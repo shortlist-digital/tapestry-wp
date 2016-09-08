@@ -1,5 +1,5 @@
 import React from 'react'
-import Tapestry from '../app-server'
+import Tapestry from '../app-tapestry'
 import Page from './components/Page'
 import Post from './components/Post'
 import Helmet from 'react-helmet'
@@ -33,12 +33,12 @@ let App = ({post}) => {
 }
 
 
-let server = new Tapestry(
+let tapestry = new Tapestry(
   App,
   'http://shortliststudio.foundry.press'
 )
 
-server.proxy('/robots.txt')
-server.proxy('/sitemap.xml')
+tapestry.proxy('/robots.txt')
+tapestry.proxy('/sitemap.xml')
 
-server.start()
+tapestry.start()
