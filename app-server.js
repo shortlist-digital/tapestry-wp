@@ -37,10 +37,9 @@ class Tapestry {
     ])
   }
 
-  proxy (path){
+  proxy(path) {
     this.proxyPaths = this.proxyPaths || []
     this.proxyPaths.push(path)
-    console.log(this.proxyPaths)
   }
 
   registerProxies() {
