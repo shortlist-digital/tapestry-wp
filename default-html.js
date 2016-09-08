@@ -1,21 +1,21 @@
 import React from 'react'
 
-let DefaultHTML = (props) =>
+let DefaultHTML = ({markup, head}) =>
   <html class="no-js" lang="en">
     <head>
-      <meta charset="utf-8" />
-      <meta http-equiv="x-ua-compatible" content="ie=edge" />
-
-      <meta name="description" content="" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-      <title>{props.title}</title>
-
-      <link rel="stylesheet" type="text/css" href="/public/style.css" />
+      {head.title.toComponent()}
+      {head.meta.toComponent()}
+      {head.link.toComponent()}
     </head>
     <body>
       <div id="root"
-        dangerouslySetInnerHTML={{__html: props.appString}}
+        style={{
+          margin: 'auto',
+          maxWidth:'700px',
+          width: '100%',
+          overflow: 'hidden'
+        }}
+        dangerouslySetInnerHTML={{__html: markup}}
       ></div>
 
       <script src="/public/main.js"></script>

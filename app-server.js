@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
+import Helmet from 'react-helmet'
 import DefaultHTML from './default-html'
 import Hapi from 'hapi'
 import WP from 'wpapi'
@@ -14,7 +15,7 @@ class Tapestry {
     this.server = new Hapi.Server()
     this.setupConnection({
       host: '0.0.0.0',
-      port: process.env.PORT || 3000
+      port: process.env.PORT || 3030
     })
     this.registerRoutes()
   }
@@ -47,13 +48,16 @@ class Tapestry {
               return prev.concat(next)
             })
           }).then(data => {
-            return ReactDOMServer.renderToString(
-              <App post={data[0]}/>
-            )
-          }).then(appString => {
+            return {
+              markup: ReactDOMServer.renderToString(
+                <App post={data[0]}/>
+              ),
+              head: Helmet.rewind()
+            }
+          }).then(pageData => {
             return ReactDOMServer.renderToStaticMarkup(
               <DefaultHTML
-                appString={appString}
+                {...pageData}
                 title='Tapestry'
               />
             )
