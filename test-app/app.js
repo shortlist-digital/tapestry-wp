@@ -16,8 +16,9 @@ let App = ({post}) => {
     <div>
       <Helmet
         title={siteName}
+        titleTemplate={`%s | ${siteName}`}
         meta={[
-          {property: 'og:title', content: {siteName}},
+          {property: 'og:title', content: siteName},
         ]}
         link={[
           {

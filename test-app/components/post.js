@@ -1,19 +1,11 @@
 import React from 'react'
-import Paragraph from './paragraph'
+import Helmet from 'react-helmet'
 import Image from './image'
-import Heading from './heading'
-
-let getWidget = (name) => {
-  let widgetMap = {
-    'paragraph': Paragraph,
-    'image': Image,
-    'heading': Heading
-  }
-  return widgetMap[name] || null
-}
+import Widgets from './widgets'
 
 let Post = ({post}) =>
   <div>
+    <Helmet title={post.title.rendered} />
     <h1>Tapestry Press</h1>
     <h2>{post.title.rendered}</h2>
     <h4><em>By {post._embedded.author[0].name}</em></h4>
@@ -22,11 +14,7 @@ let Post = ({post}) =>
         url: post._embedded['wp:featuredmedia'][0].source_url
       }}
     />
-    {post.acf.widgets.map((widget, index) => {
-      let Widget = getWidget(widget.acf_fc_layout)
-      return Widget ? <Widget key={index} {...widget} /> : null
-    })}
-    <hr/>
+    <Widgets {...post.acf} />
   </div>
 
 export default Post
