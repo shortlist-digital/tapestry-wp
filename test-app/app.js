@@ -35,7 +35,10 @@ let App = ({post}) => {
 
 let server = new Tapestry(
   App,
-  'http://shortliststudio.foundry.press/wp-json'
+  'http://shortliststudio.foundry.press'
 )
+
+server.proxy('/robots.txt')
+server.proxy('/sitemap.xml')
 
 server.start()
