@@ -9,8 +9,11 @@ Very Work in Progress - Eventually:
 import App from './components/App'
 import Tapestry from 'wp-tapestry'
 
-let server = new Tapestry(App, 'http://site.com/wp-json')
-server.start()
+let server = new Tapestry(App, 'http://wordpress-api-site.com')
+
+server.proxy('/robots.txt')
+server.proxy('/sitemap.xml')
+server.start('')
 ```
 
 This will handle routing, data fetching, server side rendering, client side navigation... bundle processing. You name it. Hopefully...
@@ -25,4 +28,4 @@ This will handle routing, data fetching, server side rendering, client side navi
  - Consider a global store of page, post and archive data
  - Possible permalink WP-API plugin - integrate into Wordpress Tapestry
  - Handle Redirects
- - Think about CSS 
+ - Think about CSS
