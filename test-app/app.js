@@ -1,5 +1,5 @@
 import React from 'react'
-import Tapestry from '../app-tapestry'
+import Tapestry from '../app-server'
 import Page from './components/Page'
 import Post from './components/Post'
 import Helmet from 'react-helmet'

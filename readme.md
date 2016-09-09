@@ -9,11 +9,11 @@ Very Work in Progress - Eventually:
 import App from './components/App'
 import Tapestry from 'wp-tapestry'
 
-let server = new Tapestry(App, 'http://wordpress-api-site.com')
+let tapestry = new Tapestry(App, 'http://wordpress-api-site.com')
 
-server.proxy('/robots.txt')
-server.proxy('/sitemap.xml')
-server.start('')
+tapestry.proxy('/robots.txt')
+tapestry.proxy('/sitemap.xml')
+tapestry.start('')
 ```
 
 This will handle routing, data fetching, server side rendering, client side navigation... bundle processing. You name it. Hopefully...
