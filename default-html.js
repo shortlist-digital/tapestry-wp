@@ -1,6 +1,6 @@
 import React from 'react'
 
-let DefaultHTML = ({markup, head}) =>
+let DefaultHTML = ({markup, head, scriptTag}) =>
   <html class="no-js" lang="en">
     <head>
       {head.title.toComponent()}
@@ -17,8 +17,7 @@ let DefaultHTML = ({markup, head}) =>
         }}
         dangerouslySetInnerHTML={{__html: markup}}
       ></div>
-
-      <script src="/public/main.js"></script>
+     <div dangerouslySetInnerHTML={{__html: scriptTag}}></div>
     </body>
   </html>
 

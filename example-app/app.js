@@ -2,16 +2,11 @@ import React from 'react'
 import Tapestry from '../app-server'
 import Page from './components/Page'
 import Post from './components/Post'
+import Nav from './components/Nav'
 import Helmet from 'react-helmet'
 
-let postTypeMap = {
-  'post': Post,
-  'page' : Page
-}
-
-let App = ({post}) => {
+let App = (props) => {
   let siteName = 'Shortlist Studio'
-  let Child = postTypeMap[post.type]
   return (
     <div>
       <Helmet
@@ -27,14 +22,17 @@ let App = ({post}) => {
           }
         ]}
       />
-      <Child post={post} />
+        <Nav />
+        {props.children}
     </div>
   )
 }
 
-
-let tapestry = new Tapestry(
-  App,
+let tapestry = new Tapestry({
+    App,
+    Post,
+    Page
+  },
   'http://shortliststudio.foundry.press'
 )
 
