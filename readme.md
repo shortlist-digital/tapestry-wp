@@ -7,13 +7,15 @@ Very Work in Progress - Eventually:
 ```js
 // Top level Component for your Wordpress frontend
 import App from './components/App'
+import Post from './components/Post'
+import Page from './components/Page'
 import Tapestry from 'wp-tapestry'
 
-let tapestry = new Tapestry(App, 'http://wordpress-api-site.com')
+let tapestry = new Tapestry({App, Post, Page}, 'http://wordpress-api-site.com')
 
 tapestry.proxy('/robots.txt')
 tapestry.proxy('/sitemap.xml')
-tapestry.start('')
+tapestry.start()
 ```
 
 This will handle routing, data fetching, server side rendering, client side navigation... bundle processing. You name it. Hopefully...
