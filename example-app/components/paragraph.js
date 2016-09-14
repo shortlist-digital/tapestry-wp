@@ -1,6 +1,6 @@
 import React from 'react'
 
 let Paragraph = ({paragraph}) =>
-  <p dangerouslySetInnerHTML={{__html: paragraph}}></p>
+  <div dangerouslySetInnerHTML={{__html: paragraph}}></div>
 
 export default Paragraph

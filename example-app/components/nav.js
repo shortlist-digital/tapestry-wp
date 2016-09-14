@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { Component } from 'react'
 
-let Nav = (props) =>
-  <div>
-    <h1>This is a Nav</h1>
-  </div>
+class Nav extends Component {
+  _handleClick() {
+    alert('You\'e clicked!?')
+  }
+  render() {
+    return null
+  }
+}
 
 export default Nav

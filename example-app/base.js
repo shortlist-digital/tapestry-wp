@@ -1,11 +1,8 @@
 import React from 'react'
-import Tapestry from '../app-server'
-import Page from './components/Page'
-import Post from './components/Post'
 import Nav from './components/Nav'
 import Helmet from 'react-helmet'
 
-let App = (props) => {
+let Base = (props) => {
   let siteName = 'Shortlist Studio'
   return (
     <div>
@@ -22,21 +19,13 @@ let App = (props) => {
           }
         ]}
       />
-        <Nav />
-        {props.children}
+      <Nav />
+      {props.children}
+      <footer>
+        <h2>You could do a footer here</h2>
+      </footer>
     </div>
   )
 }
 
-let tapestry = new Tapestry({
-    App,
-    Post,
-    Page
-  },
-  'http://shortliststudio.foundry.press'
-)
-
-tapestry.proxy('/robots.txt')
-tapestry.proxy('/sitemap.xml')
-
-tapestry.start()
+export default Base

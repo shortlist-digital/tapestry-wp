@@ -11,14 +11,17 @@ import h2o2 from 'h2o2'
 import Inert from 'inert'
 import routes from './default-routes'
 import AsyncProps, { loadPropsOnServer } from 'async-props'
+import Webpack from 'webpack'
+import WebpackPlugin from 'hapi-webpack-plugin'
+import WebpackConfig from './webpack.config.babel.js'
 
 
 class Tapestry {
 
-  constructor(components, baseUrl) {
-    this.components = components
-    this.baseUrl = baseUrl
-    this.routes = routes
+  constructor(config) {
+    this.components = config.components
+    this.siteUrl = config.siteUrl
+    this.routes = config.routes || routes
     this.server = new Hapi.Server()
     this.server.register({
       register: h2o2
@@ -42,7 +45,7 @@ class Tapestry {
 
   registerProxies() {
     this.proxyPaths.map((proxyPath, index) => {
-      let url = this.baseUrl + proxyPath
+      let url = this.siteUrl + proxyPath
       this.server.route({
         method: 'GET',
         path: `${proxyPath}`,
@@ -58,6 +61,23 @@ class Tapestry {
 
   //  Catch-all routes
   setupServerRoutes () {
+    // DEV SETUP
+    if (process.env.NODE_ENV === 'development') {
+    // Proxy webpack assets requests to webpack-dev-server
+    // Note: in development webpack bundles are served from memory, not filesystem
+      // this.server.route({
+      //   method: 'GET',
+      //   path: '/bundle.js', // this includes HMR patches, not just webpack bundle files
+      //   handler: {
+      //     proxy: {
+      //       host: '0.0.0.0',
+      //       port: '3050',
+      //       passThrough: true
+      //     }
+      //   }
+      // })
+    }
+
     this.server.route({
       method: 'GET',
       path: '/public/{param*}',
@@ -68,7 +88,7 @@ class Tapestry {
       }
     })
 
-    let routes = this.routes(this.components.App)
+    let routes = this.routes(this.components.Base)
     this.server.route({
       method: 'GET',
       path: '/{path*}',
@@ -80,7 +100,7 @@ class Tapestry {
           if (error) return reply(error.message)
           if (renderProps) {
             let loadContext = {
-              baseUrl: this.baseUrl,
+              siteUrl: this.siteUrl,
               components: this.components
             }
             loadPropsOnServer(renderProps, loadContext, (err, asyncProps, scriptTag) => {
@@ -92,7 +112,7 @@ class Tapestry {
                 // Pull out the <head> data to pass to our "outer app html"
                 head: Helmet.rewind(),
                 // Echo out a script tag containing all the on page load data
-                scriptTag: scriptTag
+                asyncProps: asyncProps
               }
               let html = ReactDOMServer.renderToStaticMarkup(
                 // Render our "outer app" html with head data and "inner html"
@@ -113,11 +133,48 @@ class Tapestry {
     })
   }
 
+  startDevServer() {
+
+    const server = new Hapi.Server()
+    server.connection({port: 3050})
+
+    const compiler = new Webpack(WebpackConfig)
+
+    const assets = {
+    // webpack-dev-middleware options
+    // See https://github.com/webpack/webpack-dev-middleware
+    }
+
+    const hot = {
+      // webpack-hot-middleware options
+      // See https://github.com/glenjamin/webpack-hot-middleware
+    }
+
+    /**
+     * Register plugin and start server
+     */
+    server.register({
+      register: WebpackPlugin,
+      options: {compiler, assets, hot}
+    },
+    error => {
+      if (error) {
+        return console.error(error)
+      }
+      server.start(() => {
+        console.log('Server running at:', server.info.uri)
+      })
+    })
+  }
+
   start() {
     //  Start the server last
+    this.startDevServer()
     this.registerProxies()
     this.server.start(err => {
-      if (err) throw err
+      if (err) {
+        console.log(err)
+      }
       console.log(`🌎  Server running at: ${this.server.info.uri} 👍`)
     })
   }
