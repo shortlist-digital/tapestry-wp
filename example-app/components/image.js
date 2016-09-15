@@ -1,6 +1,6 @@
 import React from 'react'
 
-let Image = ({image, caption}) =>
+const Image = ({image, caption}) =>
   <div>
     <img
       src={image.url}

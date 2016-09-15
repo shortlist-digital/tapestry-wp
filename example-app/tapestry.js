@@ -2,6 +2,7 @@ import Tapestry from '../app-server'
 import Base from './Base'
 import Post from './components/post'
 import Page from './components/page'
+// import routes from './my-routes'
 
 // let tapestryConfig = {
 //   components: {
@@ -16,7 +17,7 @@ import Page from './components/page'
 //   routes: null
 // }
 
-let tapestryConfig = {
+const tapestryConfig = {
   components: {
     Base: Base,
     Post: Post,
@@ -25,8 +26,7 @@ let tapestryConfig = {
   siteUrl: 'http://shortliststudio.foundry.press',
 }
 
-
-let tapestry = new Tapestry(tapestryConfig)
+const tapestry = new Tapestry(tapestryConfig)
 
 tapestry.proxy('/robots.txt')
 tapestry.proxy('/sitemap.xml')

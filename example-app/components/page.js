@@ -3,7 +3,7 @@ import React from 'react'
 
 let emojis = ['👌','🙏','👀']
 
-let Page = ({post}) =>
+const Page = ({post}) =>
   <div style={{maxWidth:700, margin: 'auto'}}>
     <link rel="stylesheet" href="http://yegor256.github.io/tacit/tacit.min.css"/>
     <h1>Tapestry Press</h1>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-let Paragraph = ({paragraph}) =>
+const Paragraph = ({paragraph}) =>
   <div dangerouslySetInnerHTML={{__html: paragraph}}></div>
 
 export default Paragraph
