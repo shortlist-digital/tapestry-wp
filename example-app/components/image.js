@@ -1,4 +1,6 @@
 import React from 'react'
+import { css } from 'aphrodite'
+import t from '../styles/typography'
 
 const Image = ({image, caption}) =>
   <div>
@@ -11,7 +13,9 @@ const Image = ({image, caption}) =>
       }}
     />
     <small
-      dangerouslySetInnerHTML={{__html:caption}}>
+      dangerouslySetInnerHTML={{__html:caption}}
+      className={css(t.base, t.lhCopy)}
+    >
     </small>
   </div>
 

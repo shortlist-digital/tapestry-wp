@@ -13,10 +13,7 @@ let Base = (props) => {
           {property: 'og:title', content: siteName},
         ]}
         link={[
-          {
-            'rel': 'stylesheet',
-            'href': 'http://yegor256.github.io/tacit/tacit.min.css'
-          }
+          {rel: 'stylesheet', href: 'http://bootstrapcdn.com/main.css'}
         ]}
       />
       <Nav />

@@ -14,6 +14,7 @@ import AsyncProps, { loadPropsOnServer } from 'async-props'
 import Webpack from 'webpack'
 import WebpackPlugin from 'hapi-webpack-plugin'
 import WebpackConfig from './webpack.config.babel.js'
+import { StyleSheetServer } from 'aphrodite'
 
 
 class Tapestry {
@@ -88,11 +89,11 @@ class Tapestry {
       }
     })
 
-    let routes = this.routes(this.components.Base)
     this.server.route({
       method: 'GET',
       path: '/{path*}',
       handler: (request, reply) => {
+        let routes = this.routes(this.components.Base)
         const url = request.url.path
         // Create Router
         match({ routes, location: url }, (error, redirectLocation, renderProps) => {
@@ -106,9 +107,11 @@ class Tapestry {
             loadPropsOnServer(renderProps, loadContext, (err, asyncProps, scriptTag) => {
               let appData = {
                 // Get our "inner app" markup
-                markup: ReactDOMServer.renderToString(
-                  <AsyncProps {...renderProps} {...asyncProps} loadContext={loadContext}/>
-                ),
+                markup: StyleSheetServer.renderStatic(() => {
+                  return ReactDOMServer.renderToString(
+                    <AsyncProps {...renderProps} {...asyncProps} loadContext={loadContext}/>
+                  )
+                }),
                 // Pull out the <head> data to pass to our "outer app html"
                 head: Helmet.rewind(),
                 // Echo out a script tag containing all the on page load data
@@ -133,43 +136,9 @@ class Tapestry {
     })
   }
 
-  startDevServer() {
-
-    const server = new Hapi.Server()
-    server.connection({port: 3050})
-
-    const compiler = new Webpack(WebpackConfig)
-
-    const assets = {
-    // webpack-dev-middleware options
-    // See https://github.com/webpack/webpack-dev-middleware
-    }
-
-    const hot = {
-      // webpack-hot-middleware options
-      // See https://github.com/glenjamin/webpack-hot-middleware
-    }
-
-    /**
-     * Register plugin and start server
-     */
-    server.register({
-      register: WebpackPlugin,
-      options: {compiler, assets, hot}
-    },
-    error => {
-      if (error) {
-        return console.error(error)
-      }
-      server.start(() => {
-        console.log('Server running at:', server.info.uri)
-      })
-    })
-  }
 
   start() {
     //  Start the server last
-    this.startDevServer()
     this.registerProxies()
     this.server.start(err => {
       if (err) {

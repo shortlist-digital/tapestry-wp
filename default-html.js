@@ -6,6 +6,10 @@ let DefaultHTML = ({markup, head, asyncProps}) =>
       {head.title.toComponent()}
       {head.meta.toComponent()}
       {head.link.toComponent()}
+      <style
+        data-aphrodite
+        dangerouslySetInnerHTML={{__html: markup.css.content}}
+      ></style>
     </head>
   <body>
     <div id="root"
@@ -15,7 +19,7 @@ let DefaultHTML = ({markup, head, asyncProps}) =>
         width: '100%',
         overflow: 'hidden'
       }}
-      dangerouslySetInnerHTML={{__html: markup}}
+      dangerouslySetInnerHTML={{__html: markup.html}}
     ></div>
     <script
       dangerouslySetInnerHTML={{

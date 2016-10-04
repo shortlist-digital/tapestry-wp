@@ -21,7 +21,7 @@ const tapestryConfig = {
   components: {
     Base: Base,
     Post: Post,
-    Page: Page,
+    Page: Page
   },
   siteUrl: 'http://shortliststudio.foundry.press',
 }
