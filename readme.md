@@ -21,18 +21,19 @@ export default {
 
 ## Currently
 
-Tapestry consumes a config object in the root of the parent project i.e. Shortlist, from this source it will output a webpack bundle into `/public` and start a node server.
-
-This will handle routing, data fetching, server side rendering, client side navigation... bundle processing. You name it. Hopefully...
+Tapestry consumes a config object in the root of the parent project i.e. Shortlist, and outputs a webpack bundle into `/public` and starts a node server.
 
 ## Todo
 
- - React Helmet integration for handling `<head>` meta data that changes page to page
- - Ability to override routes object
- - Default routing
- - Accompanying WordPress plugin to enable preving and 'View Post' functionality
- - Hydrate single page store
- - Consider a global store of page, post and archive data
- - Possible permalink WP-API plugin - integrate into Wordpress Tapestry
- - Handle Redirects
- - Think about CSS
+- [x] Render React components from the server
+- [x] Bundle component tree and serve on the client
+- [x] Hook up WP-API to match routes
+- [x] Head overrides per page with `react-helmet`
+- [x] Supply default routes
+- [ ] Ability to override routes
+- [ ] Accompanying WordPress plugin to enable previewing and 'View Post' functionality
+- [ ] Hydrate single page store
+- [ ] Consider a global store of page, post and archive data
+- [ ] Possible permalink WP-API plugin - integrate into Wordpress Tapestry
+- [ ] Handle Redirects
+- [ ] Think about CSS
