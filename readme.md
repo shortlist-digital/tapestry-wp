@@ -41,3 +41,4 @@ Tapestry consumes a config object in the root of the parent project i.e. Shortli
 - [ ] Handle Redirects
 - [ ] Hash client bundle, allow path and name override
 - [ ] Provide prod build option for client bundle
+- [ ] Define cli interface (https://medium.freecodecamp.com/writing-command-line-applications-in-nodejs-2cf8327eee2)
