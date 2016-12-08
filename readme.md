@@ -6,17 +6,22 @@ Very Work in Progress - Eventually:
 
 ```js
 // Top level Component for your Wordpress frontend
-import App from './components/App'
+import Base from './components/Base'
 import Post from './components/Post'
 import Page from './components/Page'
-import Tapestry from 'wp-tapestry'
 
-let tapestry = new Tapestry({App, Post, Page}, 'http://wordpress-api-site.com')
-
-tapestry.proxy('/robots.txt')
-tapestry.proxy('/sitemap.xml')
-tapestry.start()
+export default {
+  components: {
+    Base, Post, Page
+  },
+  proxyPaths: ['/robots.txt'],
+  siteUrl: 'http://wordpress-api-site.com'
+}
 ```
+
+## Currently
+
+Tapestry consumes a config object in the root of the parent project i.e. Shortlist, from this source it will output a webpack bundle into `/public` and start a node server.
 
 This will handle routing, data fetching, server side rendering, client side navigation... bundle processing. You name it. Hopefully...
 
