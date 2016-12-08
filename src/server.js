@@ -21,10 +21,16 @@ export default class TapestryServer {
     this.routes = this.config.routes || DefaultRoutes
     // run server
     this.bootServer()
+    this.registerProxies()
     this.startServer()
     // set routes
-    this.handleRouteStatic()
-    this.handleRouteDynamic()
+    this.routeStatic()
+    this.routeDynamic()
+  }
+
+  registerProxies () {
+    if (this.config.proxyPaths)
+      this.config.proxyPaths.map(this.routeProxy.bind(this))
   }
 
   bootServer () {
@@ -44,7 +50,19 @@ export default class TapestryServer {
     })
   }
 
-  handleRouteStatic () {
+  routeProxy (path) {
+    this.server.route({
+      method: 'GET',
+      path: `${path}`,
+      handler: {
+        proxy: {
+          uri: this.config.siteurl + path,
+          passThrough: true
+        }
+      }
+    })
+  }
+  routeStatic () {
     this.server.route({
       method: 'GET',
       path: '/public/{param*}',
@@ -55,7 +73,7 @@ export default class TapestryServer {
       }
     })
   }
-  handleRouteDynamic () {
+  routeDynamic () {
     this.server.route({
       method: 'GET',
       path: '/{path*}',
