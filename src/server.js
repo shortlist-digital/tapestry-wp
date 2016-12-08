@@ -2,7 +2,7 @@ import React from 'react'
 import { renderToStaticMarkup, renderToString } from 'react-dom/server'
 import { match } from 'react-router'
 import Helmet from 'react-helmet'
-import { renderStaticOptimized } from 'glamor/server'
+import { renderStatic } from 'glamor/server'
 
 import { Server } from 'hapi'
 import h2o2 from 'h2o2'
@@ -96,7 +96,7 @@ export default class TapestryServer {
             if (err) console.log(err)
             // get html from props
             const data = {
-              markup: renderStaticOptimized(() => renderToString(
+              markup: renderStatic(() => renderToString(
                 <AsyncProps
                   {...renderProps}
                   {...asyncProps}
