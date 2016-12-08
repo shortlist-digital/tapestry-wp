@@ -19,7 +19,7 @@ export default (context) => ({
     }]
   },
   plugins: [
-    new webpackCleanPlugin(['public'], { root: context })
+    new webpackCleanPlugin(['public'], { root: context, verbose: false })
     // new webpack.optimize.UglifyJsPlugin(),
     // new webpack.optimize.OccurrenceOrderPlugin(),
     // new webpack.optimize.DedupePlugin(),
