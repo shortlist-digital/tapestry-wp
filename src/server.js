@@ -1,6 +1,7 @@
 import React from 'react'
 import { renderToStaticMarkup, renderToString } from 'react-dom/server'
 import { match } from 'react-router'
+import Helmet from 'react-helmet'
 
 import { Server } from 'hapi'
 import h2o2 from 'h2o2'
@@ -100,6 +101,7 @@ export default class TapestryServer {
                   {...asyncProps}
                   loadContext={loadContext} />
               ),
+              head: Helmet.rewind(),
               asyncProps
             }
             // render html with data

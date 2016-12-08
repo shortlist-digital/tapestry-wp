@@ -1,7 +1,15 @@
 import React from 'react'
 
-export default ({ markup, asyncProps }) =>
-  <html lang="en">
+export default ({ markup, head, asyncProps }) =>
+  <html lang="en" {...head.htmlAttributes.toComponent()}>
+    <head>
+      {head.title.toComponent()}
+      {head.base.toComponent()}
+      {head.meta.toComponent()}
+      {head.link.toComponent()}
+      {head.script.toComponent()}
+      {head.style.toComponent()}
+    </head>
     <body>
       <div
         id="root"
