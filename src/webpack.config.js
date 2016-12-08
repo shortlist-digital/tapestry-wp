@@ -1,5 +1,6 @@
 import path from 'path'
-import CleanWebpackPlugin from 'clean-webpack-plugin'
+import webpack from 'webpack'
+import webpackCleanPlugin from 'clean-webpack-plugin'
 
 export default (context) => ({
   resolve: {
@@ -18,8 +19,14 @@ export default (context) => ({
     }]
   },
   plugins: [
-    new CleanWebpackPlugin(['public'], {
-      root: context
-    })
+    new webpackCleanPlugin(['public'], { root: context })
+    // new webpack.optimize.UglifyJsPlugin(),
+    // new webpack.optimize.OccurrenceOrderPlugin(),
+    // new webpack.optimize.DedupePlugin(),
+    // new webpack.DefinePlugin({
+    //   'process.env': {
+    //     'NODE_ENV': JSON.stringify('production')
+    //   }
+    // })
   ]
 })

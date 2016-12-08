@@ -9,7 +9,9 @@ import config from 'tapestry.js'
 render(
   <Router
     history={browserHistory}
-    render={props => <AsyncProps {...props} />}
+    render={props =>
+      <AsyncProps loadContext={config} {...props} />
+    }
     routes={DefaultRoutes(config.components)}>
   </Router>,
   document.getElementById('root')

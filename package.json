@@ -17,6 +17,7 @@
   "dependencies": {
     "async-props": "^0.3.2",
     "clean-webpack-plugin": "^0.1.14",
+    "fetch": "^1.1.0",
     "h2o2": "^5.4.0",
     "hapi": "^16.0.1",
     "inert": "^4.0.3",

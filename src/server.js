@@ -69,9 +69,9 @@ export default class TapestryServer {
           // 404 if no props
           if (!renderProps) reply(404)
           // define global deets for nested components
-          const context = this.config
+          const loadContext = this.config
           // get all the props yo
-          loadPropsOnServer(renderProps, context, (err, asyncProps, scriptTag) => {
+          loadPropsOnServer(renderProps, loadContext, (err, asyncProps, scriptTag) => {
             // 404 if error from Hapi
             if (err) console.log(err)
             // get html from props
@@ -80,7 +80,7 @@ export default class TapestryServer {
                 <AsyncProps
                   {...renderProps}
                   {...asyncProps}
-                  config={context} />
+                  loadContext={loadContext} />
               ),
               asyncProps
             }
