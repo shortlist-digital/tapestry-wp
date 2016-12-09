@@ -7,11 +7,9 @@ export default class Build {
     this.compiler = new webpack(config(context))
     this.compiler.run((err, stats) => {
       const jsonStats = stats.toJson()
-      if (err) return console.log(err)
-      if (jsonStats.length) {
-        console.log('errors', jsonStats.errors)
-        console.log('warnings', jsonStats.warnings)
-      }
+      if (err) console.log(err)
+      if (jsonStats.errors.length) console.log('Errors: ', jsonStats.errors)
+      if (jsonStats.warnings.length) console.log('Warnings: ', jsonStats.warnings)
     })
   }
 }

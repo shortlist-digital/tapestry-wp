@@ -10,6 +10,7 @@ export default ({ markup, head, asyncProps }) =>
       {head.link.toComponent()}
       {head.script.toComponent()}
       <style dangerouslySetInnerHTML={{ __html: markup.css }} />
+      <link rel="shortcut icon" href="http://shortlist.studio/public/favicon.ico" />
     </head>
     <body>
       <div id="root" dangerouslySetInnerHTML={{ __html: markup.html }} />
