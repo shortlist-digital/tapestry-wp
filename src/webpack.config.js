@@ -4,7 +4,7 @@ import webpackCleanPlugin from 'clean-webpack-plugin'
 
 export default (context) => ({
   resolve: {
-    modulesDirectories: ['node_modules', context]
+    modulesDirectories: ['node_modules', context, `${context}/node_modules`]
   },
   entry: 'tapestry/src/client.js',
   output: {
