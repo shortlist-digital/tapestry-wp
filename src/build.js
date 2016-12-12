@@ -5,11 +5,17 @@ export default class Build {
 
   constructor (context) {
     this.compiler = new webpack(config(context))
-    this.compiler.run((err, stats) => {
+
+    this.compiler.watch({
+      aggregateTimeout: 300
+    }, (err, stats) => {
       const jsonStats = stats.toJson()
-      if (err) console.log(err)
-      if (jsonStats.errors.length) console.log('Errors: ', jsonStats.errors)
-      if (jsonStats.warnings.length) console.log('Warnings: ', jsonStats.warnings)
+      if (err)
+        console.log(err)
+      if (jsonStats.errors.length > 0)
+        console.log('Errors: ', jsonStats.errors)
+      if (jsonStats.warnings.length > 0)
+        console.log('Warnings: ', jsonStats.warnings)
     })
   }
 }
