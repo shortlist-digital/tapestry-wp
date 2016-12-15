@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Wordpress API Universal React Renderer",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint index.js src"
+  },
   "author": "Jon Sherrard",
   "license": "ISC",
   "devDependencies": {
@@ -17,6 +19,9 @@
   "dependencies": {
     "async-props": "^0.3.2",
     "clean-webpack-plugin": "^0.1.14",
+    "eslint": "^3.12.2",
+    "eslint-plugin-jsx-a11y": "^3.0.2",
+    "eslint-plugin-react": "^6.8.0",
     "fetch": "^1.1.0",
     "glamor": "^2.20.12",
     "h2o2": "^5.4.0",

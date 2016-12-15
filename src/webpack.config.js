@@ -1,5 +1,4 @@
 import path from 'path'
-import webpack from 'webpack'
 import webpackCleanPlugin from 'clean-webpack-plugin'
 
 export default (context) => ({

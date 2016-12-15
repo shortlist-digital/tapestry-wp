@@ -11,11 +11,11 @@ export default class Build {
     }, (err, stats) => {
       const jsonStats = stats.toJson()
       if (err)
-        console.log(err)
+        console.error(err)
       if (jsonStats.errors.length > 0)
-        console.log('Errors: ', jsonStats.errors)
+        console.error('Errors: ', jsonStats.errors)
       if (jsonStats.warnings.length > 0)
-        console.log('Warnings: ', jsonStats.warnings)
+        console.warn('Warnings: ', jsonStats.warnings)
     })
   }
 }

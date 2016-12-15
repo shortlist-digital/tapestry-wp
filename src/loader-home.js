@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import AsyncProps from 'async-props'
 import fetch from 'isomorphic-fetch'
 
@@ -17,4 +17,11 @@ export default class Loader extends Component {
     const Home = this.props.route.home
     return <Home {...this.props.data} />
   }
+}
+
+Loader.propTypes = {
+  route: PropTypes.shape({
+    home: PropTypes.element.isRequired
+  }).isRequired,
+  data: PropTypes.object
 }
