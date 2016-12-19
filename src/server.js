@@ -109,7 +109,7 @@ export default class TapestryServer {
             const html = renderToStaticMarkup(
               <DefaultHTML {...data} />
             )
-            reply(html)
+            reply(`<!doctype html>${html}`)
           })
         })
       }
