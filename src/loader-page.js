@@ -21,7 +21,7 @@ export default class Loader extends Component {
 
 Loader.propTypes = {
   route: PropTypes.shape({
-    page: PropTypes.element.isRequired
+    page: PropTypes.func.isRequired
   }).isRequired,
   data: PropTypes.object
 }
