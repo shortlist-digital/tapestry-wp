@@ -23,5 +23,8 @@ Loader.propTypes = {
   route: PropTypes.shape({
     page: PropTypes.func.isRequired
   }).isRequired,
-  data: PropTypes.object
+  data: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array
+  ])
 }

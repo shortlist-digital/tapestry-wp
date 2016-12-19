@@ -4,7 +4,7 @@ import fetch from 'isomorphic-fetch'
 
 export default class Loader extends Component {
 
-  static loadProps({params, loadContext}, cb) {
+  static loadProps({ params, loadContext }, cb) {
     // LoadContext is basicaly an object we can pass around
     // the sever with our components and some baseUrl on it
     return fetch(`${loadContext.siteUrl}/wp-json/wp/v2/posts?_embed`)
@@ -23,5 +23,8 @@ Loader.propTypes = {
   route: PropTypes.shape({
     home: PropTypes.func.isRequired
   }).isRequired,
-  data: PropTypes.object
+  data: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array
+  ])
 }
