@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import AsyncProps from 'async-props'
 import fetch from 'isomorphic-fetch'
+import MissingView from './missing-view'
 
 export default class Loader extends Component {
 
@@ -14,14 +15,16 @@ export default class Loader extends Component {
   }
 
   render () {
-    const Home = this.props.route.home
-    return <Home {...this.props.data} />
+    const Tag = this.props.route.tag
+    return Tag ?
+      <Tag {...this.props.data} /> :
+      <MissingView {...this.props.data} />
   }
 }
 
 Loader.propTypes = {
   route: PropTypes.shape({
-    home: PropTypes.func.isRequired
+    tag: PropTypes.func
   }).isRequired,
   data: PropTypes.oneOfType([
     PropTypes.object,

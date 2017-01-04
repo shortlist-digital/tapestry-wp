@@ -8,9 +8,9 @@ export default class Loader extends Component {
   static loadProps({params, loadContext}, cb) {
     // LoadContext is basicaly an object we can pass around
     // the sever with our components and some baseUrl on it
-    return fetch(`${loadContext.siteUrl}/wp-json/wp/v2/pages?filter[name]=${params.slug}`)
+    return fetch(`${loadContext.siteUrl}/wp-json/wp/v2/posts?filter[category_name]=${params.subcategory || params.category}`)
       .then(response => response.json())
-      .then(data => cb(null, { data: data[0] }))
+      .then(data => cb(null, { data }))
       .catch(error => cb(error))
   }
 

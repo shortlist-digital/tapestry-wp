@@ -81,7 +81,7 @@ export default class TapestryServer {
       path: '/{path*}',
       handler: (request, reply) => {
         match({
-          routes: this.routes(this.config.components),
+          routes: this.routes(this.config.components || {}),
           location: request.url.path
         }, (error, redirectLocation, renderProps) => {
           // 404 if error from Hapi
