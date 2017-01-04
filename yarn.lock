@@ -2826,6 +2826,10 @@ react-helmet@^3.2.3:
     object-assign "^4.0.1"
     react-side-effect "1.0.2"
 
+react-object-inspector@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/react-object-inspector/-/react-object-inspector-0.2.1.tgz#8ec32951bde8c76b072ef084a74e7a9d2d0aeb72"
+
 react-router@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/react-router/-/react-router-3.0.0.tgz#3f313e4dbaf57048c48dd0a8c3cac24d93667dff"
