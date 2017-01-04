@@ -20,8 +20,8 @@ export default class Loader extends Component {
       .then(resp => resp.json())
       .then(resp => {
         const data = ('0' in resp) || resp instanceof Array ?
-        { data: resp[0] } :
-        { resp }
+          { data: resp[0] } :
+          { resp }
         return cb(null, data)
       })
       .catch(error => cb(error))
