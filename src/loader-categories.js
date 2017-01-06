@@ -6,11 +6,16 @@ import MissingView from './missing-view'
 export default class Loader extends Component {
 
   static loadProps({params, loadContext}, cb) {
+
     const customLoader = loadContext.loaders.Categories
     if (customLoader) return customLoader(loadContext.siteUrl, cb)
+
+    const baseUrl = `${loadContext.siteUrl}/wp-json/wp/v2`
+    const path = `posts?filter[category_name]=${params.subcategory || params.category}`
+
     // LoadContext is basicaly an object we can pass around
     // the sever with our components and some baseUrl on it
-    return fetch(`${loadContext.siteUrl}/wp-json/wp/v2/posts?filter[category_name]=${params.subcategory || params.category}`)
+    return fetch(`${baseUrl}/${path}`)
       .then(response => response.json())
       .then(data => cb(null, { data }))
       .catch(error => cb(error))

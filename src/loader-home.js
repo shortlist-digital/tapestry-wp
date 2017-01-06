@@ -12,15 +12,15 @@ export default class Loader extends Component {
 
     const baseUrl = `${loadContext.siteUrl}/wp-json/wp/v2`
 
-    let url = `pages?filter[name]=home`
+    let path = `pages?filter[name]=home`
     if (parseInt(loadContext.frontPage))
-      url = `pages/${loadContext.frontPage}`
+      path = `pages/${loadContext.frontPage}`
     else if (typeof loadContext.frontPage === 'string')
-      url = `pages?filter[name]=${loadContext.frontPage}`
+      path = `pages?filter[name]=${loadContext.frontPage}`
 
     // LoadContext is basicaly an object we can pass around
     // the sever with our components and some baseUrl on it
-    return fetch(`${baseUrl}/${url}`)
+    return fetch(`${baseUrl}/${path}`)
       .then(resp => resp.json())
       .then(resp => {
         const data = ('0' in resp) || resp instanceof Array ?
