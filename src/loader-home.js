@@ -7,6 +7,9 @@ export default class Loader extends Component {
 
   static loadProps({ params, loadContext }, cb) {
 
+    const customLoader = loadContext.loaders.Home
+    if (customLoader) return customLoader(loadContext.siteUrl, cb)
+
     const baseUrl = `${loadContext.siteUrl}/wp-json/wp/v2`
 
     let url = `pages?filter[name]=home`

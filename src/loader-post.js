@@ -6,6 +6,8 @@ import MissingView from './missing-view'
 export default class Loader extends Component {
 
   static loadProps({params, loadContext}, cb) {
+    const customLoader = loadContext.loaders.Post
+    if (customLoader) return customLoader(loadContext.siteUrl, cb)
     // LoadContext is basicaly an object we can pass around
     // the sever with our components and some baseUrl on it
     return fetch(`${loadContext.siteUrl}/wp-json/wp/v2/posts/${params.id}?_embed`)
