@@ -3,7 +3,7 @@ import webpackCleanPlugin from 'clean-webpack-plugin'
 
 export default (context, isTree = false) => ({
   resolve: {
-    modulesDirectories: ['node_modules', context, `${context}/node_modules`]
+    modulesDirectories: [context, `${context}/node_modules`]
   },
   entry: isTree ? `${context}/tapestry.js` : 'tapestry-wp/src/client.js',
   output: {
@@ -15,13 +15,16 @@ export default (context, isTree = false) => ({
     loaders: [{
       test: /\.js$/,
       exclude: /node_modules/,
-      loader: 'babel'
+      loader: 'babel-loader',
+      query: {
+        presets: ['es2015', 'react']
+      }
     }]
   },
   externals: isTree ? [
     {
       'isomorphic-fetch': {
-        commonjs2: 'isomorphic-fetch',
+        commonjs2: 'isomorphic-fetch'
       }
     }
   ] : [],

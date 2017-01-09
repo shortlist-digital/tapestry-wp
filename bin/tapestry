@@ -48,7 +48,9 @@ program.parse(process.argv)
 var NO_COMMAND_SPECIFIED = program.args.length === 0;
 
 if (NO_COMMAND_SPECIFIED) {
-  require('babel-register')
+  require('babel-register')({
+    "presets": ["es2015", "react"]
+  })
   require('../src/boot.js')
 }
 
