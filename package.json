@@ -16,6 +16,9 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0"
   },
+  "bin": {
+    "tapestry": "./bin/tapestry"
+  },
   "dependencies": {
     "async-props": "^0.3.2",
     "clean-webpack-plugin": "^0.1.14",
