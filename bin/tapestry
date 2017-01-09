@@ -21,7 +21,7 @@ program
       }
       console.log(stdout)
       console.log('Built Server')
-      const webpackConfig = require('../dist/webpack.config.js').default
+      const webpackConfig require('../dist/webpack.config.js').default
       const compiler = new webpack(webpackConfig(cwdCached, true))
       // No feedback coming out of this yet
       compiler.run((err, stats) => {
@@ -40,7 +40,6 @@ program
   .command('start')
   .action(function() {
     global.TAPESTRY_PRODUCTION = true
-    console.log(global.TAPESTRY_PRODUCTION)
     require('../dist/boot.js')
   })
 

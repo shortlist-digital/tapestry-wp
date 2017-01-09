@@ -3,12 +3,8 @@ import fs from 'fs'
 import Build from './build'
 import Server from './server'
 
-// resolve the parent config object
-console.log(global.TAPESTRY_PRODUCTION)
-
 // We have to do a bit of code duplication here... for now
 if (global.TAPESTRY_PRODUCTION) {
-  console.log('yes')
   const configPath = path.resolve(process.cwd(), './dist/tree.js')
   // throw an error if no config exists
   if (!fs.existsSync(configPath)) throw Error('tree.js not found')
