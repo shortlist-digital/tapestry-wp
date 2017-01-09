@@ -18,16 +18,13 @@ export default (context, isTree = false) => ({
       loader: 'babel'
     }]
   },
-  externals: [
+  externals: isTree ? [
     {
       'isomorphic-fetch': {
-        root: 'isomorphic-fetch',
         commonjs2: 'isomorphic-fetch',
-        commonjs: 'isomorphic-fetch',
-        amd: 'isomorphic-fetch'
       }
     }
-  ],
+  ] : [],
   plugins: [
     new webpackCleanPlugin(['public'], { root: context, verbose: false })
     // new webpack.optimize.UglifyJsPlugin(),
