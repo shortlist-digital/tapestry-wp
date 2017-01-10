@@ -2,7 +2,10 @@
   "rules": {
     "comma-dangle": ["error", "never"],
     "semi": ["error", "never"],
-    "no-console": 0
+    "no-console": 0,
+    "no-unused-vars": ["error", {
+      "varsIgnorePattern": "AsyncProps"
+    }]
   },
   "env": {
     "es6": true,

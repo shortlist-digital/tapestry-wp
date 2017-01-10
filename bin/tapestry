@@ -14,25 +14,18 @@ program
   .command('build')
   .action(function() {
     process.chdir(path.join(__dirname, '..'))
-    exec('babel ./src --out-dir ./dist --presets=es2015,react', (err, stdout, stderr) => {
-      if (err) {
+    console.log('Built Server')
+    const webpackConfig = require('../dist/webpack.config.js').default
+    const compiler = new webpack(webpackConfig(cwdCached, true))
+    // No feedback coming out of this yet
+    compiler.run((err, stats) => {
+      const jsonStats = stats.toJson()
+      if (err)
         console.error(err)
-        return;
-      }
-      console.log(stdout)
-      console.log('Built Server')
-      const webpackConfig = require('../dist/webpack.config.js').default
-      const compiler = new webpack(webpackConfig(cwdCached, true))
-      // No feedback coming out of this yet
-      compiler.run((err, stats) => {
-        const jsonStats = stats.toJson()
-        if (err)
-          console.error(err)
-        if (jsonStats.errors.length > 0)
-          console.error('Errors: ', jsonStats.errors)
-        if (jsonStats.warnings.length > 0)
-          console.warn('Warnings: ', jsonStats.warnings)
-      })
+      if (jsonStats.errors.length > 0)
+        console.error('Errors: ', jsonStats.errors)
+      if (jsonStats.warnings.length > 0)
+        console.warn('Warnings: ', jsonStats.warnings)
     })
   })
 
@@ -52,8 +45,5 @@ if (NO_COMMAND_SPECIFIED) {
     "presets": ["es2015", "react"],
     "include": path.resolve(__dirname, 'src')
   })
-  require('../src/boot.js')
+  require('../dist/boot.js')
 }
-
-
-
