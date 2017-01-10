@@ -19,7 +19,8 @@
     ".eslintrc",
     ".editorconfig",
     ".eslintrc",
-    "package.json"
+    "package.json",
+    "./bin"
   ],
   "dependencies": {
     "async-props": "^0.3.2",
