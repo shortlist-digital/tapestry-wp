@@ -5,7 +5,7 @@ export default (context, isTree = false) => ({
   resolve: {
     modulesDirectories: [context, `${context}/node_modules`]
   },
-  entry: isTree ? `${context}/tapestry.js` : 'tapestry-wp/src/client.js',
+  entry: isTree ? `${context}/tapestry.js` : 'tapestry-wp/dist/client.js',
   output: {
     path: path.resolve(context, isTree ? 'dist' : 'public'),
     filename: isTree ? 'tree.js' : 'bundle.js',

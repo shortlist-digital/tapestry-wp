@@ -4,7 +4,8 @@
   "description": "Wordpress API Universal React Renderer",
   "main": "index.js",
   "scripts": {
-    "lint": "./node_modules/.bin/eslint src bin"
+    "lint": "./node_modules/.bin/eslint src bin",
+    "postinstall": "babel ./src --out-dir ./dist"
   },
   "author": "Jon Sherrard",
   "license": "ISC",
