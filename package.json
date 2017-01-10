@@ -12,16 +12,6 @@
   "bin": {
     "tapestry": "./bin/tapestry"
   },
-  "files": [
-    "./dist",
-    "./src",
-    "readme.md",
-    ".eslintrc",
-    ".editorconfig",
-    ".eslintrc",
-    "package.json",
-    "./bin/tapestry"
-  ],
   "dependencies": {
     "async-props": "^0.3.2",
     "babel-cli": "^6.18.0",
