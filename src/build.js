@@ -11,11 +11,11 @@ export default class Build {
     }, (err, stats) => {
       const jsonStats = stats.toJson()
       if (err)
-        console.error(err)
+        console.error('Build Client Errors: ', err)
       if (jsonStats.errors.length > 0)
-        console.error('Errors: ', jsonStats.errors)
+        console.error('Build Client jsonStats Errors: ', jsonStats.errors)
       if (jsonStats.warnings.length > 0)
-        console.warn('Warnings: ', jsonStats.warnings)
+        console.warn('Build client jsonStats Warnings: ', jsonStats.warnings)
     })
   }
 }

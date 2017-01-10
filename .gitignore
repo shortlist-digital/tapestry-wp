@@ -1,5 +1,6 @@
 bundle.js
 example-app/public/bundle.js
+dist
 
 # Created by https://www.gitignore.io/api/sublimetext,vim,osx,node
 
