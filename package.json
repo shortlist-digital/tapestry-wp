@@ -20,7 +20,7 @@
     ".editorconfig",
     ".eslintrc",
     "package.json",
-    "./bin"
+    "./bin/tapestry"
   ],
   "dependencies": {
     "async-props": "^0.3.2",
