@@ -22,6 +22,7 @@ export default class Loader extends Component {
   }
 
   render () {
+    if (typeof window !== 'undefined') { window.scrollTo(0, 0) }
     const Tag = this.props.route.tag
     return Tag ?
       <Tag {...this.props.data} /> :
