@@ -26,6 +26,7 @@ export default class TapestryServer {
     this.registerProxies()
     this.startServer()
     // set routes
+    this.routeApi()
     this.routeStatic()
     this.routeDynamic()
   }
@@ -49,6 +50,17 @@ export default class TapestryServer {
     this.server.start(err => {
       if (err) console.log(err)
       console.log(`🌎  Server running at: ${this.server.info.uri} 👍`)
+    })
+  }
+
+  routeApi (path) {
+    this.server.route({
+      method: 'GET',
+      path: `/api/v1/{param*}`,
+      handler: {
+        uri: this.config.siteurl + '/wp-json/wp/v2/' + path,
+        passThrough: true
+      }
     })
   }
 
