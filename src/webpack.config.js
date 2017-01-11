@@ -5,7 +5,7 @@ export default (context) => {
       resolve: {
         modulesDirectories: [context, `${context}/node_modules`]
       },
-      entry: 'tapestry-wp/src/client.js',
+      entry: 'tapestry-wp/dist/client.js',
       output: {
         path: 'public',
         filename: 'bundle.js'
