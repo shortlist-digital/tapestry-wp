@@ -1,17 +1,13 @@
-import path from 'path'
-import fs from 'fs'
 import webpackCleanPlugin from 'clean-webpack-plugin'
 
-export default (context, isServer = false) => {
-  const config = {
+export default (context) => ({
     resolve: {
       modulesDirectories: [context, `${context}/node_modules`]
     },
-    entry: isServer ? 'tapestry-wp/dist/boot.js' : 'tapestry-wp/src/client.js',
+    entry: 'tapestry-wp/src/client.js',
     output: {
-      path: path.resolve(context, isServer ? 'server' : 'public'),
-      filename: isServer ? 'server.js' : 'bundle.js',
-      libraryTarget: isServer ? 'commonjs2' : 'var'
+      path: 'public',
+      filename: 'bundle.js'
     },
     module: {
       loaders: [{
@@ -34,24 +30,4 @@ export default (context, isServer = false) => {
       //   }
       // })
     ]
-  }
-  if (isServer) {
-
-      config.node = {
-        fs: "empty"
-      }
-
-      config.externals = fs.readdirSync('node_modules')
-        .filter((x) => {
-          return ['.bin'].indexOf(x) === -1
-        })
-        .reduce((accumulator, mod) => {
-          accumulator[mod] = `commonjs2 ${mod}`
-          return accumulator
-        }, {})
-      config.externals['glamor/server'] = 'commonjs2 glamor/server'
-  }
-
-  return config
-
-}
+})
