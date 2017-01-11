@@ -8,6 +8,7 @@ import config from 'tapestry.js'
 
 render(
   <Router
+    onUpdate={typeof config.onUpdate === 'function' && config.onUpdate}
     history={browserHistory}
     render={props =>
       <AsyncProps loadContext={config} {...props} />
