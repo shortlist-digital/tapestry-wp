@@ -14,18 +14,13 @@ program
   .command('build')
   .action(function() {
     process.chdir(path.join(__dirname, '..'))
-    console.log('Built Server')
-    const webpackConfig = require('../dist/webpack.config.js').default
-    const compiler = new webpack(webpackConfig(cwdCached, true))
-    // No feedback coming out of this yet
-    compiler.run((err, stats) => {
-      const jsonStats = stats.toJson()
-      if (err)
-        console.error(err)
-      if (jsonStats.errors.length > 0)
-        console.error('Errors: ', jsonStats.errors)
-      if (jsonStats.warnings.length > 0)
-        console.warn('Warnings: ', jsonStats.warnings)
+    exec('babel ' + cwdCached + ' --out-dir ./dist/app --presets=es2015,react  --ignore node_modules,__tests__', (err, stdout, stderr) => {
+       if (err) {
+         console.error(err)
+         return
+       }
+       console.log(stdout)
+       console.log('Built Server')
     })
   })
 
