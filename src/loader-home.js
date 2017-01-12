@@ -10,7 +10,7 @@ export default class Loader extends Component {
     const customLoader = loadContext.loaders.Home
     if (customLoader) return customLoader(loadContext.siteUrl, cb)
 
-    const baseUrl = `${loadContext.siteUrl}/wp-json/wp/v2`
+    const baseUrl = `${loadContext.serverUri || window.location.origin}/api/v1`
 
     let path = `pages?filter[name]=home`
     if (parseInt(loadContext.frontPage))

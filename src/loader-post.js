@@ -7,11 +7,12 @@ export default class Loader extends Component {
 
   static loadProps({params, loadContext}, cb) {
 
+    console.log(loadContext)
     const customLoader = loadContext.loaders.Post
     if (customLoader) return customLoader(loadContext.siteUrl, cb)
 
-    const baseUrl = `${loadContext.siteUrl}/wp-json/wp/v2`
-    const path = `posts/${params.id}?_embed`
+    const baseUrl = `${loadContext.serverUri || window.location.origin}`
+    const path = `api/v1/posts/${params.id}?_embed`
 
     // LoadContext is basicaly an object we can pass around
     // the sever with our components and some baseUrl on it
