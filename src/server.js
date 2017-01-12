@@ -41,7 +41,7 @@ export default class TapestryServer {
     this.server.register([h2o2, Inert])
     this.server.connection({
       host: this.config.host || '0.0.0.0',
-      port: this.config.port || 3030
+      port: process.env.PORT || 3030
     })
   }
   startServer () {

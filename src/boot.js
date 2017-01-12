@@ -3,11 +3,15 @@ import fs from 'fs'
 import Build from './build'
 import Server from './server'
 
-// We have to do a bit of code duplication here... for now
+// resolve the parent config object
+console.log(global.TAPESTRY_PRODUCTION)
+
+// We have to do a bit of code duplication here
 if (global.TAPESTRY_PRODUCTION) {
-  const configPath = path.resolve(process.cwd(), './dist/tree.js')
+  console.log('yes')
+  const configPath = path.resolve(__dirname, 'app/tapestry.js')
   // throw an error if no config exists
-  if (!fs.existsSync(configPath)) throw Error('tree.js not found')
+  if (!fs.existsSync(configPath)) throw Error('compiled tapestry.js not found')
 
   // define parent config and current working directory
   const config = require(configPath)
