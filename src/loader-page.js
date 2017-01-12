@@ -10,8 +10,8 @@ export default class Loader extends Component {
     const customLoader = loadContext.loaders.Page
     if (customLoader) return customLoader(loadContext.siteUrl, cb)
 
-    const baseUrl = `${loadContext.siteUrl}/wp-json/wp/v2`
-    const path = `pages?filter[name]=${params.slug}`
+    const baseUrl = `${loadContext.serverUri||window.location.origin}`
+    const path = `api/v1/pages?filter[name]=${params.slug}`
 
     // LoadContext is basicaly an object we can pass around
     // the sever with our components and some baseUrl on it
