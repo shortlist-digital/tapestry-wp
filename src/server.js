@@ -24,11 +24,11 @@ export default class TapestryServer {
     // run server
     this.bootServer()
     this.registerProxies()
-    this.startServer()
     // set routes
     this.routeApi()
     this.routeStatic()
     this.routeDynamic()
+    this.startServer()
   }
 
   registerProxies () {
@@ -44,6 +44,7 @@ export default class TapestryServer {
       host: this.config.host || '0.0.0.0',
       port: process.env.PORT || 3030
     })
+    this.config.serverUri = this.server.info.uri
   }
   startServer () {
     // run server
@@ -53,13 +54,17 @@ export default class TapestryServer {
     })
   }
 
-  routeApi (path) {
+  routeApi () {
     this.server.route({
       method: 'GET',
-      path: `/api/v1/{param*}`,
+      path: `/api/v1/{query*}`,
       handler: {
-        uri: this.config.siteurl + '/wp-json/wp/v2/' + path,
-        passThrough: true
+        proxy: {
+          mapUri: (request, callback) => {
+            const url = this.config.siteUrl + '/wp-json/wp/v2/' + request.params.query + request.url.search
+            callback(null, url);
+          }
+        }
       }
     })
   }
@@ -70,7 +75,7 @@ export default class TapestryServer {
       path: `${path}`,
       handler: {
         proxy: {
-          uri: this.config.siteurl + path,
+          uri: this.config.siteUrl + path,
           passThrough: true
         }
       }
