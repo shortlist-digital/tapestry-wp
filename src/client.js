@@ -2,12 +2,10 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Router, browserHistory } from 'react-router'
 import AsyncProps from 'async-props'
-import locationOriginPolyfill from './utils/location-origin-polyfill'
+import 'location-origin'
 
 import DefaultRoutes from './default-routes'
 import config from 'tapestry.js'
-
-locationOriginPolyfill()
 
 render(
   <Router
