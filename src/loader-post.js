@@ -7,7 +7,6 @@ export default class Loader extends Component {
 
   static loadProps({params, loadContext}, cb) {
 
-    console.log(loadContext)
     const customLoader = loadContext.loaders && loadContext.loaders.Post
     if (customLoader) return customLoader(loadContext, cb)
 
