@@ -8,7 +8,7 @@ export default class Loader extends Component {
   static loadProps({params, loadContext}, cb) {
 
     const customLoader = loadContext.loaders.Page
-    if (customLoader) return customLoader(loadContext.siteUrl, cb)
+    if (customLoader) return customLoader(loadContext, cb)
 
     const baseUrl = `${loadContext.serverUri||window.location.origin}`
     const path = `api/v1/pages?filter[name]=${params.slug}`
