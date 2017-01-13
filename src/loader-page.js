@@ -7,7 +7,7 @@ export default class Loader extends Component {
 
   static loadProps({params, loadContext}, cb) {
 
-    const customLoader = loadContext.loaders.Page
+    const customLoader = loadContext.loaders && loadContext.loaders.Page
     if (customLoader) return customLoader(loadContext, cb)
 
     const baseUrl = `${loadContext.serverUri||window.location.origin}`
