@@ -11,12 +11,12 @@ const defaultHtml = ({ markup, head, asyncProps }) => {
         {head.meta.toComponent()}
         {head.link.toComponent()}
         {head.script.toComponent()}
+        <script defer src="/public/bundle.js" />
         <style dangerouslySetInnerHTML={{ __html: markup.css }} />
       </head>
       <body>
         <div id="root" dangerouslySetInnerHTML={{ __html: markup.html }} />
         <script dangerouslySetInnerHTML={{ __html: `window.__ASYNC_PROPS__ = ${JSON.stringify(asyncProps.propsArray)}` }} />
-        <script src="/public/bundle.js" />
       </body>
     </html>
   )
