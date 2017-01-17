@@ -14,7 +14,7 @@ program
   .command('build')
   .action(function() {
     process.chdir(path.join(__dirname, '..'))
-    exec('babel ' + cwdCached + ' --out-dir ./dist/app --presets=es2015,react  --ignore node_modules,__tests__', (err, stdout, stderr) => {
+    exec('./node_modules/babel-cli/bin/babel.js ' + cwdCached + ' --out-dir ./dist/app --presets=es2015,react  --ignore node_modules,__tests__', (err, stdout, stderr) => {
        if (err) {
          console.error(err)
          return

@@ -7,9 +7,8 @@ export default class Loader extends Component {
 
   static loadProps({params, loadContext}, cb) {
 
-    console.log(loadContext)
-    const customLoader = loadContext.loaders.Post
-    if (customLoader) return customLoader(loadContext.siteUrl, cb)
+    const customLoader = loadContext.loaders && loadContext.loaders.Post
+    if (customLoader) return customLoader(loadContext, cb)
 
     const baseUrl = `${loadContext.serverUri || window.location.origin}`
     const path = `api/v1/posts/${params.id}?_embed`
