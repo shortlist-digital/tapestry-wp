@@ -1,3 +1,4 @@
+import fs from 'fs'
 import path from 'path'
 import webpack from 'webpack'
 import CleanPlugin from 'clean-webpack-plugin'
@@ -11,12 +12,6 @@ export default (ctx, isTree = false) => {
     resolve: {
       modules: [ctx, `${ctx}/node_modules`]
     },
-    plugins: [
-      new CleanPlugin(['public'], {
-        root: ctx,
-        verbose: false
-      })
-    ],
     module: {
       rules: [{
         test: /\.js$/,
@@ -26,7 +21,13 @@ export default (ctx, isTree = false) => {
           presets: ['es2015', 'react']
         }
       }]
-    }
+    },
+    plugins: [
+      new CleanPlugin(['public'], {
+        root: ctx,
+        verbose: false
+      })
+    ]
   }
 
   if (isTree) {
@@ -50,6 +51,7 @@ export default (ctx, isTree = false) => {
   }
 
   if (env === 'production') {
+    config.devtool = 'eval'
     config.plugins.push(
       new webpack.DefinePlugin({
        'process.env.NODE_ENV': JSON.stringify('production')
@@ -61,7 +63,15 @@ export default (ctx, isTree = false) => {
       }),
       new webpack.LoaderOptionsPlugin({
         minimize: true
-      })
+      }),
+      function () {
+        this.plugin('done', function (stats) {
+          fs.writeFileSync(
+            path.resolve(ctx, 'public', 'stats.json'),
+            JSON.stringify(stats.toJson())
+          )
+        })
+      }
     )
   }
 
