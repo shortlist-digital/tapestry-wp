@@ -6,11 +6,11 @@ import Server from './server'
 // resolve the parent config object
 console.log(global.TAPESTRY_PRODUCTION)
 
-// We have to do a bit of code duplication here
+var configPath
 if (global.TAPESTRY_PRODUCTION) {
-  const configPath = path.resolve(__dirname, 'app/tapestry.js')
+  configPath = path.resolve(__dirname, 'app/tapestry.js')
 } else {
-  const configPath = path.resolve(process.cwd(), 'tapestry.js')
+  configPath = path.resolve(process.cwd(), 'tapestry.js')
 }
 // throw an error if no config exists
 if (!fs.existsSync(configPath)) throw Error('tapestry.js not found')
