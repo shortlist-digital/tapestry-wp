@@ -51,7 +51,6 @@ export default (ctx, isTree = false) => {
   }
 
   if (env === 'production') {
-    config.devtool = 'eval'
     config.plugins.push(
       new webpack.DefinePlugin({
        'process.env.NODE_ENV': JSON.stringify('production')
@@ -67,7 +66,7 @@ export default (ctx, isTree = false) => {
       function () {
         this.plugin('done', function (stats) {
           fs.writeFileSync(
-            path.resolve(ctx, 'public', 'stats.json'),
+            path.resolve(ctx, 'stats.json'),
             JSON.stringify(stats.toJson())
           )
         })
