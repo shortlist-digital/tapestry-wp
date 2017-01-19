@@ -12,6 +12,9 @@
   "bin": {
     "tapestry": "./bin/tapestry"
   },
+  "engines": {
+    "node": ">= 4.7.0"
+  },
   "dependencies": {
     "async-props": "^0.3.2",
     "babel-cli": "^6.18.0",
