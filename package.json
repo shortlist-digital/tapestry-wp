@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "./node_modules/.bin/eslint src bin",
-    "prepublish": "babel ./src --out-dir ./dist"
+    "prepublish": "babel ./src --out-dir ./dist",
+    "watch": "babel ./src --watch --out-dir ./dist"
   },
   "author": "Jon Sherrard",
   "license": "ISC",

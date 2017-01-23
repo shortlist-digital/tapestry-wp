@@ -7,7 +7,7 @@ export default class Loader extends Component {
 
   static loadProps({params, loadContext}, cb) {
 
-    const customLoader = loadContext.loaders.Categories
+    const customLoader = loadContext.loaders && loadContext.loaders.Categories
     if (customLoader) return customLoader(loadContext.siteUrl, cb)
 
     const baseUrl = `${loadContext.siteUrl}/wp-json/wp/v2`
