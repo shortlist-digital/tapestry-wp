@@ -1,50 +1,43 @@
 #!/usr/bin/env node
 
-'use strict'
-
+const program = require('commander')
+const exec = require('child_process').exec
 const path = require('path')
-const cp = require('child_process')
+const webpack = require('webpack')
+
 const pkg = require('../package.json')
 
-const defaultCommand = 'dev'
-const commands = [
-  'build',
-  'start',
-  defaultCommand
-]
+const cwdCached = process.cwd()
 
-let cmd = process.argv[2]
-
-if (['--version', '-v'].indexOf(cmd) !== -1) {
-  console.log(`tapestry-wp v${pkg.version}`)
-  process.exit(0)
-}
-
-if (['--help', '-h'].indexOf(cmd) !== -1) {
-  console.log(`
-    Usage
-      $ tapestry <command>
-
-    Available commands
-      ${Array.from(commands).join(', ')}
-  `)
-  process.exit(0)
-}
-
-if (commands.indexOf(cmd) === -1) {
-  cmd = defaultCommand
-}
-
-const bin = path.join(__dirname, `tapestry-${cmd}`)
-
-const startProcess = () => {
-  const proc = cp.spawn(bin, [], { stdio: 'inherit' })
-  proc.on('close', code => process.exit(code))
-  proc.on('error', err => {
-    console.error(err)
-    process.exit(1)
+program
+  .version(pkg.version)
+  .command('build')
+  .action(function() {
+    process.chdir(path.join(__dirname, '..'))
+    exec('./node_modules/babel-cli/bin/babel.js ' + cwdCached + ' --out-dir ./dist/app --presets=es2015,react  --ignore node_modules,__tests__', (err, stdout, stderr) => {
+       if (err) {
+         console.error(err)
+         return
+       }
+       console.log(stdout)
+       console.log('Built Server')
+    })
   })
-  return proc
-}
 
-startProcess()
+program
+  .command('start')
+  .action(function() {
+    global.TAPESTRY_PRODUCTION = true
+    require('../dist/boot.js')
+  })
+
+program.parse(process.argv)
+
+var NO_COMMAND_SPECIFIED = program.args.length === 0;
+
+if (NO_COMMAND_SPECIFIED) {
+  require('babel-register')({
+    "presets": ["es2015", "react"]
+  })
+  require('../dist/boot.js')
+}
