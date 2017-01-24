@@ -1,9 +1,10 @@
+import path from 'path'
 import webpackCleanPlugin from 'clean-webpack-plugin'
 
 export default (context) => {
     const config = {
       resolve: {
-        modulesDirectories: [context, `${context}/node_modules`]
+        root: [context, path.resolve(context, 'node_modules')]
       },
       entry: 'tapestry-wp/dist/client.js',
       output: {
