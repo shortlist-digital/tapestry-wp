@@ -5,8 +5,8 @@ export default class Build {
 
   constructor (context) {
     this.compiler = new webpack(config(context))
-
-    this.compiler.watch({
+    // console.log(this.compiler)
+    this.compiler.run({
       aggregateTimeout: 300
     }, (err, stats) => {
       const jsonStats = stats.toJson()
