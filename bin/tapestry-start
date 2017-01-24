@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+global.TAPESTRY_PRODUCTION = true
+
+require('../dist/boot.js')
