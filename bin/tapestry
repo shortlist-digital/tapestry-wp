@@ -6,9 +6,6 @@ const path = require('path')
 const webpack = require('webpack')
 const Server = require('../dist/server').default
 const Client = require('../dist/build').default
-// const Tapestry = require('../dist/boot.js')
-// const Server = Tapestry.Server
-// const Client = Tapestry.Client
 
 const pkg = require('../package.json')
 const configPath = path.join(process.cwd(), 'tapestry.js')
@@ -48,5 +45,4 @@ if (NO_COMMAND_SPECIFIED) {
   })
   const config = require(configPath)
   new Server({ config, cwdCached })
-  // tapestry.default(config)
 }
