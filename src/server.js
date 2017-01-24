@@ -13,7 +13,7 @@ import DefaultRoutes from './default-routes'
 import DefaultHTML from './default-html'
 
 
-export default class TapestryServer {
+export default class Tapestry {
 
   constructor ({ config, cwd }) {
     // allow access from class
@@ -68,7 +68,6 @@ export default class TapestryServer {
       }
     })
   }
-
   routeProxy (path) {
     this.server.route({
       method: 'GET',
