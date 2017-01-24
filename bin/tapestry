@@ -10,7 +10,7 @@ const Client = require('../dist/build').default
 const pkg = require('../package.json')
 const configPath = path.join(process.cwd(), 'tapestry.js')
 
-const cwdCached = process.cwd()
+const cwd = process.cwd()
 
 program
   .version(pkg.version)
@@ -30,10 +30,15 @@ program
 program
   .command('start')
   .action(function() {
-    global.TAPESTRY_PRODUCTION = true
     const config = require('../dist/app/tapestry')
-    new Client(cwdCached)
-    new Server({ config, cwdCached })
+    new Client(cwd)
+    new Server({ config, cwd })
+  })
+
+program
+  .command('bundle')
+  .action(function() {
+    new Client(cwd)
   })
 
 program.parse(process.argv)
@@ -45,6 +50,6 @@ if (NO_COMMAND_SPECIFIED) {
     "presets": ["es2015", "react"]
   })
   const config = require(configPath)
-  new Client(cwdCached)
-  new Server({ config, cwdCached })
+  new Client(cwd)
+  new Server({ config, cwd })
 }
