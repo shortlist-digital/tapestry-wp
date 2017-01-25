@@ -8,7 +8,8 @@ const Server = require('../dist/server').default
 const Client = require('../dist/build').default
 
 const pkg = require('../package.json')
-const configPath = path.join(process.cwd(), 'tapestry.js')
+const treeClient = path.join(process.cwd(), 'tapestry.js')
+const treeServer = path.join(process.cwd(), '.tapestry/tapestry.js')
 
 const cwd = process.cwd()
 
@@ -17,7 +18,7 @@ program
   .command('build')
   .action(function() {
     process.chdir(path.join(__dirname, '..'))
-    exec('babel ' + cwdCached + ' --out-dir ./dist/app --presets=es2015,react  --ignore node_modules,__tests__', (err, stdout, stderr) => {
+    exec(`babel ${cwd} --out-dir ${cwd}.tapestry --presets=es2015,react  --ignore node_modules,__tests__,_scripts`, (err, stdout, stderr) => {
        if (err) {
          console.error(err)
          return
@@ -30,7 +31,7 @@ program
 program
   .command('start')
   .action(function() {
-    const config = require('../dist/app/tapestry')
+    const config = require(treeServer)
     new Client(cwd)
     new Server({ config, cwd })
   })
@@ -49,7 +50,7 @@ if (NO_COMMAND_SPECIFIED) {
   require('babel-register')({
     "presets": ["es2015", "react"]
   })
-  const config = require(configPath)
+  const config = require(treeClient)
   new Client(cwd)
   new Server({ config, cwd })
 }
