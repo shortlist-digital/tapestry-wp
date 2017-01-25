@@ -2,49 +2,15 @@
 
 'use strict'
 
-const path = require('path')
-const cp = require('child_process')
+const program = require('commander')
 const pkg = require('../package.json')
 
-const defaultCommand = 'dev'
-const commands = [
-  'build',
-  'start',
-  defaultCommand
-]
+program
+  .version(pkg.version)
+  .description(pkg.description)
+  .usage('[options]')
+  .command('dev', 'development mode (default)', { isDefault: true })
+  .command('start', 'production mode')
+  .command('build', 'build client bundle')
 
-let cmd = process.argv[2]
-
-if (['--version', '-v'].indexOf(cmd) !== -1) {
-  console.log(`tapestry-wp v${pkg.version}`)
-  process.exit(0)
-}
-
-if (['--help', '-h'].indexOf(cmd) !== -1) {
-  console.log(`
-    Usage
-      $ tapestry <command>
-
-    Available commands
-      ${Array.from(commands).join(', ')}
-  `)
-  process.exit(0)
-}
-
-if (commands.indexOf(cmd) === -1) {
-  cmd = defaultCommand
-}
-
-const bin = path.join(__dirname, `tapestry-${cmd}`)
-
-const startProcess = () => {
-  const proc = cp.spawn(bin, [], { stdio: 'inherit' })
-  proc.on('close', code => process.exit(code))
-  proc.on('error', err => {
-    console.error(err)
-    process.exit(1)
-  })
-  return proc
-}
-
-startProcess()
+program.parse(process.argv)
