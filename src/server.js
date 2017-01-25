@@ -49,7 +49,10 @@ export default class Tapestry {
   startServer () {
     // run server
     this.server.start(err => {
-      if (err) console.log(err)
+      if (err) {
+        console.error(err)
+        return
+      }
       console.log(`🌎  Server running at: ${this.server.info.uri} 👍`)
     })
   }
@@ -109,7 +112,10 @@ export default class Tapestry {
           // get all the props yo
           loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
             // 404 if error from Hapi
-            if (err) console.log(err)
+            if (err) {
+              console.error(err)
+              return
+            }
             // get html from props
             const data = {
               markup: renderStaticOptimized(() =>
