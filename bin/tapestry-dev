@@ -10,10 +10,10 @@ const cwd = process.cwd()
 const treeClient = path.join(cwd, 'tapestry.js')
 
 require('babel-register')({
-  "presets": ["es2015", "react"]
+  presets: ['es2015', 'react']
 })
 
 const config = require(treeClient)
 
-new Client(cwd)
-new Server({ config, cwd })
+new Client({ cwd, env: 'development' })
+new Server({ cwd, config })

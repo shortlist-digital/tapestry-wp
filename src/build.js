@@ -3,9 +3,9 @@ import config from './webpack.config'
 
 export default class Build {
 
-  constructor (context) {
+  constructor (options) {
     this.compiler = new webpack(
-      config(context),
+      config(options),
       (err, stats) => console.log(stats.toString({ colors: true }))
     )
   }

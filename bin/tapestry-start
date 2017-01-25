@@ -11,5 +11,5 @@ const treeServer = path.join(cwd, '.tapestry/tapestry.js')
 
 const config = require(treeServer)
 
-new Client(cwd)
-new Server({ config, cwd })
+new Client({ cwd, env: 'production' })
+new Server({ cwd, config })
