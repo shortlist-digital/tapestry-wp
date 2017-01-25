@@ -11,6 +11,4 @@ exec(`babel ${cwd} --out-dir ${cwd}/.tapestry --presets=es2015,react  --ignore n
     console.error(err)
     return
   }
-  console.log(stdout)
-  console.log('Built Server')
 })
