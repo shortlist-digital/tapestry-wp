@@ -7,7 +7,7 @@ export default (context) => {
       },
       entry: 'tapestry-wp/dist/client.js',
       output: {
-        path: 'public',
+        path: '_scripts',
         filename: 'bundle.js'
       },
       module: {
@@ -23,7 +23,7 @@ export default (context) => {
         ]
       },
       plugins: [
-        new webpackCleanPlugin(['public'], { root: context, verbose: false })
+        new webpackCleanPlugin(['_scripts'], { root: context, verbose: false })
         // new webpack.optimize.UglifyJsPlugin(),
         // new webpack.optimize.OccurrenceOrderPlugin(),
         // new webpack.optimize.DedupePlugin(),
