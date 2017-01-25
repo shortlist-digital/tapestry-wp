@@ -3,19 +3,18 @@ import path from 'path'
 import webpack from 'webpack'
 import CleanPlugin from 'clean-webpack-plugin'
 
-const env = process.env.NODE_ENV
-
-
-export default (ctx) => {
+export default ({ cwd, env }) => {
 
   const config = {
     entry: 'tapestry-wp/dist/client.js',
     output: {
-      path: path.resolve(ctx, '_scripts'),
+      path: path.resolve(cwd, '_scripts'),
       filename: 'bundle.js'
     },
     resolve: {
-      modules: [ctx, `${ctx}/node_modules`]
+      alias: {
+        'tapestry.js': path.resolve(cwd, '.tapestry/tapestry.js')
+      }
     },
     module: {
       rules: [{
@@ -23,13 +22,16 @@ export default (ctx) => {
         exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
-          presets: ['es2015', 'react']
+          presets: [
+            ['es2015', { modules: false }],
+            'react'
+          ]
         }
       }]
     },
     plugins: [
       new CleanPlugin(['_scripts'], {
-        root: ctx,
+        root: cwd,
         verbose: false
       })
     ]
@@ -41,15 +43,18 @@ export default (ctx) => {
        'process.env.NODE_ENV': JSON.stringify('production')
       }),
       new webpack.optimize.UglifyJsPlugin({
-        compress: { warnings: false }
+        compress: {
+          warnings: false
+        }
       }),
       new webpack.LoaderOptionsPlugin({
-        minimize: true
+        minimize: true,
+        debug: false
       }),
       function () {
         this.plugin('done', stats =>
           fs.writeFileSync(
-            path.resolve(ctx, 'stats.json'),
+            path.resolve(cwd, 'stats.json'),
             JSON.stringify(stats.toJson())
           )
         )
