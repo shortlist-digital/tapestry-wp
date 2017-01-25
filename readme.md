@@ -30,9 +30,9 @@ Tapestry consumes a config object in the root of the parent project i.e. Shortli
 - [x] Hook up WP-API to match routes
 - [x] Head overrides per page with `react-helmet`
 - [x] Supply default routes
-- [ ] Integrate CSS-in-JS framework
+- [x] Integrate CSS-in-JS framework
 - [ ] Access options, menus through WP-API
-- [ ] Ability to override loaders - Separate loaders and routes?
+- [x] Ability to override loaders - Separate loaders and routes?
 - [ ] Ability to override routes
 - [ ] WordPress plugin to enable previewing and 'View Post' functionality
 - [ ] Hydrate single page store
@@ -40,5 +40,5 @@ Tapestry consumes a config object in the root of the parent project i.e. Shortli
 - [ ] Permalink WP-API plugin - integrate into Wordpress Tapestry
 - [ ] Handle Redirects
 - [ ] Hash client bundle, allow path and name override
-- [ ] Provide prod build option for client bundle
-- [ ] Define cli interface (https://medium.freecodecamp.com/writing-command-line-applications-in-nodejs-2cf8327eee2)
+- [x] Provide prod build option for client bundle
+- [x] Define cli interface (https://medium.freecodecamp.com/writing-command-line-applications-in-nodejs-2cf8327eee2)
