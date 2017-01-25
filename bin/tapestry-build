@@ -2,13 +2,11 @@
 
 'use strict'
 
-const cp = require('child_process')
-const path = require('path')
+const exec = require('child_process').exec
 
-const cwdCached = process.cwd()
+const cwd = process.cwd()
 
-process.chdir(path.join(__dirname, '..'))
-cp.exec('./node_modules/babel-cli/bin/babel.js ' + cwdCached + ' --out-dir ./dist/app --presets=es2015,react  --ignore node_modules,__tests__', (err, stdout, stderr) => {
+exec(`babel ${cwd} --out-dir ${cwd}/.tapestry --presets=es2015,react  --ignore node_modules,__tests__,_scripts`, (err, stdout, stderr) => {
   if (err) {
     console.error(err)
     return
