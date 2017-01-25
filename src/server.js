@@ -84,10 +84,10 @@ export default class TapestryServer {
   routeStatic () {
     this.server.route({
       method: 'GET',
-      path: '/public/{param*}',
+      path: '/_scripts/{param*}',
       handler: {
         directory: {
-          path: 'public'
+          path: '_scripts'
         }
       }
     })

@@ -9,7 +9,7 @@ console.log(global.TAPESTRY_PRODUCTION)
 // We have to do a bit of code duplication here
 if (global.TAPESTRY_PRODUCTION) {
   console.log('yes')
-  const configPath = path.resolve(__dirname, 'app/tapestry.js')
+  const configPath = path.resolve(process.cwd(), '.tapestry/tapestry.js')
   // throw an error if no config exists
   if (!fs.existsSync(configPath)) throw Error('compiled tapestry.js not found')
 
