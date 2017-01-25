@@ -11,7 +11,7 @@ export default (ctx) => {
   const config = {
     entry: 'tapestry-wp/dist/client.js',
     output: {
-      path: path.resolve(ctx, 'public'),
+      path: path.resolve(ctx, '_scripts'),
       filename: 'bundle.js'
     },
     resolve: {
@@ -22,11 +22,13 @@ export default (ctx) => {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
-        options: { presets: ['es2015', 'react'] }
+        options: {
+          presets: ['es2015', 'react']
+        }
       }]
     },
     plugins: [
-      new CleanPlugin(['public'], {
+      new CleanPlugin(['_scripts'], {
         root: ctx,
         verbose: false
       })

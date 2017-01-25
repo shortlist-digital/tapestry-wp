@@ -11,7 +11,7 @@ const defaultHtml = ({ markup, head, asyncProps }) => {
         {head.meta.toComponent()}
         {head.link.toComponent()}
         {head.script.toComponent()}
-        <script defer src="/public/bundle.js" />
+        <script defer src="/_scripts/bundle.js" />
         <style dangerouslySetInnerHTML={{ __html: markup.css }} />
       </head>
       <body>
