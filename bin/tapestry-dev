@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+'use strict'
+
+const path = require('path')
+const Server = require('../dist/server').default
+const Client = require('../dist/build').default
+
+const cwd = process.cwd()
+const treeClient = path.join(cwd, 'tapestry.js')
+
+require('babel-register')({
+  presets: ['es2015', 'react']
+})
+
+const config = require(treeClient)
+
+new Client({ cwd, env: 'development' })
+new Server({ cwd, config })

@@ -1,51 +1,16 @@
 #!/usr/bin/env node
 
+'use strict'
+
 const program = require('commander')
-const exec = require('child_process').exec
-const path = require('path')
-const webpack = require('webpack')
-const Server = require('../dist/server').default
-const Client = require('../dist/build').default
-
 const pkg = require('../package.json')
-const treeClient = path.join(process.cwd(), 'tapestry.js')
-const treeServer = path.join(process.cwd(), '.tapestry/tapestry.js')
-
-const cwd = process.cwd()
 
 program
   .version(pkg.version)
-  .command('build')
-  .action(function() {
-    process.chdir(path.join(__dirname, '..'))
-    exec(`babel ${cwd} --out-dir ${cwd}.tapestry --presets=es2015,react  --ignore node_modules,__tests__,_scripts`, (err, stdout, stderr) => {
-       if (err) {
-         console.error(err)
-         return
-       }
-       console.log(stdout)
-       console.log('Built Server')
-    })
-  })
-
-program
-  .command('start')
-  .action(function() {
-    const config = require(treeServer)
-    console.log(cwd)
-    new Client(cwd)
-    new Server({ config, cwd })
-  })
+  .description(pkg.description)
+  .usage('[options]')
+  .command('dev', 'development mode (default)', { isDefault: true })
+  .command('start', 'production mode')
+  .command('build', 'build client bundle')
 
 program.parse(process.argv)
-
-var NO_COMMAND_SPECIFIED = program.args.length === 0;
-
-if (NO_COMMAND_SPECIFIED) {
-  require('babel-register')({
-    "presets": ["es2015", "react"]
-  })
-  // const config = require(treeClient)
-  new Client({ cwd: cwd, env: 'development' })
-  // new Server({ config, cwd })
-}

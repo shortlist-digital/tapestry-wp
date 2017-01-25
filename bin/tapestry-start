@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+
+'use strict'
+
+const path = require('path')
+const Server = require('../dist/server').default
+const Client = require('../dist/build').default
+
+const cwd = process.cwd()
+const treeServer = path.join(cwd, '.tapestry/tapestry.js')
+
+const config = require(treeServer)
+
+new Client({ cwd, env: 'production' })
+new Server({ cwd, config })
