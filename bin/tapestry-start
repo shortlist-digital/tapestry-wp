@@ -5,6 +5,9 @@
 const path = require('path')
 const Server = require('../dist/server').default
 const Client = require('../dist/build').default
+const log = require('../dist/logger').log
+
+log(`Setting up Tapestry…`)
 
 const cwd = process.cwd()
 const treeServer = path.join(cwd, '.tapestry/tapestry.js')

@@ -12,6 +12,8 @@ import AsyncProps, { loadPropsOnServer } from 'async-props'
 import DefaultRoutes from './default-routes'
 import DefaultHTML from './default-html'
 
+import { log } from './logger'
+
 
 export default class Tapestry {
 
@@ -53,7 +55,7 @@ export default class Tapestry {
         console.error(err)
         return
       }
-      console.log(`🌎  Server running at: ${this.server.info.uri} 👍`)
+      log(`Tapestry running at: ${this.server.info.uri} 🐙`)
     })
   }
 

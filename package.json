@@ -33,6 +33,7 @@
     "eslint-plugin-react": "^6.8.0",
     "fetch": "^1.1.0",
     "glamor": "^2.20.12",
+    "gzip-size": "^3.0.0",
     "h2o2": "5.1.1",
     "hapi": "15.0.3",
     "inert": "^4.0.3",
@@ -44,5 +45,8 @@
     "react-object-inspector": "^0.2.1",
     "react-router": "^3.0.0",
     "webpack": "^2.2.0"
+  },
+  "devDependencies": {
+    "chalk": "^1.1.3"
   }
 }

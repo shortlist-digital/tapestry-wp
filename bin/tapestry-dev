@@ -5,9 +5,12 @@
 const path = require('path')
 const Server = require('../dist/server').default
 const Client = require('../dist/build').default
+const log = require('../dist/logger').log
 
 const cwd = process.cwd()
 const treeClient = path.join(cwd, 'tapestry.js')
+
+log(`Setting up Tapestry…`)
 
 require('babel-register')({
   presets: ['es2015', 'react']

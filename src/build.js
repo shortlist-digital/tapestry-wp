@@ -1,5 +1,7 @@
 import webpack from 'webpack'
 import config from './webpack.config'
+import { log, error } from './logger'
+import bytes from 'pretty-bytes'
 
 export default class Build {
 
@@ -8,17 +10,8 @@ export default class Build {
   }
 
   handleComplete (err, stats) {
-    if (err) {
-      console.error(err)
-      return
-    }
-    const output = stats.toString({
-      hash: false,
-      timings: false,
-      version: false,
-      chunks: false,
-      colors: true
-    })
-    console.log(output)
+    if (err) error(err, true)
+    const output = stats.toJson()
+    log(`Client bundle size: ${bytes(output.assets[0].size)}`)
   }
 }
