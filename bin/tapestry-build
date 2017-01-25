@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+
+'use strict'
+
+const cp = require('child_process')
+const path = require('path')
+
+const cwdCached = process.cwd()
+
+process.chdir(path.join(__dirname, '..'))
+cp.exec('./node_modules/babel-cli/bin/babel.js ' + cwdCached + ' --out-dir ./dist/app --presets=es2015,react  --ignore node_modules,__tests__', (err, stdout, stderr) => {
+  if (err) {
+    console.error(err)
+    return
+  }
+  console.log(stdout)
+  console.log('Built Server')
+})
