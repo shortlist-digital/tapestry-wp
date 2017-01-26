@@ -16,6 +16,7 @@ import DefaultHTML from './default-html'
 export default class Tapestry {
 
   constructor ({ config, cwd }, cb) {
+    console.log('TEST')
     // allow access from class
     this.config = config.default
     this.context = cwd
