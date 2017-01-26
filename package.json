@@ -7,7 +7,7 @@
     "lint": "./node_modules/.bin/eslint src bin",
     "prepublish": "babel ./src --out-dir ./dist",
     "watch": "babel ./src --watch --out-dir ./dist",
-    "test": "mocha"
+    "test": "mocha 'test/**/*.js' --compilers js:babel-core/register"
   },
   "author": "Jon Sherrard",
   "license": "ISC",
