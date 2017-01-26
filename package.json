@@ -7,7 +7,7 @@
     "lint": "./node_modules/.bin/eslint src bin",
     "prepublish": "babel ./src --out-dir ./dist",
     "watch": "babel ./src --watch --out-dir ./dist",
-    "test": "jest"
+    "test": "mocha"
   },
   "author": "Jon Sherrard",
   "license": "ISC",
@@ -46,7 +46,9 @@
     "webpack": "^2.2.0"
   },
   "devDependencies": {
-    "jest": "^18.1.0",
-    "nock": "^9.0.2"
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "nock": "^9.0.2",
+    "supertest": "^2.0.1"
   }
 }
