@@ -15,12 +15,15 @@ import DefaultHTML from './default-html'
 
 export default class Tapestry {
 
-  constructor ({ config, cwd }) {
+  constructor ({ config, cwd }, cb) {
+    console.log('TEST')
     // allow access from class
     this.config = config.default
     this.context = cwd
+    this.cb = cb
     // override defaults
     this.routes = this.config.routes || DefaultRoutes
+    this.stop = this.stopServer.bind(this)
     // run server
     this.bootServer()
     this.registerProxies()
@@ -54,7 +57,12 @@ export default class Tapestry {
         return
       }
       console.log(`🌎  Server running at: ${this.server.info.uri} 👍`)
+      if (typeof this.cb === 'function') this.cb()
     })
+  }
+  stopServer () {
+    this.server.stop()
+    console.log(`🌎  Server stopped 👍`)
   }
 
   routeApi () {
