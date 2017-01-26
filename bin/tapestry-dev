@@ -3,17 +3,28 @@
 'use strict'
 
 const path = require('path')
+const fs = require('fs')
 const Server = require('../dist/server').default
 const Client = require('../dist/build').default
 
 const cwd = process.cwd()
 const treeClient = path.join(cwd, 'tapestry.js')
 
+if (!fs.existsSync(treeClient)) {
+  console.error('Couldn\'t find a tapestry.js')
+  process.exit(0)
+}
+
 require('babel-register')({
   presets: ['es2015', 'react']
 })
 
 const config = require(treeClient)
+
+if (!config.default.siteUrl) {
+  console.error('siteUrl is missing')
+  process.exit(0)
+}
 
 new Client({ cwd, env: 'development' })
 new Server({ cwd, config })

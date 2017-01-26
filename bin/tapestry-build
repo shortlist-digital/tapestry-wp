@@ -9,7 +9,7 @@ const cwd = process.cwd()
 exec(`babel ${cwd} --out-dir ${cwd}/.tapestry --presets=es2015,react  --ignore node_modules,__tests__,_scripts`, (err, stdout, stderr) => {
   if (err) {
     console.error(err)
-    return
+    process.exit(0)
   }
   console.log('Built Tapestry 👍')
 })

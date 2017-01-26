@@ -3,13 +3,24 @@
 'use strict'
 
 const path = require('path')
+const fs = require('fs')
 const Server = require('../dist/server').default
 const Client = require('../dist/build').default
 
 const cwd = process.cwd()
 const treeServer = path.join(cwd, '.tapestry/tapestry.js')
 
+if (!fs.existsSync(treeServer)) {
+  console.error('Couldn\'t find the .tapestry directory, have you run tapestry build?')
+  process.exit(0)
+}
+
 const config = require(treeServer)
+
+if (!config.default.siteUrl) {
+  console.error('siteUrl is missing')
+  process.exit(0)
+}
 
 new Client({ cwd, env: 'production' })
 new Server({ cwd, config })
