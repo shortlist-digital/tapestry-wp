@@ -1,91 +1,113 @@
-'use strict'
-
-const React = require('react')
-const assert = require('assert')
+const expect = require('chai').expect
 const Server = require('../dist/server').default
 const request = require('supertest')
 const nock = require('nock')
-
-// nock.enableNetConnect()
-//
-const mockedApi = nock('http://dummy.api')
-  .defaultReplyHeaders({ 'Content-Type': 'application/json' })
-  .log(console.log)
-const thingaling = {
-  username: 'pgte',
-  email: 'pedro.teixeira@gmail.com',
-  _id: '4324243fsd'
-}
-mockedApi
-  .get('/wp-json/wp/v2/pages?filter[name]=home')
-  .reply(200, thingaling)
-mockedApi
-  .get('/wp-json/wp/v2/posts/10?_embed')
-  .reply(200, thingaling)
+const React = require('react')
 
 
+// test a super basic Tapestry server with minimal config
+describe('Minimal config', function () {
 
-describe('Minimum config', () => {
-
-  let tapestry = null
   const config = {
     siteUrl: 'http://dummy.api:80'
   }
+  const jsonResp = {
+    username: 'pgte',
+    email: 'pedro.teixeira@gmail.com',
+    _id: '4324243fsd'
+  }
 
-  before(done => {
-    tapestry = new Server({ config: { default: config } }, done)
-  })
+  before(function (done) { this.tapestry = setup(config, done) })
+  after(function () { this.tapestry.stop() })
 
-  it('Homepage should respond with a 200', done => {
-    request(tapestry.server.listener)
+  it('Homepage should respond with a 200', function (done) {
+    request(this.tapestry.server.listener)
       .get('')
-      .expect(200)
-      .end(done)
+      .expect(200, done)
   })
-
-  it('Homepage should respond with a missing view component', done => {
-    request(tapestry.server.listener)
+  it('A page should return a Missing View Component', function (done) {
+    request(this.tapestry.server.listener)
       .get('')
-      .expect(res => res.text.includes('Missing component'))
-      .end(done)
+      .end((err, res) => {
+        expect(res.text).to.contain('Missing component')
+        done()
+      })
   })
-
-  it('ASYNC_PROPS should store response from API', done => {
-    request(tapestry.server.listener)
+  it('Global ASYNC_PROPS should store data from API', function (done) {
+    mockApi(
+      '/wp-json/wp/v2/pages',
+      { filter: { name: 'home' }},
+      jsonResp
+    )
+    request(this.tapestry.server.listener)
       .get('')
-      .expect(res =>
-        res.text.includes(`window.__ASYNC_PROPS__ = [{"resp":${JSON.stringify(thingaling)}}]`)
-      )
-      .end(done)
-  })
-
-  after(() => {
-    tapestry.stop()
+      .end((err, res) => {
+        expect(res.text).to.contain(`window.__ASYNC_PROPS__ = [{"resp":${JSON.stringify(jsonResp)}}]`)
+        done()
+      })
   })
 })
 
-describe('Custom components', () => {
+// test the component loader
+describe('Custom components', function () {
 
-  let tapestry = null
+  const componentString = 'Test Content'
   const config = {
     components: {
-      Post: () => React.createElement('div', null, 'Test content')
+      Post: () => React.createElement('div', null, componentString)
     },
     siteUrl: 'http://dummy.api:80'
   }
 
-  before(done => {
-    tapestry = new Server({ config: { default: config } }, done)
-  })
+  before(function (done) { this.tapestry = setup(config, done) })
+  after(function () { this.tapestry.stop() })
 
-  it('Home should respond with defined component', done => {
-    request(tapestry.server.listener)
-      .get('/category/slug/10')
-      .expect(res => console.log(res))
-      .end(done)
-  })
-
-  after(() => {
-    tapestry.stop()
+  it('Post should return with custom component text', function (done) {
+    mockApi(
+      '/wp-json/wp/v2/posts/10',
+      { '_embed': true }
+    )
+    request(this.tapestry.server.listener)
+      .get('/cat/slug/10')
+      .end((err, res) => {
+        expect(res.text).to.contain(componentString)
+        done()
+      })
   })
 })
+
+// test proxy stchuff
+describe('Proxies', function () {
+
+  const proxyFile = '/robots.txt'
+  const proxyContents = 'Robots text file'
+  const config = {
+    proxyPaths: [proxyFile],
+    siteUrl: 'http://dummy.api:80'
+  }
+  before(function (done) { this.tapestry = setup(config, done) })
+  after(function () { this.tapestry.stop() })
+
+  it('Proxy should return correct content', function (done) {
+    mockApi(
+      proxyFile,
+      null,
+      proxyContents
+    )
+    request(this.tapestry.server.listener)
+      .get(proxyFile)
+      .end((err, res) => {
+        expect(res.text).to.contain(proxyContents)
+        done()
+      })
+  })
+})
+
+
+const setup = (config, done) =>
+  new Server({ config: { default: config } }, done)
+const mockApi = (path, query, resp) =>
+  nock('http://dummy.api')
+    .get(path)
+    .query(query || false)
+    .reply(200, resp || {})
