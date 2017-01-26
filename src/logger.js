@@ -7,6 +7,6 @@ export const log = str =>
   console.log(msg(str))
 
 export const error = (str, quit) => {
-  console.log(err(str))
-  if (quit) process.exit(1)
+  console.log(chalk.bold.red('ERR!'), chalk.red(str))
+  if (quit) process.exit(0)
 }
