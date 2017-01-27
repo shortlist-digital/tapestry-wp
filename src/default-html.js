@@ -13,6 +13,7 @@ const defaultHtml = ({ markup, head, asyncProps }) => {
         {head.script.toComponent()}
         <script defer src="/_scripts/bundle.js" />
         <style dangerouslySetInnerHTML={{ __html: markup.css }} />
+        <link rel="shortcut icon" href="/public/favicon.ico" />
       </head>
       <body>
         <div id="root" dangerouslySetInnerHTML={{ __html: markup.html }} />
