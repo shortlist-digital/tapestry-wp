@@ -1,20 +1,22 @@
 import nock from 'nock'
 import Server from '../dist/server'
-import resp from './mocks/page.json'
+import data from './mocks/page.json'
 
 export const bootServer = (config, done) =>
   new Server({
     config: {
       default: config
     }
-  }, done)
+  }, done, true)
 
 export const mockApi = ({
   url = 'http://dummy.api',
+  query = false,
   path,
-  query = false
+  resp
 }) =>
   nock(url)
+    // .log(console.log)
     .get(path)
     .query(query)
-    .reply(200, resp)
+    .reply(200, resp || data)
