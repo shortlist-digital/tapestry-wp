@@ -7,20 +7,20 @@ const fs = require('fs')
 const Server = require('../dist/server').default
 const Client = require('../dist/build').default
 const logger = require('../dist/logger')
+const cwd = process.cwd()
+
+// compiled tapestry config path
+const treeServer = path.join(cwd, '.tapestry/tapestry.js')
+
+// check compiled tapestry directory exists
+if (!fs.existsSync(treeServer))
+  logger.error(`.tapestry directory not found in ${cwd}, have you run 'tapestry build' yet?`)
 
 logger.info(`Booting Tapestry… \n`)
 
-const cwd = process.cwd()
-const treeServer = path.join(cwd, '.tapestry/tapestry.js')
-
-if (!fs.existsSync(treeServer))
-  logger.error('Couldn\'t find the .tapestry directory, have you run `tapestry build`?')
-
 const config = require(treeServer)
 
-if (!config.default.siteUrl)
-  logger.error('siteUrl is missing')
-
+// kick off client build & server
 new Client({
   cwd,
   env: 'production',
