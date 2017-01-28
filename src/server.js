@@ -65,7 +65,7 @@ export default class Tapestry {
         proxy: {
           mapUri: (request, callback) => {
             const url = this.config.siteUrl + '/wp-json/wp/v2/' + request.params.query + request.url.search
-            callback(null, url);
+            callback(null, url)
           }
         }
       }
