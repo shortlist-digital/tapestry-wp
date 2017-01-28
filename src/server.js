@@ -14,6 +14,8 @@ import { has, isEmpty } from 'lodash'
 import DefaultRoutes from './default-routes'
 import DefaultHTML from './default-html'
 
+import { success, error } from './logger'
+
 
 export default class Tapestry {
 
@@ -52,11 +54,8 @@ export default class Tapestry {
   startServer () {
     // run server
     this.server.start(err => {
-      if (err) {
-        console.error(err)
-        return
-      }
-      console.log(`🌎  Server running at: ${this.server.info.uri} 👍`)
+      if (err) error(err)
+      success(`Server ready: ${this.server.info.uri}`)
     })
   }
   stopServer () {
@@ -72,7 +71,7 @@ export default class Tapestry {
         proxy: {
           mapUri: (request, callback) => {
             const url = this.config.siteUrl + '/wp-json/wp/v2/' + request.params.query + request.url.search
-            callback(null, url);
+            callback(null, url)
           }
         }
       }
@@ -150,7 +149,7 @@ export default class Tapestry {
             // 500 if error from AsyncProps
             if (err)
               return reply(err).code(500)
-
+            
             // get html from props
             const data = {
               markup: renderStaticOptimized(() =>

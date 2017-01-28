@@ -3,13 +3,12 @@
 'use strict'
 
 const exec = require('child_process').exec
-
+const logger = require('../dist/logger')
 const cwd = process.cwd()
 
+logger.info('Preparing Tapestry…\n')
+
 exec(`babel ${cwd} --out-dir ${cwd}/.tapestry --presets=es2015,react  --ignore node_modules,__tests__,_scripts`, (err, stdout, stderr) => {
-  if (err) {
-    console.error(err)
-    return
-  }
-  console.log('Built Tapestry 👍')
+  if (err) logger.error(err)
+  logger.success('Tapestry built! Run `tapestry start` to boot')
 })
