@@ -1,24 +1,22 @@
 import webpack from 'webpack'
 import config from './webpack.config'
+import { success, error } from './logger'
+import bytes from 'pretty-bytes'
 
 export default class Build {
 
-  constructor (options) {
-    new webpack(config(options), this.handleComplete)
-  }
-
-  handleComplete (err, stats) {
-    if (err) {
-      console.error(err)
-      return
-    }
-    const output = stats.toString({
-      hash: false,
-      timings: false,
-      version: false,
-      chunks: false,
-      colors: true
+  constructor (opts) {
+    // bundle client scripts
+    new webpack(config(opts), (err, stats) => {
+      // handle error
+      if (err)
+        error(err)
+      // log output
+      const output = stats.toJson()
+      success(`Client built: ${bytes(output.assets[0].size)}`)
+      // run callback
+      if (typeof opts.onComplete === 'function')
+        opts.onComplete(output)
     })
-    console.log(output)
   }
 }

@@ -12,6 +12,8 @@ import AsyncProps, { loadPropsOnServer } from 'async-props'
 import DefaultRoutes from './default-routes'
 import DefaultHTML from './default-html'
 
+import { success, error } from './logger'
+
 
 export default class Tapestry {
 
@@ -49,11 +51,8 @@ export default class Tapestry {
   startServer () {
     // run server
     this.server.start(err => {
-      if (err) {
-        console.error(err)
-        return
-      }
-      console.log(`🌎  Server running at: ${this.server.info.uri} 👍`)
+      if (err) error(err)
+      success(`Server ready: ${this.server.info.uri}`)
     })
   }
 
@@ -112,10 +111,7 @@ export default class Tapestry {
           // get all the props yo
           loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
             // 404 if error from Hapi
-            if (err) {
-              console.error(err)
-              return
-            }
+            if (err) error(err)
             // get html from props
             const data = {
               markup: renderStaticOptimized(() =>
