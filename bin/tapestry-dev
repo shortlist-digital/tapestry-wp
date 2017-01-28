@@ -6,14 +6,15 @@ const path = require('path')
 const fs = require('fs')
 const Server = require('../dist/server').default
 const Client = require('../dist/build').default
+const logger = require('../dist/logger')
 
 const cwd = process.cwd()
 const treeClient = path.join(cwd, 'tapestry.js')
 
-if (!fs.existsSync(treeClient)) {
-  console.error('Couldn\'t find a tapestry.js')
-  process.exit(0)
-}
+if (!fs.existsSync(treeClient))
+  logger.error('Couldn\'t find a tapestry.js')
+
+logger.info(`Booting Tapestry… \n`)
 
 require('babel-register')({
   presets: ['es2015', 'react']
@@ -21,10 +22,11 @@ require('babel-register')({
 
 const config = require(treeClient)
 
-if (!config.default.siteUrl) {
-  console.error('siteUrl is missing')
-  process.exit(0)
-}
+if (!config.default.siteUrl)
+  logger.error('siteUrl is missing')
 
-new Client({ cwd, env: 'development' })
-new Server({ cwd, config })
+new Client({
+  cwd,
+  env: 'development',
+  onComplete: () => new Server({ cwd, config })
+})
