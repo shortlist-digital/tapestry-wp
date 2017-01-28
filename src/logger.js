@@ -1,12 +1,19 @@
 import chalk from 'chalk'
 
-const msg = chalk.white
-const err = chalk.bold.red
 
-export const log = str =>
-  console.log(msg(str))
-
-export const error = (str, quit) => {
-  console.log(chalk.bold.red('ERR!'), chalk.red(str))
-  if (quit) process.exit(0)
+// method to log message to console and optionally cancel current process
+const log = (message, quit) => {
+  console.log(message)
+  if (quit)
+    process.exit(0)
 }
+
+
+export const info = (str) =>
+  log(chalk.white(str))
+
+export const success = (str, quit) =>
+  log(`${chalk.green('→')} ${chalk.white(str)}`, quit)
+
+export const error = (str, quit) =>
+  log(`${chalk.bold.red('Error:')} ${chalk.red(str)}\n`, quit)
