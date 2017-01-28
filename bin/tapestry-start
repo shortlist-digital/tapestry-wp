@@ -10,7 +10,7 @@ const info = require('../dist/logger').info
 info(`Booting Tapestry… \n`)
 
 const cwd = process.cwd()
-const treeServer = path.join(cwd, '.tapestry/tapestry.js')
+const treeServer = path.join(cwd, '.tapestry/tapestry.config.js')
 
 const config = require(treeServer)
 
