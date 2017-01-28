@@ -10,7 +10,7 @@ export default class Build {
     new webpack(config(opts), (err, stats) => {
       // handle error
       if (err)
-        error(err, true)
+        error(err)
       // log output
       const output = stats.toJson()
       success(`Client built: ${bytes(output.assets[0].size)}`)

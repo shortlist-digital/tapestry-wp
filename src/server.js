@@ -51,7 +51,7 @@ export default class Tapestry {
   startServer () {
     // run server
     this.server.start(err => {
-      if (err) error(err, true)
+      if (err) error(err)
       success(`Server ready: ${this.server.info.uri}`)
     })
   }
