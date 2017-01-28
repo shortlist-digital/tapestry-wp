@@ -14,7 +14,7 @@ import { has, isEmpty } from 'lodash'
 import DefaultRoutes from './default-routes'
 import DefaultHTML from './default-html'
 
-import { success, error } from './logger'
+import { success, error, info } from './logger'
 
 
 export default class Tapestry {
@@ -60,7 +60,7 @@ export default class Tapestry {
   }
   stopServer () {
     this.server.stop()
-    console.log(`🌎  Server stopped 👍`)
+    info('Server stopped')
   }
 
   routeApi () {
@@ -149,7 +149,7 @@ export default class Tapestry {
             // 500 if error from AsyncProps
             if (err)
               return reply(err).code(500)
-            
+
             // get html from props
             const data = {
               markup: renderStaticOptimized(() =>
