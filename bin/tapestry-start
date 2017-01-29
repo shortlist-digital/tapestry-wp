@@ -3,17 +3,24 @@
 'use strict'
 
 const path = require('path')
+const fs = require('fs')
 const Server = require('../dist/server').default
 const Client = require('../dist/build').default
-const info = require('../dist/logger').info
-
-info(`Booting Tapestry… \n`)
-
+const logger = require('../dist/logger')
 const cwd = process.cwd()
+
+// compiled tapestry config path
 const treeServer = path.join(cwd, '.tapestry/tapestry.config.js')
+
+// check compiled tapestry directory exists
+if (!fs.existsSync(treeServer))
+  logger.error(`.tapestry directory not found in ${cwd}, have you run 'tapestry build' yet?`)
+
+logger.info(`Booting Tapestry… \n`)
 
 const config = require(treeServer)
 
+// kick off client build & server
 new Client({
   cwd,
   env: 'production',
