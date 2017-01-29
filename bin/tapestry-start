@@ -10,7 +10,7 @@ const logger = require('../dist/logger')
 const cwd = process.cwd()
 
 // compiled tapestry config path
-const treeServer = path.join(cwd, '.tapestry/tapestry.js')
+const treeServer = path.join(cwd, '.tapestry/tapestry.config.js')
 
 // check compiled tapestry directory exists
 if (!fs.existsSync(treeServer))

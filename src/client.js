@@ -5,7 +5,7 @@ import AsyncProps from 'async-props'
 import 'location-origin'
 
 import DefaultRoutes from './default-routes'
-import config from 'tapestry.js'
+import config from 'tapestry.config.js'
 
 var onUpdateMethod = () => {}
 if (typeof config.onPageUpdate === 'function') {

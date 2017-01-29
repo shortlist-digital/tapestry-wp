@@ -11,11 +11,11 @@ const logger = require('../dist/logger')
 const cwd = process.cwd()
 
 // project tapestry config path
-const treeClient = path.join(cwd, 'tapestry.js')
+const treeClient = path.join(cwd, 'tapestry.config.js')
 
-// check tapestry.js exists
+// check tapestry.config.js exists
 if (!fs.existsSync(treeClient))
-  logger.error(`tapestry.js not found in ${cwd}`)
+  logger.error(`tapestry.config.js not found in ${cwd}`)
 
 logger.info(`Booting Tapestry… \n`)
 
@@ -28,11 +28,11 @@ const config = require(treeClient)
 
 // check the config exports an object
 if (!_.isPlainObject(config.default))
-  logger.error('tapestry.js needs to export an object')
+  logger.error('tapestry.config.js needs to export an object')
 
 // check siteUrl has been passed
 if (!_.has(config.default, 'siteUrl'))
-  logger.error('tapestry.js export needs to include a siteUrl')
+  logger.error('tapestry.config.js export needs to include a siteUrl')
 
 // kick off client build & server
 new Client({
