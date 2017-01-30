@@ -2,54 +2,35 @@
 
 'use strict'
 
-const fse = require('fs-extra')
+const fs = require('fs-extra')
 const path = require('path')
 const _ = require('lodash')
 const logger = require('../dist/logger')
 const cwd = process.cwd()
 
-const copySrc = (file) => {
-  fse.copy(
-    path.resolve(cwd, 'node_modules/tapestry-wp/bootstrap/', file),
-    path.resolve(cwd, file), {
-      overwrite: false,
-      errorOnExist: true
-    },
-    (err) => {
-      // if (err) {
-      //   const errStr = err.toString().replace('Error: ', '')
-      //   return logger.error(errStr)
-      // }
-      // logger.success(`${file} written`)
-  })
+logger.info('Adding some sensible defaults…')
+
+const bootstrapDir = path.resolve(cwd, 'node_modules/tapestry-wp/bootstrap/')
+
+const copySrc = (src) => {
+  fs.copySync(
+    path.resolve(bootstrapDir, src),
+    path.resolve(cwd, src), {
+      overwrite: false
+    }
+  )
+}
+const copyMergeSrc = (file) => {
+  const bootstrapPackage = fs.readJsonSync(path.resolve(bootstrapDir, file))
+  const projectPackage = fs.readJsonSync(path.resolve(cwd, file))
+  fs.outputJsonSync(
+    path.resolve(cwd, file),
+    _.merge({}, bootstrapPackage, projectPackage)
+  )
 }
 
-logger.info('Creating a Tapestry project…\n')
-let packageJson = null
-fse.readJson(path.resolve(cwd, 'package.json'), (err, obj) => {
-  if (err) logger.error(err)
-  const thing = _.merge({}, {
-    "name": "Tapestry Project",
-    "version": "0.1.0",
-    "description": "Simple Tapestry project with minimal config",
-    "main": "tapestry.config.js",
-    "scripts": {
-      "start": "tapestry dev",
-      "start:prod": "tapestry build && tapestry start",
-    },
-    "author": "Shortlist Studio",
-    "license": "ISC",
-    "dependencies": {
-      "tapestry-wp": "^1.4.0"
-    }
-  }, obj)
-  // console.log(thing)
-  fse.outputJson(path.resolve(cwd, 'package.json'), thing, (err) => {
-    // if (err) {
-    //   const errStr = err.toString().replace('Error: ', '')
-    //   return logger.error(errStr)
-    // }
-  })
-})
 copySrc('tapestry.config.js'),
 copySrc('components')
+copyMergeSrc('package.json')
+
+logger.success('Sensible defaults ahoy!\n')

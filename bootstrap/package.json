@@ -1,0 +1,15 @@
+{
+  "name": "Tapestry Project",
+  "version": "0.1.0",
+  "description": "Simple Tapestry project with minimal config",
+  "main": "tapestry.config.js",
+  "scripts": {
+    "start": "tapestry dev",
+    "start:prod": "tapestry build && tapestry start"
+  },
+  "author": "Shortlist Studio",
+  "license": "ISC",
+  "dependencies": {
+    "tapestry-wp": "^1.4.0"
+  }
+}
