@@ -3,7 +3,7 @@ import { Route } from 'react-router'
 import CategoriesLoader from './loader-categories'
 import PostLoader from './loader-post'
 import PageLoader from './loader-page'
-import FrontPageLoader from './loader-frontpage'
+import FrontPageLoader from './loader-front-page'
 
 const DefaultRoutes = ({ Category, Post, Page, FrontPage }) =>
   <div>
