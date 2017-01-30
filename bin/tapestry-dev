@@ -3,17 +3,40 @@
 'use strict'
 
 const path = require('path')
+const fs = require('fs')
+const _ = require('lodash')
 const Server = require('../dist/server').default
 const Client = require('../dist/build').default
-
+const logger = require('../dist/logger')
 const cwd = process.cwd()
-const treeClient = path.join(cwd, 'tapestry.js')
 
+// project tapestry config path
+const treeClient = path.join(cwd, 'tapestry.config.js')
+
+// check tapestry.config.js exists
+if (!fs.existsSync(treeClient))
+  logger.error(`tapestry.config.js not found in ${cwd}`)
+
+logger.info(`Booting Tapestry… \n`)
+
+// transpile any following imports
 require('babel-register')({
   presets: ['es2015', 'react']
 })
 
 const config = require(treeClient)
 
-new Client({ cwd, env: 'development' })
-new Server({ cwd, config })
+// check the config exports an object
+if (!_.isPlainObject(config.default))
+  logger.error('tapestry.config.js needs to export an object')
+
+// check siteUrl has been passed
+if (!_.has(config.default, 'siteUrl'))
+  logger.error('tapestry.config.js export needs to include a siteUrl')
+
+// kick off client build & server
+new Client({
+  cwd,
+  env: 'development',
+  onComplete: () => new Server({ cwd, config })
+})
