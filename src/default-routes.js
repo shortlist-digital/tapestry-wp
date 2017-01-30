@@ -5,8 +5,8 @@ import PostLoader from './loader-post'
 import PageLoader from './loader-page'
 import HomeLoader from './loader-home'
 
-const DefaultRoutes = ({ Base, Category, Post, Page, Home }) =>
-  <Route component={Base}>
+const DefaultRoutes = ({ Category, Post, Page, Home }) =>
+  <div>
     <Route
       path='/'
       component={HomeLoader}
@@ -23,10 +23,9 @@ const DefaultRoutes = ({ Base, Category, Post, Page, Home }) =>
       path=':category(/:subcategory)/:slug/:id'
       component={PostLoader}
       tag={Post} />
-  </Route>
+  </div>
 
 DefaultRoutes.propTypes = {
-  Base: PropTypes.element,
   Category: PropTypes.element,
   Home: PropTypes.element,
   Page: PropTypes.element,

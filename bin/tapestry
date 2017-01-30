@@ -12,5 +12,6 @@ program
   .command('dev', 'development mode (default)', { isDefault: true })
   .command('start', 'production mode')
   .command('build', 'build client bundle')
+  .command('init', 'Bootstrap a Tapestry project')
 
 program.parse(process.argv)
