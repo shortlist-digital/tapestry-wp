@@ -1,4 +1,5 @@
-import request from 'supertest'
+import request from 'request'
+import { expect } from 'chai'
 import { bootServer, mockApi } from '../utils'
 
 // test a super basic Tapestry server with minimal config
@@ -21,18 +22,24 @@ describe('Handing server responses', () => {
 
 
   it('Route matched, respond with a 200', (done) => {
-    request(tapestry.server.listener)
-      .get('/')
-      .expect(200, done)
+    request
+      .get(tapestry.server.info.uri, (err, res, body) => {
+        expect(res.statusCode).to.equal(200)
+        done()
+      })
   })
   it('Route not matched, respond with a 404', (done) => {
-    request(tapestry.server.listener)
-      .get('/route/not/matched/in/any/way')
-      .expect(404, done)
+    request
+      .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res, body) => {
+        expect(res.statusCode).to.equal(404)
+        done()
+      })
   })
   it('Route matched but API lacks data, respond with a 404', (done) => {
-    request(tapestry.server.listener)
-      .get('/about/null-page')
-      .expect(404, done)
+    request
+      .get(`${tapestry.server.info.uri}/about/null-page`, (err, res, body) => {
+        expect(res.statusCode).to.equal(404)
+        done()
+      })
   })
 })

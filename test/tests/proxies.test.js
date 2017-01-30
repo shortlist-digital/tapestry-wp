@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import request from 'supertest'
+import request from 'request'
 import { bootServer, mockApi } from '../utils'
 
 describe('Handling proxies', () => {
@@ -22,18 +22,18 @@ describe('Handling proxies', () => {
   })
   afterEach(() => tapestry.stop())
 
-
   it('Proxy should return correct content', (done) => {
-    request(tapestry.server.listener)
-      .get(proxyFile)
-      .end((err, res) => {
-        expect(res.text).to.contain(proxyContents)
-        done()
-      })
+    request
+      .get(tapestry.server.info.uri + proxyFile, (err, res, body) => {
+          expect(body).to.contain(proxyContents)
+          done()
+        })
   })
   it('Undeclared proxy should return 404', (done) => {
-    request(tapestry.server.listener)
-      .get('/test.txt')
-      .expect(404, done)
+    request
+      .get(`${tapestry.server.info.uri}/test.txt`, (err, res, body) => {
+        expect(res.statusCode).to.equal(404)
+        done()
+      })
   })
 })

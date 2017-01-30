@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import request from 'supertest'
+import request from 'request'
 import { bootServer, mockApi } from '../utils'
 import pageData from '../mocks/page.json'
 import style from '../../dist/default-style'
@@ -24,26 +24,24 @@ describe('HTML document', () => {
 
 
   it('Data is correctly loaded on page', (done) => {
-    request(tapestry.server.listener)
-      .get('/')
-      .end((err, res) => {
-        expect(res.text).to.contain(`window.__ASYNC_PROPS__ = [{"resp":${JSON.stringify(pageData)}}]`)
+    console.log(tapestry.server.info.uri)
+    request
+      .get(tapestry.server.info.uri, (err, res, body) => {
+        expect(body).to.contain(`window.__ASYNC_PROPS__ = [{"resp":${JSON.stringify(pageData)}}]`)
         done()
       })
   })
   it('If no component passed, Missing component rendered', (done) => {
-    request(tapestry.server.listener)
-      .get('/')
-      .end((err, res) => {
-        expect(res.text).to.contain('Missing component')
+    request
+      .get(tapestry.server.info.uri, (err, res, body) => {
+        expect(body).to.contain('Missing component')
         done()
       })
   })
   it('Page should return default CSS', (done) => {
-    request(tapestry.server.listener)
-      .get('/')
-      .end((err, res) => {
-        expect(res.text).to.contain(style)
+    request
+      .get(tapestry.server.info.uri, (err, res, body) => {
+        expect(body).to.contain(style)
         done()
       })
   })
