@@ -2,6 +2,7 @@
 * Changed configuration filename to `tapestry.config.js`
 * Incorporated a `logger.js` and normalised logging through the server
 * Improved and normalised error handling throughout the app
+
 ### v1.3.0
 * Changed output directory for transpiled project to `.tapestry`
 * Changed output directory for the client bundle to `_scripts` to avoid a clash with the `public` directory for project specific files
