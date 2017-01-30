@@ -7,7 +7,7 @@
     "lint": "./node_modules/.bin/eslint src bin",
     "prepublish": "babel ./src --out-dir ./dist",
     "watch": "babel ./src --watch --out-dir ./dist",
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "mocha 'test/**/*.test.js' --compilers js:babel-core/register"
   },
   "author": "Jon Sherrard",
   "license": "ISC",
@@ -49,5 +49,11 @@
     "react-object-inspector": "^0.2.1",
     "react-router": "^3.0.0",
     "webpack": "^2.2.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "nock": "^9.0.2",
+    "request": "^2.79.0"
   }
 }

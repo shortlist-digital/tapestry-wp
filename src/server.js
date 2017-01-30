@@ -25,7 +25,6 @@ export default class Tapestry {
     this.context = cwd
     // override defaults
     this.routes = this.config.routes || DefaultRoutes
-    this.stop = this.stopServer.bind(this)
     // run server
     this.bootServer()
     this.registerProxies()
@@ -57,10 +56,6 @@ export default class Tapestry {
       if (err) error(err)
       success(`Server ready: ${this.server.info.uri}`)
     })
-  }
-  stopServer () {
-    this.server.stop()
-    info('Server stopped')
   }
 
   routeApi () {
