@@ -3,14 +3,14 @@ import { Route } from 'react-router'
 import CategoriesLoader from './loader-categories'
 import PostLoader from './loader-post'
 import PageLoader from './loader-page'
-import HomeLoader from './loader-home'
+import FrontPageLoader from './loader-front-page'
 
-const DefaultRoutes = ({ Category, Post, Page, Home }) =>
+const DefaultRoutes = ({ Category, Post, Page, FrontPage }) =>
   <div>
     <Route
       path='/'
-      component={HomeLoader}
-      tag={Home} />
+      component={FrontPageLoader}
+      tag={FrontPage} />
     <Route
       path='about/:slug'
       component={PageLoader}
@@ -27,7 +27,7 @@ const DefaultRoutes = ({ Category, Post, Page, Home }) =>
 
 DefaultRoutes.propTypes = {
   Category: PropTypes.element,
-  Home: PropTypes.element,
+  FrontPage: PropTypes.element,
   Page: PropTypes.element,
   Post: PropTypes.element
 }
