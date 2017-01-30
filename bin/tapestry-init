@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+'use strict'
+
+const fs = require('fs')
+const path = require('path')
+const logger = require('../dist/logger')
+const cwd = process.cwd()
+
+logger.info('Creating a Tapestry project…\n')
+
+// const tapestryConfig = path.resolve(cwd, 'tapestry.config.js')
+
+// if (!fs.existsSync(tapestryConfig))
+  fs.writeFileSync(path.join(cwd, 'tapestry.config.test.js'), `
+export default {
+  siteUrl: 'http://google.com'
+}
+`)
