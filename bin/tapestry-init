@@ -12,6 +12,11 @@ logger.info('Adding some sensible defaults…')
 
 const bootstrapDir = path.resolve(cwd, 'node_modules/tapestry-wp/bootstrap/')
 
+const createDir = (src) => {
+  fs.ensureDirSync(
+    path.resolve(cwd, src)
+  )
+}
 const copySrc = (src) => {
   fs.copySync(
     path.resolve(bootstrapDir, src),
@@ -29,6 +34,7 @@ const copyMergeSrc = (file) => {
   )
 }
 
+createDir('public')
 copySrc('tapestry.config.js'),
 copySrc('components')
 copyMergeSrc('package.json')
