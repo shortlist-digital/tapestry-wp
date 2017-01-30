@@ -41,6 +41,7 @@
     "hapi": "16.1.0",
     "inert": "^4.0.3",
     "location-origin": "^1.1.4",
+    "lodash": "^4.17.4",
     "nodemon": "^1.11.0",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",

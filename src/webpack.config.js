@@ -13,7 +13,7 @@ export default ({ cwd, env }) => {
     },
     resolve: {
       alias: {
-        'tapestry.js': path.resolve(cwd, 'tapestry.js')
+        'tapestry.config.js': path.resolve(cwd, 'tapestry.config.js')
       }
     },
     module: {
@@ -39,7 +39,7 @@ export default ({ cwd, env }) => {
 
   if (env === 'production') {
     config.resolve.alias = {
-      'tapestry.js': path.resolve(cwd, '.tapestry/tapestry.js')
+      'tapestry.config.js': path.resolve(cwd, '.tapestry/tapestry.config.js')
     }
     config.plugins.push(
       new webpack.DefinePlugin({
