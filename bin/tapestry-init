@@ -2,18 +2,54 @@
 
 'use strict'
 
-const fs = require('fs')
+const fse = require('fs-extra')
 const path = require('path')
+const _ = require('lodash')
 const logger = require('../dist/logger')
 const cwd = process.cwd()
 
-logger.info('Creating a Tapestry project…\n')
-
-// const tapestryConfig = path.resolve(cwd, 'tapestry.config.js')
-
-// if (!fs.existsSync(tapestryConfig))
-  fs.writeFileSync(path.join(cwd, 'tapestry.config.test.js'), `
-export default {
-  siteUrl: 'http://google.com'
+const copySrc = (file) => {
+  fse.copy(
+    path.resolve(cwd, 'node_modules/tapestry-wp/bootstrap/', file),
+    path.resolve(cwd, file), {
+      overwrite: false,
+      errorOnExist: true
+    },
+    (err) => {
+      // if (err) {
+      //   const errStr = err.toString().replace('Error: ', '')
+      //   return logger.error(errStr)
+      // }
+      // logger.success(`${file} written`)
+  })
 }
-`)
+
+logger.info('Creating a Tapestry project…\n')
+let packageJson = null
+fse.readJson(path.resolve(cwd, 'package.json'), (err, obj) => {
+  if (err) logger.error(err)
+  const thing = _.merge({}, {
+    "name": "Tapestry Project",
+    "version": "0.1.0",
+    "description": "Simple Tapestry project with minimal config",
+    "main": "tapestry.config.js",
+    "scripts": {
+      "start": "tapestry dev",
+      "start:prod": "tapestry build && tapestry start",
+    },
+    "author": "Shortlist Studio",
+    "license": "ISC",
+    "dependencies": {
+      "tapestry-wp": "^1.4.0"
+    }
+  }, obj)
+  // console.log(thing)
+  fse.outputJson(path.resolve(cwd, 'package.json'), thing, (err) => {
+    // if (err) {
+    //   const errStr = err.toString().replace('Error: ', '')
+    //   return logger.error(errStr)
+    // }
+  })
+})
+copySrc('tapestry.config.js'),
+copySrc('components')
