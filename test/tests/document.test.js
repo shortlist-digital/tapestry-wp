@@ -18,9 +18,10 @@ describe('HTML document', () => {
       path: '/wp-json/wp/v2/pages',
       query: { filter: { name: 'home' }}
     })
-    tapestry = bootServer(config, done)
+    tapestry = bootServer(config)
+    tapestry.server.on('start', done)
   })
-  afterEach(() => tapestry.stop())
+  afterEach(() => tapestry.server.stop())
 
 
   it('Data is correctly loaded on page', (done) => {

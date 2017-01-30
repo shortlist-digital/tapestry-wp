@@ -4,10 +4,8 @@ import data from './mocks/page.json'
 
 export const bootServer = (config, done) =>
   new Server({
-    config: {
-      default: config
-    }
-  }, done, true)
+    config: { default: config }
+  })
 
 export const mockApi = ({
   url = 'http://dummy.api',

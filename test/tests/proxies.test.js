@@ -18,9 +18,10 @@ describe('Handling proxies', () => {
       path: proxyFile,
       resp: proxyContents
     })
-    tapestry = bootServer(config, done)
+    tapestry = bootServer(config)
+    tapestry.server.on('start', done)
   })
-  afterEach(() => tapestry.stop())
+  afterEach(() => tapestry.server.stop())
 
   it('Proxy should return correct content', (done) => {
     request

@@ -19,14 +19,12 @@ import { success, error, info } from './logger'
 
 export default class Tapestry {
 
-  constructor ({ config, cwd }, cb) {
+  constructor ({ config, cwd }) {
     // allow access from class
     this.config = config.default
     this.context = cwd
-    this.cb = cb
     // override defaults
     this.routes = this.config.routes || DefaultRoutes
-    this.stop = this.stopServer.bind(this)
     // run server
     this.bootServer()
     this.registerProxies()
@@ -57,12 +55,7 @@ export default class Tapestry {
     this.server.start(err => {
       if (err) error(err)
       success(`Server ready: ${this.server.info.uri}`)
-      if (typeof this.cb === 'function') this.cb()
     })
-  }
-  stopServer () {
-    this.server.stop()
-    info('Server stopped')
   }
 
   routeApi () {

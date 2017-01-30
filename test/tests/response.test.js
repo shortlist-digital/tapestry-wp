@@ -16,9 +16,10 @@ describe('Handing server responses', () => {
       path: '/wp-json/wp/v2/pages',
       query: { filter: { name: 'home' }}
     })
-    tapestry = bootServer(config, done)
+    tapestry = bootServer(config)
+    tapestry.server.on('start', done)
   })
-  afterEach(() => tapestry.stop())
+  afterEach(() => tapestry.server.stop())
 
 
   it('Route matched, respond with a 200', (done) => {
