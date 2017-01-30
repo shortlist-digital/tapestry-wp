@@ -25,7 +25,6 @@ describe('HTML document', () => {
 
 
   it('Data is correctly loaded on page', (done) => {
-    console.log(tapestry.server.info.uri)
     request
       .get(tapestry.server.info.uri, (err, res, body) => {
         expect(body).to.contain(`window.__ASYNC_PROPS__ = [{"resp":${JSON.stringify(pageData)}}]`)

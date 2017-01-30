@@ -52,8 +52,10 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "enzyme": "^2.7.1",
     "mocha": "^3.2.0",
     "nock": "^9.0.2",
+    "react-addons-test-utils": "^15.4.2",
     "request": "^2.79.0"
   }
 }
