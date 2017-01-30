@@ -4,39 +4,23 @@
 
 const fs = require('fs-extra')
 const path = require('path')
-const _ = require('lodash')
 const logger = require('../dist/logger')
 const cwd = process.cwd()
 
 logger.info('Adding some sensible defaults…')
 
-const bootstrapDir = path.resolve(cwd, 'node_modules/tapestry-wp/bootstrap/')
-
-const createDir = (src) => {
+const createDir = src =>
   fs.ensureDirSync(
     path.resolve(cwd, src)
   )
-}
-const copySrc = (src) => {
+const copySrc = src =>
   fs.copySync(
-    path.resolve(bootstrapDir, src),
-    path.resolve(cwd, src), {
-      overwrite: false
-    }
+    path.resolve(cwd, 'node_modules/tapestry-wp/bootstrap/', src),
+    path.resolve(cwd, src), { overwrite: false }
   )
-}
-const copyMergeSrc = (file) => {
-  const bootstrapPackage = fs.readJsonSync(path.resolve(bootstrapDir, file))
-  const projectPackage = fs.readJsonSync(path.resolve(cwd, file))
-  fs.outputJsonSync(
-    path.resolve(cwd, file),
-    _.merge({}, bootstrapPackage, projectPackage)
-  )
-}
 
 createDir('public')
-copySrc('tapestry.config.js'),
+copySrc('tapestry.config.js')
 copySrc('components')
-copyMergeSrc('package.json')
 
 logger.success('Sensible defaults ahoy!\n')
