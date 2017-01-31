@@ -5,8 +5,12 @@
 const exec = require('child_process').exec
 const logger = require('../dist/logger')
 const cwd = process.cwd()
+const path = require('path')
 
 logger.info('Preparing Tapestry…\n')
+
+// Switch up a directory so this run relatively
+process.chdir(path.join(__dirname, '..'))
 
 exec(`./node_modules/babel-cli/bin/babel.js ${cwd} --out-dir ${cwd}/.tapestry --presets=es2015,react  --ignore node_modules,__tests__,_scripts`, (err, stdout, stderr) => {
   if (err) logger.error(err)
