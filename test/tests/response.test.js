@@ -43,4 +43,11 @@ describe('Handing server responses', () => {
         done()
       })
   })
+  it('Matched route has correct headers', (done) => {
+    request
+      .get(tapestry.server.info.uri, (err, res, body) => {
+        expect(res.headers['content-type']).to.equal('text/html; charset=utf-8')
+        done()
+      })
+  })
 })
