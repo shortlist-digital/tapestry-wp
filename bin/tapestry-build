@@ -2,10 +2,8 @@
 
 'use strict'
 
-const exec = require('child_process').exec
 const logger = require('../dist/logger')
 const cwd = process.cwd()
-const path = require('path')
 const glob = require('glob-fs')({ gitignore: true })
 const babel = require('babel-core')
 const fs = require('fs')
