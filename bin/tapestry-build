@@ -8,7 +8,7 @@ const cwd = process.cwd()
 
 logger.info('Preparing Tapestry…\n')
 
-exec(`babel ${cwd} --out-dir ${cwd}/.tapestry --presets=es2015,react  --ignore node_modules,__tests__,_scripts`, (err, stdout, stderr) => {
+exec(`./node_modules/babel-cli/bin/babel.js ${cwd} --out-dir ${cwd}/.tapestry --presets=es2015,react  --ignore node_modules,__tests__,_scripts`, (err, stdout, stderr) => {
   if (err) logger.error(err)
   logger.success('Tapestry built! Run `tapestry start` to boot')
 })
