@@ -15,7 +15,7 @@ logger.info('Preparing Tapestry…\n')
 const noTests = (file) => {
     // Test if a .js file is within a __test__ directory, which we don't want to transpile
    if (/__tests__/.test(file.path)) {
-    file.exclude = true;
+    file.exclude = true
   }
   return file
 }
