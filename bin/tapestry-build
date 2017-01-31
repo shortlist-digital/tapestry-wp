@@ -13,6 +13,7 @@ const fs = require('fs')
 logger.info('Preparing Tapestry…\n')
 
 const noTests = (file) => {
+    // Test if a .js file is within a __test__ directory, which we don't want to transpile
    if (/__tests__/.test(file.path)) {
     file.exclude = true;
   }
@@ -20,6 +21,7 @@ const noTests = (file) => {
 }
 
 const noPublic = (file) => {
+  // Test if a file is in a public directory we don't want to transpile
   if (/public/.test(file.path)) {
     file.exclude = true
   }
@@ -43,6 +45,7 @@ glob.use(noTests).use(noPublic).readdir('**/*.js', function (err, files) {
   if (err) {
     logger.error(err)
   } else {
+    // Push tapestry.config.js manually as it is git ignored
     files.push('tapestry.config.js')
     files.map((file) => {
       console.log(file)
