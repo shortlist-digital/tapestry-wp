@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react'
 import { Route } from 'react-router'
+import MissingView from './missing-view'
 import CategoriesLoader from './loader-categories'
 import PostLoader from './loader-post'
 import PageLoader from './loader-page'
 import FrontPageLoader from './loader-front-page'
 
-const DefaultRoutes = ({ Category, Post, Page, FrontPage }) =>
+const DefaultRoutes = ({ Category, Post, Page, FrontPage, Error }) =>
   <div>
     <Route
       path='/'
@@ -23,6 +24,9 @@ const DefaultRoutes = ({ Category, Post, Page, FrontPage }) =>
       path=':category(/:subcategory)/:slug/:id'
       component={PostLoader}
       tag={Post} />
+    <Route
+      path='*'
+      component={Error || MissingView} />
   </div>
 
 DefaultRoutes.propTypes = {
