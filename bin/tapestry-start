@@ -8,9 +8,10 @@ const Server = require('../dist/server').default
 const Client = require('../dist/build').default
 const logger = require('../dist/logger')
 const cwd = process.cwd()
+const env = 'production'
 
 // compiled tapestry config path
-const treeServer = path.join(cwd, '.tapestry/tapestry.config.js')
+const treeServer = path.join(cwd, '.tapestry/app/tapestry.config.js')
 
 // check compiled tapestry directory exists
 if (!fs.existsSync(treeServer))
@@ -23,6 +24,6 @@ const config = require(treeServer)
 // kick off client build & server
 new Client({
   cwd,
-  env: 'production',
-  onComplete: () => new Server({ cwd, config })
+  env,
+  onComplete: () => new Server({ cwd, env, config })
 })
