@@ -1,3 +1,20 @@
+### v1.4.5
+* Improved `tapestry build` script removing the `exec` call and replacing it with the `babel` Node API 
+
+### v1.4.4
+* Fixed a `tapestry build` incorrect directory issue when deploying on Heroku
+
+### v1.4.3
+* Fixed missing dependency in `package.json`
+* Fixed inexplicit `babel` reference in `tapestry build` command
+* Added `npm` version badge to `README.md`
+
+### v1.4.1
+* Added a set of basic server tests to check responses, proxies and output HTML
+* Renamed the `Home` component to `FrontPage` to increase the Wordpressy-ness
+* Fixed the `engines` version range in `package.json`
+* Added a `tapestry init` command to bootstrap a simple Tapestry project. This includes a `tapestry.config.js` and the `Post` and `Page` components
+
 ### v1.4.0
 * Changed configuration filename to `tapestry.config.js`
 * Incorporated a `logger.js` and normalised logging through the server
