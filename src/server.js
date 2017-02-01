@@ -14,7 +14,10 @@ import { has, isEmpty } from 'lodash'
 import DefaultRoutes from './default-routes'
 import DefaultHTML from './default-html'
 
+import { renderHtml, renderError } from './render'
+
 import { success, error, info } from './logger'
+import prettyjson from 'prettyjson'
 
 
 export default class Tapestry {
@@ -123,48 +126,48 @@ export default class Tapestry {
           if (redirectLocation)
             return reply.redirect(redirectLocation)
 
-          // 404 if no Router match
-          if (!renderProps)
-            return reply('No matched Route').code(404)
-
           // define global deets for nested components
           const loadContext = this.config
 
           // get all the props yo
           loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
 
-            // 404 if no data from API, yeah sorry for this, I'll change it
-            if (isEmpty(asyncProps))
-              return reply('No API data').code(404)
-            if (has(asyncProps.propsArray[0], 'resp') && isEmpty(asyncProps.propsArray[0].resp))
-              return reply('No API data').code(404)
-            if (has(asyncProps.propsArray[0], 'data') && isEmpty(asyncProps.propsArray[0].data))
-              return reply('No API data').code(404)
+            console.log(asyncProps)
+
+            return
+
+            // if (isEmpty(asyncProps.propsArray))
+            //   return reply(renderError({ loadContext }))
+
+            // const data = {renderProps, loadContext, err, asyncProps}
+
+            // const has404ed = asyncProps.propsArray[0].data
+
+            // console.log(asyncProps.propsArray[0])
+
+            // if (isEmpty(asyncProps))
+            //   return reply(
+            //     renderError({ loadContext })
+            //   ).code(404)
+
+            // if (asyncProps.propsArray[0] &&
+            //   (asyncProps.propsArray[0].data.data.status < 200 ||
+            // asyncProps.propsArray[0].data.data.status > 300))
+            //   return reply(
+            //     renderError({
+            //       loadContext,
+            //       error: asyncProps.propsArray[0].data
+            //     })
+            //   ).code(404)
 
             // 500 if error from AsyncProps
             if (err)
               return reply(err).code(500)
 
-            // get html from props
-            const data = {
-              markup: renderStaticOptimized(() =>
-                renderToString(
-                  <AsyncProps
-                    {...renderProps}
-                    {...asyncProps}
-                    loadContext={loadContext} />
-                )
-              ),
-              head: Helmet.rewind(),
-              asyncProps
-            }
-
-            // render html with data
-            const html = renderToStaticMarkup(
-              <DefaultHTML {...data} />
-            )
-
-            reply(`<!doctype html>${html}`).code(200)
+            // 200 with rendered HTML
+            reply(renderHtml({
+              renderProps, loadContext, asyncProps
+            })).code(200)
           })
         })
       }

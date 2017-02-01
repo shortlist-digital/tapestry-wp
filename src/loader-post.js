@@ -3,6 +3,8 @@ import AsyncProps from 'async-props'
 import fetch from 'isomorphic-fetch'
 import MissingView from './missing-view'
 
+import { error } from './logger'
+
 export default class Loader extends Component {
 
   static loadProps({params, loadContext}, cb) {
@@ -16,7 +18,7 @@ export default class Loader extends Component {
     // LoadContext is basicaly an object we can pass around
     // the sever with our components and some baseUrl on it
     return fetch(`${baseUrl}/${path}`)
-      .then(response => response.json())
+      .then(response => Object.assign(response.json(), { ok: response.ok }))
       .then(data => cb(null, { data }))
       .catch(error => cb(error))
   }

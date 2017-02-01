@@ -24,9 +24,9 @@ const DefaultRoutes = ({ Category, Post, Page, FrontPage, Error }) =>
       path=':category(/:subcategory)/:slug/:id'
       component={PostLoader}
       tag={Post} />
-    <Route
+    {/* <Route
       path='*'
-      component={Error || MissingView} />
+    component={Error || MissingView} /> */}
   </div>
 
 DefaultRoutes.propTypes = {
