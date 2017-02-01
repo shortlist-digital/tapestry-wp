@@ -1,4 +1,6 @@
 # Tapestry
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/shortlist-digital/tapestry-wp.svg)](https://greenkeeper.io/)
 [![npm](https://img.shields.io/npm/v/tapestry-wp.svg)]()
 [![CircleCI](https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop.svg?style=shield)](https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop)
 [![dependencies Status](https://david-dm.org/shortlist-digital/tapestry-wp/status.svg)](https://david-dm.org/shortlist-digital/tapestry-wp)
