@@ -1,3 +1,5 @@
+import fs from 'fs-extra'
+import path from 'path'
 import React from 'react'
 import { renderToStaticMarkup, renderToString } from 'react-dom/server'
 import { match } from 'react-router'
@@ -19,12 +21,14 @@ import { success, error, info } from './logger'
 
 export default class Tapestry {
 
-  constructor ({ config, cwd }) {
+  constructor ({ config, cwd, env }) {
     // allow access from class
     this.config = config.default
     this.context = cwd
+    this.env = env
     // override defaults
     this.routes = this.config.routes || DefaultRoutes
+    this.assets = fs.readJsonSync(path.resolve(cwd, 'node_modules/tapestry-wp/assets.json'), 'utf8')
     // run server
     this.bootServer()
     this.registerProxies()
@@ -156,6 +160,7 @@ export default class Tapestry {
                 )
               ),
               head: Helmet.rewind(),
+              assets: this.env === 'production' ? this.assets : null,
               asyncProps
             }
 

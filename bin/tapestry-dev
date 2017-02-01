@@ -9,6 +9,7 @@ const Server = require('../dist/server').default
 const Client = require('../dist/build').default
 const logger = require('../dist/logger')
 const cwd = process.cwd()
+const env = 'development'
 
 // project tapestry config path
 const treeClient = path.join(cwd, 'tapestry.config.js')
@@ -37,6 +38,11 @@ if (!_.has(config.default, 'siteUrl'))
 // kick off client build & server
 new Client({
   cwd,
-  env: 'development',
-  onComplete: () => new Server({ cwd, config })
+  env,
+  onComplete: () =>
+    new Server({
+      cwd,
+      config,
+      env
+    })
 })
