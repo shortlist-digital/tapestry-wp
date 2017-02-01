@@ -60,7 +60,6 @@ export default ({ cwd, env }) => {
       function () {
         this.plugin('done', stats => {
           const jsonStats = stats.toJson()
-          console.log(path.resolve(cwd, '.tapestry/assets.json'))
           return fs.writeFileSync(
             path.resolve(cwd, '.tapestry/assets.json'),
             JSON.stringify(jsonStats.assetsByChunkName)
