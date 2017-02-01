@@ -1,6 +1,6 @@
 {
   "name": "tapestry-wp",
-  "version": "1.4.0",
+  "version": "1.4.5",
   "description": "Wordpress API Universal React Renderer",
   "main": "index.js",
   "scripts": {
@@ -15,8 +15,8 @@
     "tapestry": "./bin/tapestry"
   },
   "engines": {
-    "node": "6.9.0",
-    "npm": "3.10.9"
+    "node": ">= 6.9.0",
+    "npm": ">= 3.10.0"
   },
   "dependencies": {
     "async-props": "^0.3.2",
@@ -36,6 +36,7 @@
     "fetch": "^1.1.0",
     "fs-extra": "^2.0.0",
     "glamor": "^2.20.12",
+    "glob-fs": "^0.1.6",
     "gzip-size": "^3.0.0",
     "h2o2": "5.4.0",
     "hapi": "16.1.0",
@@ -43,6 +44,7 @@
     "location-origin": "^1.1.4",
     "lodash": "^4.17.4",
     "nodemon": "^1.11.0",
+    "pretty-bytes": "^4.0.2",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-helmet": "^4.0.0",
