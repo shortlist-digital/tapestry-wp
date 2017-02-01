@@ -42,7 +42,7 @@ export default ({ cwd, env }) => {
   if (env === 'production') {
     config.output.filename = '[name].[chunkhash].js'
     config.resolve.alias = {
-      'tapestry.config.js': path.resolve(cwd, '.tapestry/tapestry.config.js')
+      'tapestry.config.js': path.resolve(cwd, '.tapestry/app/tapestry.config.js')
     }
     config.plugins.push(
       new webpack.DefinePlugin({
@@ -60,8 +60,9 @@ export default ({ cwd, env }) => {
       function () {
         this.plugin('done', stats => {
           const jsonStats = stats.toJson()
+          console.log(path.resolve(cwd, '.tapestry/assets.json'))
           return fs.writeFileSync(
-            './node_modules/tapestry-wp/assets.json',
+            path.resolve(cwd, '.tapestry/assets.json'),
             JSON.stringify(jsonStats.assetsByChunkName)
           )
         })

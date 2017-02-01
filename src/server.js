@@ -28,7 +28,7 @@ export default class Tapestry {
     this.env = env
     // override defaults
     this.routes = this.config.routes || DefaultRoutes
-    this.assets = fs.readJsonSync(path.resolve(cwd, 'node_modules/tapestry-wp/assets.json'), 'utf8')
+    this.assets = fs.readJsonSync(path.resolve(cwd, '.tapestry/assets.json'))
     // run server
     this.bootServer()
     this.registerProxies()
