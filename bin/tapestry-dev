@@ -39,10 +39,5 @@ if (!_.has(config.default, 'siteUrl'))
 new Client({
   cwd,
   env,
-  onComplete: () =>
-    new Server({
-      cwd,
-      config,
-      env
-    })
+  onComplete: () => new Server({ cwd, env, config })
 })
