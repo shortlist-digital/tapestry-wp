@@ -1,3 +1,5 @@
+import fs from 'fs-extra'
+import path from 'path'
 import React from 'react'
 import { renderToStaticMarkup, renderToString } from 'react-dom/server'
 import { match } from 'react-router'
@@ -22,12 +24,14 @@ import prettyjson from 'prettyjson'
 
 export default class Tapestry {
 
-  constructor ({ config, cwd }) {
+  constructor ({ config, cwd, env }) {
     // allow access from class
     this.config = config.default
     this.context = cwd
+    this.env = env
     // override defaults
     this.routes = this.config.routes || DefaultRoutes
+    this.assets = fs.readJsonSync(path.resolve(cwd, '.tapestry/assets.json'))
     // run server
     this.bootServer()
     this.registerProxies()
@@ -132,10 +136,6 @@ export default class Tapestry {
           // get all the props yo
           loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
 
-            console.log(asyncProps)
-
-            return
-
             // if (isEmpty(asyncProps.propsArray))
             //   return reply(renderError({ loadContext }))
 
@@ -165,9 +165,36 @@ export default class Tapestry {
               return reply(err).code(500)
 
             // 200 with rendered HTML
-            reply(renderHtml({
-              renderProps, loadContext, asyncProps
-            })).code(200)
+            reply(
+              renderHtml({
+                renderProps,
+                loadContext,
+                asyncProps,
+                assets: this.env === 'production' ? this.assets : null
+              })
+            ).code(200)
+
+            // // get html from props
+            // const data = {
+            //   markup: renderStaticOptimized(() =>
+            //     renderToString(
+            //       <AsyncProps
+            //         {...renderProps}
+            //         {...asyncProps}
+            //         loadContext={loadContext} />
+            //     )
+            //   ),
+            //   head: Helmet.rewind(),
+            //   assets: this.env === 'production' ? this.assets : null,
+            //   asyncProps
+            // }
+            //
+            // // render html with data
+            // const html = renderToStaticMarkup(
+            //   <DefaultHTML {...data} />
+            // )
+            //
+            // reply(`<!doctype html>${html}`).code(200)
           })
         })
       }
