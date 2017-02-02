@@ -12,10 +12,10 @@ const cwd = process.cwd()
 const env = 'development'
 
 // project tapestry config path
-const treeClient = path.join(cwd, 'tapestry.config.js')
+const configPath = path.join(cwd, 'tapestry.config.js')
 
 // check tapestry.config.js exists
-if (!fs.existsSync(treeClient))
+if (!fs.existsSync(configPath))
   logger.error(`tapestry.config.js not found in ${cwd}`)
 
 logger.info(`Booting Tapestry… \n`)
@@ -25,7 +25,7 @@ require('babel-register')({
   presets: ['es2015', 'react']
 })
 
-const config = require(treeClient)
+const config = require(configPath)
 
 // check the config exports an object
 if (!_.isPlainObject(config.default))
@@ -39,5 +39,5 @@ if (!_.has(config.default, 'siteUrl'))
 new Client({
   cwd,
   env,
-  onComplete: () => new Server({ cwd, env, config })
+  onComplete: () => new Server({ cwd, env, config, configPath })
 })
