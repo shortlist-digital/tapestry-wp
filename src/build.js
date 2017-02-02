@@ -1,6 +1,5 @@
 import webpack from 'webpack'
 import bytes from 'pretty-bytes'
-import { once } from 'lodash'
 import config from './webpack.config'
 import { success, error } from './logger'
 
@@ -10,6 +9,7 @@ export default class Build {
     // allow class access
     this.opts = opts
     this.compiler = webpack(config(opts))
+    this.devNotified = false
     // run once if production, watch if development
     if (opts.env !== 'development') {
       this.compiler.run((err, stats) => this.run(err, stats))
@@ -28,7 +28,10 @@ export default class Build {
     // handle error
     if (err) error(err)
     // log complete
-    once(() => this.complete(stats))
+    if (!this.devNotified) {
+      this.complete(stats)
+      this.devNotified = true
+    }
   }
   complete (stats) {
     // log output
