@@ -120,11 +120,11 @@ export default class Tapestry {
         match({
           routes: this.routes(this.config.components || {}),
           location: request.url.path
-        }, (error, redirectLocation, renderProps) => {
+        }, (err, redirectLocation, renderProps) => {
 
           // 500 if error from Router
-          if (error)
-            return reply(error.message).code(500)
+          if (err)
+            return reply(err.message).code(500)
 
           // 301/2 if redirect
           if (redirectLocation)
@@ -135,6 +135,10 @@ export default class Tapestry {
 
           // get all the props yo
           loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
+
+            // 500 if error from AsyncProps
+            if (err)
+              return reply(err).code(500)
 
             // if (isEmpty(asyncProps.propsArray))
             //   return reply(renderError({ loadContext }))
@@ -160,10 +164,6 @@ export default class Tapestry {
             //     })
             //   ).code(404)
 
-            // 500 if error from AsyncProps
-            if (err)
-              return reply(err).code(500)
-
             // 200 with rendered HTML
             reply(
               renderHtml({
@@ -173,28 +173,6 @@ export default class Tapestry {
                 assets: this.env === 'production' ? this.assets : null
               })
             ).code(200)
-
-            // // get html from props
-            // const data = {
-            //   markup: renderStaticOptimized(() =>
-            //     renderToString(
-            //       <AsyncProps
-            //         {...renderProps}
-            //         {...asyncProps}
-            //         loadContext={loadContext} />
-            //     )
-            //   ),
-            //   head: Helmet.rewind(),
-            //   assets: this.env === 'production' ? this.assets : null,
-            //   asyncProps
-            // }
-            //
-            // // render html with data
-            // const html = renderToStaticMarkup(
-            //   <DefaultHTML {...data} />
-            // )
-            //
-            // reply(`<!doctype html>${html}`).code(200)
           })
         })
       }
