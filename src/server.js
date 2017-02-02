@@ -29,7 +29,9 @@ export default class Tapestry {
     this.env = env
     // override defaults
     this.routes = this.config.routes || DefaultRoutes
-    this.assets = fs.readJsonSync(path.resolve(cwd, '.tapestry/assets.json'))
+    this.assets = null
+    if (env === 'production')
+      this.assets = fs.readJsonSync(path.resolve(cwd, '.tapestry/assets.json'))
     // run server
     this.bootServer()
     this.registerProxies()
@@ -172,7 +174,7 @@ export default class Tapestry {
                 )
               ),
               head: Helmet.rewind(),
-              assets: this.env === 'production' ? this.assets : null,
+              assets: this.assets,
               asyncProps
             }
 
