@@ -1,3 +1,9 @@
+### v1.4.7
+* Removed `lodash` `once` dependency
+
+### v1.4.6
+* `tapestry dev` now listens for file changes and re-compiles the client, the server re-requires the latest project component tree and will update on page-reload.
+
 ### v1.4.5
 * Improved `tapestry build` script removing the `exec` call and replacing it with the `babel` Node API 
 
