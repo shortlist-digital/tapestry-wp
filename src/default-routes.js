@@ -11,22 +11,26 @@ const DefaultRoutes = ({ Category, Post, Page, FrontPage, Error }) =>
     <Route
       path='/'
       component={FrontPageLoader}
-      tag={FrontPage} />
+      tag={FrontPage}
+      fallback={Error} />
     <Route
       path='about/:slug'
       component={PageLoader}
-      tag={Page} />
+      tag={Page}
+      fallback={Error} />
     <Route
       path=':category(/:subcategory)'
       component={CategoriesLoader}
-      tag={Category} />
+      tag={Category}
+      fallback={Error} />
     <Route
       path=':category(/:subcategory)/:slug/:id'
       component={PostLoader}
-      tag={Post} />
-    {/* <Route
+      tag={Post}
+      fallback={Error} />
+    <Route
       path='*'
-    component={Error || MissingView} /> */}
+      component={Error || MissingView} />
   </div>
 
 DefaultRoutes.propTypes = {

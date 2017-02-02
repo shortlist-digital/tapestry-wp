@@ -7,7 +7,7 @@ import { error } from './logger'
 
 export default class Loader extends Component {
 
-  static loadProps({params, loadContext}, cb) {
+  static loadProps({ params, loadContext }, cb) {
 
     const customLoader = loadContext.loaders && loadContext.loaders.Post
     if (customLoader) return customLoader(loadContext, cb)
@@ -18,7 +18,7 @@ export default class Loader extends Component {
     // LoadContext is basicaly an object we can pass around
     // the sever with our components and some baseUrl on it
     return fetch(`${baseUrl}/${path}`)
-      .then(response => Object.assign(response.json(), { ok: response.ok }))
+      .then(response => response.json())
       .then(data => cb(null, { data }))
       .catch(error => cb(error))
   }
@@ -26,6 +26,9 @@ export default class Loader extends Component {
   render () {
     if (typeof window !== 'undefined') { window.scrollTo(0, 0) }
     const Tag = this.props.route.tag
+    const Error = this.props.route.fallback
+    if (this.props.data.data && this.props.data.data.status)
+      return <Error {...this.props.data} />
     return Tag ?
       <Tag {...this.props.data} /> :
       <MissingView {...this.props.data} />

@@ -152,30 +152,6 @@ export default class Tapestry {
             if (err)
               return reply(err).code(500)
 
-            // if (isEmpty(asyncProps.propsArray))
-            //   return reply(renderError({ loadContext }))
-
-            // const data = {renderProps, loadContext, err, asyncProps}
-
-            // const has404ed = asyncProps.propsArray[0].data
-
-            // console.log(asyncProps.propsArray[0])
-
-            // if (isEmpty(asyncProps))
-            //   return reply(
-            //     renderError({ loadContext })
-            //   ).code(404)
-
-            // if (asyncProps.propsArray[0] &&
-            //   (asyncProps.propsArray[0].data.data.status < 200 ||
-            // asyncProps.propsArray[0].data.data.status > 300))
-            //   return reply(
-            //     renderError({
-            //       loadContext,
-            //       error: asyncProps.propsArray[0].data
-            //     })
-            //   ).code(404)
-
             // 200 with rendered HTML
             reply(
               renderHtml({
