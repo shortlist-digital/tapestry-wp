@@ -1,22 +1,41 @@
 import webpack from 'webpack'
+import bytes from 'pretty-bytes'
+import { once } from 'lodash'
 import config from './webpack.config'
 import { success, error } from './logger'
-import bytes from 'pretty-bytes'
 
 export default class Build {
 
   constructor (opts) {
-    // bundle client scripts
-    new webpack(config(opts), (err, stats) => {
-      // handle error
-      if (err)
-        error(err)
-      // log output
-      const output = stats.toJson()
-      success(`Client built: ${bytes(output.assets[0].size)}`)
-      // run callback
-      if (typeof opts.onComplete === 'function')
-        opts.onComplete(output)
-    })
+    // allow class access
+    this.opts = opts
+    this.compiler = webpack(config(opts))
+    // run once if production, watch if development
+    if (opts.env !== 'development') {
+      this.compiler.run((err, stats) => this.run(err, stats))
+    } else {
+      this.compiler.watch({}, this.watch.bind(this))
+    }
+  }
+
+  run (err, stats) {
+    // handle error
+    if (err) error(err)
+    // log complete
+    this.complete(stats)
+  }
+  watch (err, stats) {
+    // handle error
+    if (err) error(err)
+    // log complete
+    once(() => this.complete(stats))
+  }
+  complete (stats) {
+    // log output
+    const output = stats.toJson()
+    success(`Client built: ${bytes(output.assets[0].size)}`)
+    // run callback
+    if (typeof this.opts.onComplete === 'function')
+      this.opts.onComplete()
   }
 }

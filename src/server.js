@@ -21,9 +21,10 @@ import { success, error, info } from './logger'
 
 export default class Tapestry {
 
-  constructor ({ config, cwd, env }) {
+  constructor ({ config, cwd, env, configPath }) {
     // allow access from class
     this.config = config.default
+    this.configPath = configPath
     this.context = cwd
     this.env = env
     // override defaults
@@ -113,6 +114,17 @@ export default class Tapestry {
       method: 'GET',
       path: '/{path*}',
       handler: (request, reply) => {
+
+        if (this.env === 'development') {
+          // clear the cached modules in memory
+          Object
+            .keys(require.cache)
+            .forEach(key => delete require.cache[key])
+          // re-require that config from the parent project to get the latest
+          const updatedConfig = require(this.configPath).default
+          // combine with previously set values (serverUri etc.)
+          Object.assign(this.config, updatedConfig)
+        }
 
         match({
           routes: this.routes(this.config.components || {}),
