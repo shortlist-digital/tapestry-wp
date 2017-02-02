@@ -17,10 +17,7 @@ const defaultHtml = ({ markup, head, asyncProps, assets }) => {
       </head>
       <body>
         <div id="root" dangerouslySetInnerHTML={{ __html: markup.html }} />
-        {
-          asyncProps &&
-            <script dangerouslySetInnerHTML={{ __html: `window.__ASYNC_PROPS__ = ${JSON.stringify(asyncProps.propsArray)}` }} />
-        }
+        <script dangerouslySetInnerHTML={{ __html: `window.__ASYNC_PROPS__ = ${JSON.stringify(asyncProps.propsArray)}` }} />
       </body>
     </html>
   )
@@ -34,8 +31,8 @@ defaultHtml.propTypes = {
   }).isRequired,
   head: PropTypes.object.isRequired,
   asyncProps: PropTypes.shape({
-    propsArray: PropTypes.array
-  })
+    propsArray: PropTypes.array.isRequired
+  }).isRequired,
 }
 
 export default defaultHtml
