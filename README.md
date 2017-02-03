@@ -3,45 +3,49 @@
 [![CircleCI](https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop.svg?style=shield)](https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop)
 [![dependencies Status](https://david-dm.org/shortlist-digital/tapestry-wp/status.svg)](https://david-dm.org/shortlist-digital/tapestry-wp)
 
-## Work In Progress
+Tapestry is a Universal JavaScript Application for rendering React front-ends via the Wordpress API.
 
-Very Work in Progress - Eventually:
+_**Note:** This is currently a work in progress and will likely undergo major public/private API changes and feature updates._
 
+## Using Tapestry
+Install  `tapestry-wp` through `npm` or `yarn`
 ```js
-// Top level Component for your Wordpress frontend
-import Base from './components/Base'
-import Post from './components/Post'
-import Page from './components/Page'
+npm install tapestry-wp --save
+```
+Map the Tapestry commands to `npm` scripts in your `package.json`
+```js
+"scripts": {
+  "start": "tapestry",
+  "start:prod": "tapestry build && tapestry start",
+  "bootstrap": "tapestry init"
+}
+```
+You can now either run `npm run bootstrap` to create a simple Tapestry project or manually add a `tapestry.config.js` to your project root.
+```js
+import Post from './components/post'
+import Page from './components/page'
 
 export default {
   components: {
-    Base, Post, Page
+    Post, Page
   },
-  proxyPaths: ['/robots.txt'],
-  siteUrl: 'http://wordpress-api-site.com'
+  siteUrl: 'http://your-wordpress.url'
 }
 ```
 
-## Currently
-
-Tapestry consumes a config object in the root of the parent project i.e. Shortlist, and outputs a Webpack bundle into `/public` and starts a node server.
-
-## Todo
-
-- [x] Render React components from the server
-- [x] Bundle component tree and serve on the client
+## Roadmap
+Tapestry has a long list of features that we are looking to implement, including confirmed and super speculative features.
+- [x] Server render React component tree
+- [x] Bundle the app for the client
+- [x] Provide production option for client bundle
+- [x] Supply CLI to run the server
 - [x] Hook up WP-API to match routes
-- [x] Head overrides per page with `react-helmet`
+- [x] Render `<head>` tags with `react-helmet`
 - [x] Supply default routes
-- [x] Integrate CSS-in-JS framework
-- [ ] Access options, menus through WP-API
-- [x] Ability to override loaders - Separate loaders and routes?
-- [ ] Ability to override routes
-- [ ] WordPress plugin to enable previewing and 'View Post' functionality
-- [ ] Hydrate single page store
-- [ ] Consider a global store of page, post and archive data
-- [ ] Permalink WP-API plugin - integrate into Wordpress Tapestry
+- [x] Integrate Glamor CSS-in-JS framework, rendering server-side, hydrating on the client
+- [x] Ability to override data loaders
+- [ ] Ability to override routing
+- [ ] WordPress plugin to enable previewing, 'View Post' functionality and permalinks
+- [ ] Create a global Redux store of page, post and archive data
 - [ ] Handle Redirects
-- [ ] Hash client bundle, allow path and name override
-- [x] Provide prod build option for client bundle
-- [x] Define cli interface (https://medium.freecodecamp.com/writing-command-line-applications-in-nodejs-2cf8327eee2)
+- [ ] Access options, menus through WP-API
