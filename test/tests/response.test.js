@@ -24,21 +24,21 @@ describe('Handing server responses', () => {
 
   it('Route matched, respond with a 200', (done) => {
     request
-      .get(tapestry.server.info.uri, (err, res, body) => {
+      .get(tapestry.server.info.uri, (err, res) => {
         expect(res.statusCode).to.equal(200)
         done()
       })
   })
   it('Route not matched, respond with a 404', (done) => {
     request
-      .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res, body) => {
+      .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res) => {
         expect(res.statusCode).to.equal(404)
         done()
       })
   })
   it('Route matched but API lacks data, respond with a 404', (done) => {
     request
-      .get(`${tapestry.server.info.uri}/about/null-page`, (err, res, body) => {
+      .get(`${tapestry.server.info.uri}/about/null-page`, (err, res) => {
         expect(res.statusCode).to.equal(404)
         done()
       })

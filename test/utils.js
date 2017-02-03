@@ -2,7 +2,7 @@ import nock from 'nock'
 import Server from '../dist/server'
 import data from './mocks/page.json'
 
-export const bootServer = (config, done) =>
+export const bootServer = (config) =>
   new Server({
     config: { default: config }
   })

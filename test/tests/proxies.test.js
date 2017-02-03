@@ -32,7 +32,7 @@ describe('Handling proxies', () => {
   })
   it('Undeclared proxy should return 404', (done) => {
     request
-      .get(`${tapestry.server.info.uri}/test.txt`, (err, res, body) => {
+      .get(`${tapestry.server.info.uri}/test.txt`, (err, res) => {
         expect(res.statusCode).to.equal(404)
         done()
       })
