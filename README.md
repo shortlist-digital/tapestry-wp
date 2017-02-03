@@ -33,6 +33,15 @@ export default {
 }
 ```
 
+### API
+* `siteUrl`: The Wordpress instance to access the WP-API. e.g. `http://thesun.co.uk`
+* `components`: An object with React components mapped to Wordpress endpoints. e.g. `Post`, `Page`, `Term`, `Category`
+* `loaders`: An optional object with data loading functions matching components.
+* `proxyPaths`: An array of paths to allow proxy access e.g. `['robots.txt', 'favicon.ico']`
+* `host`: The host Tapestry is assigned to. e.g. `localhost`
+* `port`: The port Tapestry is assigned to. e.g. `3030`
+* `onPageUpdate`: A function called on React-router `route` event
+
 ## Roadmap
 Tapestry has a long list of features that we are looking to implement, including confirmed and super speculative features.
 - [x] Server render React component tree
