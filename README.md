@@ -9,11 +9,11 @@ _**Note:** This is currently a work in progress and will likely undergo major pu
 
 ## Using Tapestry
 Install  `tapestry-wp` through `npm` or `yarn`
-```
+```js
 npm install tapestry-wp --save
 ```
 Map the Tapestry commands to `npm` scripts in your `package.json`
-```
+```js
 "scripts": {
   "start": "tapestry",
   "start:prod": "tapestry build && tapestry start",
@@ -21,7 +21,7 @@ Map the Tapestry commands to `npm` scripts in your `package.json`
 }
 ```
 You can now either run `npm run bootstrap` to create a simple Tapestry project or manually add a `tapestry.config.js` to your project root.
-```
+```js
 import Post from './components/post'
 import Page from './components/page'
 
