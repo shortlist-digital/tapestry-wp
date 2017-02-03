@@ -3,6 +3,7 @@ import request from 'request'
 import { bootServer, mockApi } from '../utils'
 import pageData from '../mocks/page.json'
 import style from '../../dist/default-style'
+import CleanCSS from 'clean-css'
 
 // test Tapestry components and data
 describe('HTML document', () => {
@@ -42,7 +43,9 @@ describe('HTML document', () => {
   it('Page should return default CSS', (done) => {
     request
       .get(tapestry.server.info.uri, (err, res, body) => {
-        expect(body).to.contain(style)
+        // utilising the same underlying API as html-minifier
+        const minifiedCSS = new CleanCSS().minify(style)
+        expect(body).to.contain(minifiedCSS.styles)
         done()
       })
   })
