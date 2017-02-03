@@ -185,8 +185,7 @@ export default class Tapestry {
 
             reply(
               minify(`<!doctype html>${html}`, {
-                minifyCSS: true,
-                minifyJS: true
+                minifyCSS: true
               })
             ).code(200)
           })
