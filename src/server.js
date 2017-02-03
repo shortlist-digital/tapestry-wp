@@ -12,11 +12,12 @@ import Inert from 'inert'
 import AsyncProps, { loadPropsOnServer } from 'async-props'
 
 import { has, isEmpty } from 'lodash'
+import { minify } from 'html-minifier'
 
 import DefaultRoutes from './default-routes'
 import DefaultHTML from './default-html'
 
-import { success, error, info } from './logger'
+import { success, error } from './logger'
 
 
 export default class Tapestry {
@@ -182,7 +183,12 @@ export default class Tapestry {
               <DefaultHTML {...data} />
             )
 
-            reply(`<!doctype html>${html}`).code(200)
+            reply(
+              minify(`<!doctype html>${html}`, {
+                minifyCSS: true,
+                minifyJS: true
+              })
+            ).code(200)
           })
         })
       }
