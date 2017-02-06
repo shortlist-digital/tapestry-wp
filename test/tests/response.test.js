@@ -11,15 +11,12 @@ describe('Handing server responses', () => {
   }
 
 
-  beforeEach(done => {
-    mockApi({
-      path: '/wp-json/wp/v2/pages',
-      query: { filter: { name: 'home' }}
-    })
+  before(done => {
+    mockApi()
     tapestry = bootServer(config)
     tapestry.server.on('start', done)
   })
-  afterEach(() => tapestry.server.stop())
+  after(() => tapestry.server.stop())
 
 
   it('Route matched, respond with a 200', (done) => {

@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import request from 'request'
-import { bootServer, mockApi } from '../utils'
+import { bootServer, mockProxy } from '../utils'
 
 describe('Handling proxies', () => {
 
@@ -13,15 +13,15 @@ describe('Handling proxies', () => {
   }
 
 
-  beforeEach(done => {
-    mockApi({
+  before(done => {
+    mockProxy({
       path: proxyFile,
       resp: proxyContents
     })
     tapestry = bootServer(config)
     tapestry.server.on('start', done)
   })
-  afterEach(() => tapestry.server.stop())
+  after(() => tapestry.server.stop())
 
   it('Proxy should return correct content', (done) => {
     request
