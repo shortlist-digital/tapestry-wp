@@ -22,12 +22,13 @@ import { success, error } from './logger'
 
 export default class Tapestry {
 
-  constructor ({ config, cwd, env, configPath }) {
+  constructor ({ config, cwd, env, configPath }, { silent }) {
     // allow access from class
     this.config = config.default
     this.configPath = configPath
     this.context = cwd
     this.env = env
+    this.silent = silent
     // override defaults
     this.assets = null
     if (env === 'production')
@@ -61,7 +62,7 @@ export default class Tapestry {
     // run server
     this.server.start(err => {
       if (err) error(err)
-      success(`Server ready: ${this.server.info.uri}`)
+      if (!this.silent) success(`Server ready: ${this.server.info.uri}`)
     })
   }
 
