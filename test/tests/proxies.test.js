@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import request from 'request'
-import { bootServer, mockApi } from '../utils'
+import { bootServer, mockProxy } from '../utils'
 
 describe('Handling proxies', () => {
 
@@ -13,15 +13,15 @@ describe('Handling proxies', () => {
   }
 
 
-  beforeEach(done => {
-    mockApi({
+  before(done => {
+    mockProxy({
       path: proxyFile,
       resp: proxyContents
     })
     tapestry = bootServer(config)
     tapestry.server.on('start', done)
   })
-  afterEach(() => tapestry.server.stop())
+  after(() => tapestry.server.stop())
 
   it('Proxy should return correct content', (done) => {
     request
@@ -32,7 +32,7 @@ describe('Handling proxies', () => {
   })
   it('Undeclared proxy should return 404', (done) => {
     request
-      .get(`${tapestry.server.info.uri}/test.txt`, (err, res, body) => {
+      .get(`${tapestry.server.info.uri}/test.txt`, (err, res) => {
         expect(res.statusCode).to.equal(404)
         done()
       })

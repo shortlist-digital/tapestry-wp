@@ -1,7 +1,6 @@
 # Tapestry
-[![npm](https://img.shields.io/npm/v/tapestry-wp.svg)]()
 [![CircleCI](https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop.svg?style=shield)](https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop)
-[![dependencies Status](https://david-dm.org/shortlist-digital/tapestry-wp/status.svg)](https://david-dm.org/shortlist-digital/tapestry-wp)
+[![Known Vulnerabilities](https://snyk.io/test/github/shortlist-digital/tapestry-wp/badge.svg)](https://snyk.io/test/github/shortlist-digital/tapestry-wp)
 
 Tapestry is a Universal JavaScript Application for rendering React front-ends via the Wordpress API.
 
