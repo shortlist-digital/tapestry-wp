@@ -30,7 +30,7 @@ describe('HTML document', () => {
   it('Data is correctly loaded on page', (done) => {
     request
       .get(tapestry.server.info.uri, (err, res, body) => {
-        expect(body).to.contain(`window.__ASYNC_PROPS__ = [{"resp":${JSON.stringify(pageData)}}]`)
+        expect(body).to.contain(`window.__ASYNC_PROPS__ = [{"data":${JSON.stringify(pageData)}}]`)
         done()
       })
   })
