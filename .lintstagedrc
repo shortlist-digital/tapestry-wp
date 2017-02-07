@@ -5,6 +5,7 @@
   ],
   "*.js": [
     "eslint --fix",
-    "git add"
+    "git add",
+    "npm test"
   ]
 }
