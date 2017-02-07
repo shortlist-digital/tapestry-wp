@@ -23,10 +23,8 @@ export default class Loader extends Component {
     return fetch(`${baseUrl}/${path}`)
       .then(resp => resp.json())
       .then(resp => {
-        const data = ('0' in resp) || resp instanceof Array ?
-          { data: resp[0] } :
-          { resp }
-        return cb(null, data)
+        const data = ('0' in resp) || resp instanceof Array ? resp[0] : resp
+        return cb(null, { data })
       })
       .catch(error => cb(error))
   }

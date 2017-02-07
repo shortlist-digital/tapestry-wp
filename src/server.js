@@ -22,7 +22,7 @@ import { success, error } from './logger'
 
 export default class Tapestry {
 
-  constructor ({ config, cwd, env, configPath }, { silent }) {
+  constructor ({ config, cwd, env, configPath }, { silent } = {}) {
     // allow access from class
     this.config = config.default
     this.configPath = configPath
