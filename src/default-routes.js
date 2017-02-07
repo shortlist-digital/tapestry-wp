@@ -6,31 +6,24 @@ import PostLoader from './loader-post'
 import PageLoader from './loader-page'
 import FrontPageLoader from './loader-front-page'
 
-const DefaultRoutes = ({ Category, Post, Page, FrontPage, Error }) =>
+const DefaultRoutes = ({ Category, Post, Page, FrontPage }) =>
   <div>
     <Route
       path='/'
       component={FrontPageLoader}
-      tag={FrontPage}
-      fallback={Error} />
+      tag={FrontPage} />
     <Route
       path='about/:slug'
       component={PageLoader}
-      tag={Page}
-      fallback={Error} />
+      tag={Page} />
     <Route
       path=':category(/:subcategory)'
       component={CategoriesLoader}
-      tag={Category}
-      fallback={Error} />
+      tag={Category} />
     <Route
       path=':category(/:subcategory)/:slug/:id'
       component={PostLoader}
-      tag={Post}
-      fallback={Error} />
-    <Route
-      path='*'
-      component={Error || MissingView} />
+      tag={Post} />
   </div>
 
 DefaultRoutes.propTypes = {

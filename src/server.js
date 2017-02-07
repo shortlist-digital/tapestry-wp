@@ -1,25 +1,20 @@
 import fs from 'fs-extra'
 import path from 'path'
-import React from 'react'
-import { renderToStaticMarkup, renderToString } from 'react-dom/server'
 import { match } from 'react-router'
-import Helmet from 'react-helmet'
-import { renderStaticOptimized } from 'glamor/server'
 
 import { Server } from 'hapi'
 import h2o2 from 'h2o2'
 import Inert from 'inert'
-import AsyncProps, { loadPropsOnServer } from 'async-props'
+import { loadPropsOnServer } from 'async-props'
 
 import { has, isEmpty } from 'lodash'
 
 import DefaultRoutes from './default-routes'
 import DefaultHTML from './default-html'
 
-import { renderHtml, renderError } from './render'
+import { renderHtml } from './render'
 
 import { success, error, info } from './logger'
-import prettyjson from 'prettyjson'
 
 
 export default class Tapestry {
@@ -135,23 +130,37 @@ export default class Tapestry {
           location: request.url.path
         }, (err, redirectLocation, renderProps) => {
 
+          // define global deets for nested components
+          const loadContext = this.config
+
+          // 404 if non-matched route
+          if (!renderProps) {
+            return reply(
+              renderHtml({
+                loadContext,
+                assets: this.env === 'production' ? this.assets : null
+              })
+            ).code(404)
+          }
+
           // 500 if error from Router
-          if (err)
+          if (err) {
+            error(err)
             return reply(err.message).code(500)
+          }
 
           // 301/2 if redirect
           if (redirectLocation)
             return reply.redirect(redirectLocation)
 
-          // define global deets for nested components
-          const loadContext = this.config
-
           // get all the props yo
           loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
 
             // 500 if error from AsyncProps
-            if (err)
+            if (err) {
+              error(err)
               return reply(err).code(500)
+            }
 
             // 200 with rendered HTML
             reply(

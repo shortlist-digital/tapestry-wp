@@ -16,13 +16,24 @@ export default class Loader extends Component {
     // LoadContext is basicaly an object we can pass around
     // the sever with our components and some baseUrl on it
     return fetch(`${baseUrl}/${path}`)
-      .then(response => response.json())
-      .then(data => cb(null, { data }))
+      .then(resp => resp.json())
+      .then(resp => {
+        const data = ('0' in resp) || resp instanceof Array ?
+          resp[0] :
+          resp
+        return cb(null, {
+          data: Object.assign({}, { loadContext }, data)
+        })
+      })
       .catch(error => cb(error))
   }
 
   render () {
+    if (typeof window !== 'undefined') { window.scrollTo(0, 0) }
     const Tag = this.props.route.tag
+    const Error = this.props.data.loadContext.components.Error || MissingView
+    if (this.props.data.data && this.props.data.data.status)
+      return <Error {...this.props.data} />
     return Tag ?
       <Tag {...this.props.data} /> :
       <MissingView {...this.props.data} />

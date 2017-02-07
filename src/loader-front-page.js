@@ -24,15 +24,22 @@ export default class Loader extends Component {
       .then(resp => resp.json())
       .then(resp => {
         const data = ('0' in resp) || resp instanceof Array ?
-          { data: resp[0] } :
-          { resp }
-        return cb(null, data)
+          resp[0] :
+          resp
+        return cb(null, {
+          data: Object.assign({}, { loadContext }, data)
+        })
       })
       .catch(error => cb(error))
   }
 
   render () {
+    console.log(this.props.data.loadContext)
+    if (typeof window !== 'undefined') { window.scrollTo(0, 0) }
     const Tag = this.props.route.tag
+    const Error = this.props.data.loadContext.components.Error || MissingView
+    if (this.props.data.data && this.props.data.data.status)
+      return <Error {...this.props.data} />
     return Tag ?
       <Tag {...this.props.data} /> :
       <MissingView {...this.props.data} />
