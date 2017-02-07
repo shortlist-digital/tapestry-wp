@@ -31,8 +31,9 @@ export default class Tapestry {
     this.context = cwd
     this.env = env
     // override defaults
-    this.routes = this.config.routes || DefaultRoutes
-    this.assets = fs.readJsonSync(path.resolve(cwd, '.tapestry/assets.json'))
+    this.assets = null
+    if (env === 'production')
+      this.assets = fs.readJsonSync(path.resolve(cwd, '.tapestry/assets.json'))
     // run server
     this.bootServer()
     this.registerProxies()
@@ -54,7 +55,7 @@ export default class Tapestry {
     this.server.register([h2o2, Inert])
     this.server.connection({
       host: this.config.host || '0.0.0.0',
-      port: process.env.PORT || 3030
+      port: this.config.port || process.env.PORT || 3030
     })
     this.config.serverUri = this.server.info.uri
   }
@@ -130,7 +131,7 @@ export default class Tapestry {
         }
 
         match({
-          routes: this.routes(this.config.components || {}),
+          routes: DefaultRoutes(this.config.components || {}),
           location: request.url.path
         }, (err, redirectLocation, renderProps) => {
 

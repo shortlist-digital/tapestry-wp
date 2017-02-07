@@ -6,7 +6,7 @@ const logger = require('../dist/logger')
 const cwd = process.cwd()
 const glob = require('glob-fs')({ gitignore: true })
 const babel = require('babel-core')
-const fs = require('fs')
+const fs = require('fs-extra')
 
 logger.info('Preparing Tapestry…\n')
 
@@ -39,7 +39,9 @@ const transform = (filePath) => {
     if (err) {
       return logger.error(err)
     }
-    fs.writeFile(`${cwd}/.tapestry/app/${filePath}`, result.code, 'utf8', (err) => {
+    const outputFilePath = `${cwd}/.tapestry/app/${filePath}`
+    fs.ensureFileSync(outputFilePath)
+    fs.writeFile(outputFilePath, result.code, 'utf8', (err) => {
       if (err) {
         return logger.error(err)
       }
