@@ -3,9 +3,10 @@ import AsyncProps from 'async-props'
 import fetch from 'isomorphic-fetch'
 import MissingView from './missing-view'
 
+
 export default class Loader extends Component {
 
-  static loadProps({params, loadContext}, cb) {
+  static loadProps({ params, loadContext }, cb) {
 
     const customLoader = loadContext.loaders && loadContext.loaders.Categories
     if (customLoader) return customLoader(loadContext.siteUrl, cb)
@@ -21,9 +22,7 @@ export default class Loader extends Component {
         const data = ('0' in resp) || resp instanceof Array ?
           resp[0] :
           resp
-        return cb(null, {
-          data: Object.assign({}, { loadContext }, data)
-        })
+        return cb(null, { data })
       })
       .catch(error => cb(error))
   }
@@ -31,7 +30,7 @@ export default class Loader extends Component {
   render () {
     if (typeof window !== 'undefined') { window.scrollTo(0, 0) }
     const Tag = this.props.route.tag
-    const Error = this.props.data.loadContext.components.Error || MissingView
+    const Error = this.props.route.fallback || MissingView
     if (this.props.data.data && this.props.data.data.status)
       return <Error {...this.props.data} />
     return Tag ?
