@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
 import { Route } from 'react-router'
-import MissingView from './missing-view'
 import CategoriesLoader from './loader-categories'
 import PostLoader from './loader-post'
 import PageLoader from './loader-page'
