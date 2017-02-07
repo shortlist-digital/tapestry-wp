@@ -6,6 +6,7 @@ import { success, error } from './logger'
 export default class Build {
 
   constructor (opts) {
+    // this is a test comment
     // allow class access
     this.opts = opts
     this.compiler = webpack(config(opts))
