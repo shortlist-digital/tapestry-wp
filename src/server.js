@@ -12,21 +12,23 @@ import Inert from 'inert'
 import AsyncProps, { loadPropsOnServer } from 'async-props'
 
 import { has, isEmpty } from 'lodash'
+import { minify } from 'html-minifier'
 
 import DefaultRoutes from './default-routes'
 import DefaultHTML from './default-html'
 
-import { success, error, info } from './logger'
+import { success, error } from './logger'
 
 
 export default class Tapestry {
 
-  constructor ({ config, cwd, env, configPath }) {
+  constructor ({ config, cwd, env, configPath }, { silent }) {
     // allow access from class
     this.config = config.default
     this.configPath = configPath
     this.context = cwd
     this.env = env
+    this.silent = silent
     // override defaults
     this.assets = null
     if (env === 'production')
@@ -60,7 +62,7 @@ export default class Tapestry {
     // run server
     this.server.start(err => {
       if (err) error(err)
-      success(`Server ready: ${this.server.info.uri}`)
+      if (!this.silent) success(`Server ready: ${this.server.info.uri}`)
     })
   }
 
@@ -182,7 +184,11 @@ export default class Tapestry {
               <DefaultHTML {...data} />
             )
 
-            reply(`<!doctype html>${html}`).code(200)
+            reply(
+              minify(`<!doctype html>${html}`, {
+                minifyCSS: true
+              })
+            ).code(200)
           })
         })
       }

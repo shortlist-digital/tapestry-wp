@@ -32,7 +32,8 @@ defaultHtml.propTypes = {
   head: PropTypes.object.isRequired,
   asyncProps: PropTypes.shape({
     propsArray: PropTypes.array.isRequired
-  }).isRequired
+  }).isRequired,
+  assets: PropTypes.object
 }
 
 export default defaultHtml
