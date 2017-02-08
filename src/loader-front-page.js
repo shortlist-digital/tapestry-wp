@@ -24,9 +24,7 @@ export default class Loader extends Component {
     return fetch(`${baseUrl}/${path}`)
       .then(resp => resp.json())
       .then(resp => {
-        const data = ('0' in resp) || resp instanceof Array ?
-          resp[0] :
-          resp
+        const data = ('0' in resp) || resp instanceof Array ? resp[0] : resp
         return cb(null, { data })
       })
       .catch(error => cb(error))
@@ -46,7 +44,8 @@ export default class Loader extends Component {
 
 Loader.propTypes = {
   route: PropTypes.shape({
-    tag: PropTypes.func
+    tag: PropTypes.func,
+    fallback: PropTypes.element
   }).isRequired,
   data: PropTypes.oneOfType([
     PropTypes.object,

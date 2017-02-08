@@ -33,7 +33,8 @@ DefaultRoutes.propTypes = {
   Category: PropTypes.element,
   FrontPage: PropTypes.element,
   Page: PropTypes.element,
-  Post: PropTypes.element
+  Post: PropTypes.element,
+  Error: PropTypes.element
 }
 
 export default DefaultRoutes

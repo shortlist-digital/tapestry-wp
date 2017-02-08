@@ -7,10 +7,7 @@ import h2o2 from 'h2o2'
 import Inert from 'inert'
 import { loadPropsOnServer } from 'async-props'
 
-import { has, isEmpty } from 'lodash'
-
 import DefaultRoutes from './default-routes'
-import DefaultHTML from './default-html'
 
 import { renderHtml } from './render'
 import { success, error } from './logger'
@@ -18,7 +15,7 @@ import { success, error } from './logger'
 
 export default class Tapestry {
 
-  constructor ({ config, cwd, env, configPath }, { silent }) {
+  constructor ({ config, cwd, env, configPath }, { silent } = {}) {
     // allow access from class
     this.config = config.default
     this.configPath = configPath

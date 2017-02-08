@@ -1,13 +1,15 @@
 {
   "name": "tapestry-wp",
-  "version": "1.4.8",
+  "version": "1.4.10",
   "description": "Wordpress API Universal React Renderer",
   "main": "index.js",
   "scripts": {
-    "lint": "./node_modules/.bin/eslint src bin bootstrap test",
+    "lint": "eslint . --fix --cache",
     "prepublish": "babel ./src --out-dir ./dist",
     "watch": "babel ./src --watch --out-dir ./dist",
-    "test": "mocha 'test/**/*.test.js' --compilers js:babel-core/register"
+    "test": "mocha 'test/**/*.test.js' --compilers js:babel-core/register",
+    "pre-commit-msg": "echo \"Performing pre-commit checks...\" && exit 0",
+    "lint-staged": "lint-staged"
   },
   "author": "Jon Sherrard",
   "license": "ISC",
@@ -53,9 +55,16 @@
     "webpack": "^2.2.0"
   },
   "devDependencies": {
+    "editorconfig-tools": "^0.1.1",
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
     "nock": "^9.0.2",
-    "request": "^2.79.0"
-  }
+    "request": "^2.79.0",
+    "lint-staged": "^3.3.0",
+    "pre-commit": "^1.2.2"
+  },
+  "pre-commit": [
+    "pre-commit-msg",
+    "lint-staged"
+  ]
 }

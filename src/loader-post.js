@@ -41,7 +41,8 @@ export default class Loader extends Component {
 
 Loader.propTypes = {
   route: PropTypes.shape({
-    tag: PropTypes.func
+    tag: PropTypes.func,
+    fallback: PropTypes.element
   }).isRequired,
   data: PropTypes.oneOfType([
     PropTypes.object,
