@@ -4,7 +4,7 @@
   "description": "Wordpress API Universal React Renderer",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint src bin bootstrap test --cache",
+    "lint": "eslint . --fix --cache",
     "prepublish": "babel ./src --out-dir ./dist",
     "watch": "babel ./src --watch --out-dir ./dist",
     "test": "mocha 'test/**/*.test.js' --compilers js:babel-core/register",

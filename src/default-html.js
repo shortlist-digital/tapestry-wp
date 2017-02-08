@@ -11,13 +11,19 @@ const defaultHtml = ({ markup, head, asyncProps, assets }) => {
         {head.meta.toComponent()}
         {head.link.toComponent()}
         {head.script.toComponent()}
-        <script defer src={`/_scripts/${assets ? assets.bundle : 'bundle.js'}`} />
+        {
+          asyncProps &&
+            <script defer src={`/_scripts/${assets ? assets.bundle : 'bundle.js'}`} />
+        }
         <style dangerouslySetInnerHTML={{ __html: markup.css }} />
         <link rel="shortcut icon" href="/public/favicon.ico" />
       </head>
       <body>
         <div id="root" dangerouslySetInnerHTML={{ __html: markup.html }} />
-        <script dangerouslySetInnerHTML={{ __html: `window.__ASYNC_PROPS__ = ${JSON.stringify(asyncProps.propsArray)}` }} />
+        {
+          asyncProps &&
+            <script dangerouslySetInnerHTML={{ __html: `window.__ASYNC_PROPS__ = ${JSON.stringify(asyncProps.propsArray)}` }} />
+        }
       </body>
     </html>
   )
@@ -32,7 +38,7 @@ defaultHtml.propTypes = {
   head: PropTypes.object.isRequired,
   asyncProps: PropTypes.shape({
     propsArray: PropTypes.array.isRequired
-  }).isRequired,
+  }),
   assets: PropTypes.object
 }
 

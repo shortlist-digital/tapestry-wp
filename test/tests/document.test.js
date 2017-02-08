@@ -3,7 +3,6 @@ import { expect } from 'chai'
 import request from 'request'
 import { bootServer, mockApi } from '../utils'
 import pageData from '../mocks/page.json'
-import style from '../../dist/default-style'
 import { css } from 'glamor'
 
 // test Tapestry components and data
@@ -13,7 +12,7 @@ describe('HTML document', () => {
   let tapestry = null
   let config = {
     components: {
-      Post: () => <div className={css({ color: color })}>Test</div>
+      Post() { return <div className={css({ color: color })}>Test</div> }
     },
     siteUrl: 'http://dummy.api'
   }
@@ -44,7 +43,6 @@ describe('HTML document', () => {
   it('Page should render project Glamor CSS', (done) => {
     request
       .get(`${tapestry.server.info.uri}/cat/slug/10`, (err, res, body) => {
-        // console.log(body)
         expect(body).to.contain(color)
         done()
       })

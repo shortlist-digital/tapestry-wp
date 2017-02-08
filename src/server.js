@@ -1,22 +1,15 @@
 import fs from 'fs-extra'
 import path from 'path'
-import React from 'react'
-import { renderToStaticMarkup, renderToString } from 'react-dom/server'
 import { match } from 'react-router'
-import Helmet from 'react-helmet'
-import { renderStaticOptimized } from 'glamor/server'
 
 import { Server } from 'hapi'
 import h2o2 from 'h2o2'
 import Inert from 'inert'
-import AsyncProps, { loadPropsOnServer } from 'async-props'
-
-import { has, isEmpty } from 'lodash'
-import { minify } from 'html-minifier'
+import { loadPropsOnServer } from 'async-props'
 
 import DefaultRoutes from './default-routes'
-import DefaultHTML from './default-html'
 
+import { renderHtml } from './render'
 import { success, error } from './logger'
 
 
@@ -132,61 +125,47 @@ export default class Tapestry {
         match({
           routes: DefaultRoutes(this.config.components || {}),
           location: request.url.path
-        }, (error, redirectLocation, renderProps) => {
+        }, (err, redirectLocation, renderProps) => {
+
+          // define global deets for nested components
+          const loadContext = this.config
+
+          // 404 if non-matched route
+          if (!renderProps) {
+            return reply(
+              renderHtml({
+                loadContext,
+                assets: this.env === 'production' ? this.assets : null
+              })
+            ).code(404)
+          }
 
           // 500 if error from Router
-          if (error)
-            return reply(error.message).code(500)
+          if (err) {
+            error(err)
+            return reply(err.message).code(500)
+          }
 
           // 301/2 if redirect
           if (redirectLocation)
             return reply.redirect(redirectLocation)
 
-          // 404 if no Router match
-          if (!renderProps)
-            return reply('No matched Route').code(404)
-
-          // define global deets for nested components
-          const loadContext = this.config
-
           // get all the props yo
           loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
 
-            // 404 if no data from API, yeah sorry for this, I'll change it
-            if (isEmpty(asyncProps))
-              return reply('No API data').code(404)
-            if (has(asyncProps.propsArray[0], 'resp') && isEmpty(asyncProps.propsArray[0].resp))
-              return reply('No API data').code(404)
-            if (has(asyncProps.propsArray[0], 'data') && isEmpty(asyncProps.propsArray[0].data))
-              return reply('No API data').code(404)
-
             // 500 if error from AsyncProps
-            if (err)
+            if (err) {
+              error(err)
               return reply(err).code(500)
-
-            // get html from props
-            const data = {
-              markup: renderStaticOptimized(() =>
-                renderToString(
-                  <AsyncProps
-                    {...renderProps}
-                    {...asyncProps}
-                    loadContext={loadContext} />
-                )
-              ),
-              head: Helmet.rewind(),
-              assets: this.assets,
-              asyncProps
             }
 
-            // render html with data
-            const html = renderToStaticMarkup(
-              <DefaultHTML {...data} />
-            )
-
+            // 200 with rendered HTML
             reply(
-              minify(`<!doctype html>${html}`, {
-                minifyCSS: true
+              renderHtml({
+                renderProps,
+                loadContext,
+                asyncProps,
+                assets: this.env === 'production' ? this.assets : null
               })
             ).code(200)
           })
