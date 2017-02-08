@@ -8,7 +8,7 @@ _**Note:** This is currently a work in progress and will likely undergo major pu
 
 ## Using Tapestry
 Install  `tapestry-wp` through `npm` or `yarn`
-```js
+```text
 npm install tapestry-wp --save
 ```
 Map the Tapestry commands to `npm` scripts in your `package.json`
