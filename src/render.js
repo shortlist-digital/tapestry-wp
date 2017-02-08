@@ -15,35 +15,24 @@ export const renderHtml = ({
   assets
 }) => {
 
-  let data = null
-
-  if (!renderProps) {
-    const Error = loadContext.components.Error || MissingView
-    data = {
-      markup: renderStaticOptimized(() =>
-        renderToString(
-          <Error />
-        )
-      ),
-      head: Helmet.rewind(),
-      assets
-    }
-  } else {
-    // get html from props
-    data = {
-      markup: renderStaticOptimized(() =>
-        renderToString(
-          <AsyncProps
-            {...renderProps}
-            {...asyncProps}
-            loadContext={loadContext} />
-        )
-      ),
-      head: Helmet.rewind(),
-      assets,
-      asyncProps
-    }
+  const Error = loadContext.components.Error || MissingView
+  // get html from props
+  const data = {
+    markup: renderStaticOptimized(() =>
+      renderToString(
+        renderProps ?
+        <AsyncProps
+          {...renderProps}
+          {...asyncProps}
+          loadContext={loadContext} /> :
+        <Error />
+      )
+    ),
+    head: Helmet.rewind(),
+    assets
   }
+  if (asyncProps)
+    data.asyncProps = asyncProps
 
   // render html with data
   return `
