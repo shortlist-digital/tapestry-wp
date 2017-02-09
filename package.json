@@ -17,7 +17,7 @@
     "docs:build": "npm run docs:prepare && gitbook build && npm run docs:favicon",
     "docs:watch": "npm run docs:prepare && gitbook serve",
     "docs:git-push": "git push git@github.com:shortlist-digital/tapestry-wp gh-pages --force",
-    "docs:publish": "npm run docs:clean && npm run docs:build && cd _book && git init && git commit --allow-empty -m 'update book [skip-ci]' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && npm run docs:git-push"
+    "docs:publish": "npm run docs:clean && npm run docs:build && cd _book && git init && git commit --allow-empty -m 'update book [skip ci]' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && npm run docs:git-push"
   },
   "author": "Jon Sherrard",
   "license": "ISC",
