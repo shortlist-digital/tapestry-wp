@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+
+'use strict'
+
+const program = require('commander')
+const pkg = require('../package.json')
+
+program
+  .version(pkg.version)
+  .description(pkg.description)
+  .usage('[options]')
+  .command('dev', 'development mode (default)', { isDefault: true })
+  .command('start', 'production mode')
+  .command('build', 'build client bundle')
+  .command('init', 'Bootstrap a Tapestry project')
+
+program.parse(process.argv)

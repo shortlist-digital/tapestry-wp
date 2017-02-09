@@ -1,0 +1,272 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Introduction · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.2">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter active" data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Introduction</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h2 id=""><a href="https://shortlist-digital.github.io/tapestry-wp" target="_blank"><img src="http://i.imgur.com/HtzivRT.png" height="120"></a></h2>
+<p><a href="https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop" target="_blank"><img src="https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop.svg?style=shield" alt="CircleCI"></a>
+<a href="https://snyk.io/test/github/shortlist-digital/tapestry-wp" target="_blank"><img src="https://snyk.io/test/github/shortlist-digital/tapestry-wp/badge.svg" alt="Known Vulnerabilities"></a></p>
+<p>Tapestry is a Universal JavaScript Application for rendering React front-ends via the Wordpress API.</p>
+<p><em><strong>Note:</strong> This is currently a work in progress and will likely undergo major public/private API changes and feature updates.</em></p>
+<h2 id="using-tapestry">Using Tapestry</h2>
+<p>Install  <code>tapestry-wp</code> through <code>npm</code> or <code>yarn</code></p>
+<pre><code class="lang-text">npm install tapestry-wp --save
+</code></pre>
+<p>Map the Tapestry commands to <code>npm</code> scripts in your <code>package.json</code></p>
+<pre><code class="lang-js"><span class="hljs-string">&quot;scripts&quot;</span>: {
+  <span class="hljs-string">&quot;start&quot;</span>: <span class="hljs-string">&quot;tapestry&quot;</span>,
+  <span class="hljs-string">&quot;start:prod&quot;</span>: <span class="hljs-string">&quot;tapestry build &amp;&amp; tapestry start&quot;</span>,
+  <span class="hljs-string">&quot;bootstrap&quot;</span>: <span class="hljs-string">&quot;tapestry init&quot;</span>
+}
+</code></pre>
+<p>You can now either run <code>npm run bootstrap</code> to create a simple Tapestry project or manually add a <code>tapestry.config.js</code> to your project root.</p>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> Post <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./components/post&apos;</span>
+<span class="hljs-keyword">import</span> Page <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./components/page&apos;</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  components: {
+    Post, Page
+  },
+  siteUrl: <span class="hljs-string">&apos;http://your-wordpress.url&apos;</span>
+}
+</code></pre>
+<h3 id="api">API</h3>
+<ul>
+<li><code>siteUrl</code>: The Wordpress instance to access the WP-API. e.g. <code>http://thesun.co.uk</code></li>
+<li><code>components</code>: An object with React components mapped to Wordpress endpoints. e.g. <code>Post</code>, <code>Page</code>, <code>Term</code>, <code>Category</code></li>
+<li><code>loaders</code>: An optional object with data loading functions matching components.</li>
+<li><code>proxyPaths</code>: An array of paths to allow proxy access e.g. <code>[&apos;robots.txt&apos;, &apos;favicon.ico&apos;]</code></li>
+<li><code>host</code>: The host Tapestry is assigned to. e.g. <code>localhost</code></li>
+<li><code>port</code>: The port Tapestry is assigned to. e.g. <code>3030</code></li>
+<li><code>onPageUpdate</code>: A function called on React-router <code>route</code> event</li>
+</ul>
+<h2 id="roadmap">Roadmap</h2>
+<p>Tapestry has a long list of features that we are looking to implement, including confirmed and super speculative features.</p>
+<ul>
+<li>[x] Server render React component tree</li>
+<li>[x] Bundle the app for the client</li>
+<li>[x] Provide production option for client bundle</li>
+<li>[x] Supply CLI to run the server</li>
+<li>[x] Hook up WP-API to match routes</li>
+<li>[x] Render <code>&lt;head&gt;</code> tags with <code>react-helmet</code></li>
+<li>[x] Supply default routes</li>
+<li>[x] Integrate Glamor CSS-in-JS framework, rendering server-side, hydrating on the client</li>
+<li>[x] Ability to override data loaders</li>
+<li>[ ] Ability to override routing</li>
+<li>[ ] WordPress plugin to enable previewing, &apos;View Post&apos; functionality and permalinks</li>
+<li>[ ] Create a global Redux store of page, post and archive data</li>
+<li>[ ] Handle Redirects</li>
+<li>[ ] Access options, menus through WP-API</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Introduction","level":"1.1","depth":1,"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2017-02-09T18:31:46.000Z","type":"markdown"},"gitbook":{"version":"3.2.2","time":"2017-02-09T23:17:57.605Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

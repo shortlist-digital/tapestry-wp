@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+
+'use strict'
+
+const fs = require('fs-extra')
+const path = require('path')
+const logger = require('../dist/logger')
+const cwd = process.cwd()
+
+logger.info('Adding some sensible defaults…')
+
+const createDir = src =>
+  fs.ensureDirSync(
+    path.resolve(cwd, src)
+  )
+const copySrc = src =>
+  fs.copySync(
+    path.resolve(cwd, 'node_modules/tapestry-wp/bootstrap/', src),
+    path.resolve(cwd, src), { overwrite: false }
+  )
+
+createDir('public')
+copySrc('tapestry.config.js')
+copySrc('components')
+
+logger.success('Sensible defaults ahoy!\n')
