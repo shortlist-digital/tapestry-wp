@@ -9,7 +9,15 @@
     "watch": "babel ./src --watch --out-dir ./dist",
     "test": "mocha 'test/**/*.test.js' --compilers js:babel-core/register",
     "pre-commit-msg": "echo \"Performing pre-commit checks...\" && exit 0",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "docs:clean": "rimraf _book",
+    "docs:prepare": "gitbook install",
+    "docs:rename-apple-icon": "cp _book/gitbook/images/favicon-152.png _book/gitbook/images/apple-touch-icon-precomposed-152.png",
+    "docs:favicon": "icon-gen -i logo/tapestry-logo-glyph.svg -o _book/gitbook/images/ -m all -n ico=favicon -r && npm run docs:rename-apple-icon",
+    "docs:build": "npm run docs:prepare && gitbook build && icon-gen -i logo/tapestry-logo-glyph.svg -o _book/gitbook/images",
+    "docs:watch": "npm run docs:prepare && gitbook serve",
+    "docs:git-push": "git push git@github.com:shortlist-digital/tapestry-wp gh-pages --force",
+    "docs:publish": "npm run docs:clean && npm run docs:build && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && npm run docs:git-push"
   },
   "author": "Jon Sherrard",
   "license": "ISC",
@@ -57,13 +65,14 @@
     "webpack": "^2.2.0"
   },
   "devDependencies": {
-    "editorconfig-tools": "^0.1.1",
     "chai": "^3.5.0",
+    "editorconfig-tools": "^0.1.1",
+    "icon-gen": "^1.0.7",
+    "lint-staged": "^3.3.0",
     "mocha": "^3.2.0",
     "nock": "^9.0.2",
-    "request": "^2.79.0",
-    "lint-staged": "^3.3.0",
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^1.2.2",
+    "request": "^2.79.0"
   },
   "pre-commit": [
     "pre-commit-msg",
