@@ -29,10 +29,9 @@ export const renderHtml = ({
       )
     ),
     head: Helmet.rewind(),
-    assets
+    assets,
+    asyncProps
   }
-  if (asyncProps)
-    data.asyncProps = asyncProps
 
   // render html with data
   return `
