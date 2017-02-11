@@ -4,8 +4,11 @@ import CategoriesLoader from './loader-categories'
 import PostLoader from './loader-post'
 import PageLoader from './loader-page'
 import FrontPageLoader from './loader-front-page'
+import MissingView from './missing-view'
 
-const DefaultRoutes = ({ Category, Post, Page, FrontPage, Error }) =>
+const DefaultRoutes = ({
+  Category, Post, Page, FrontPage, Error = MissingView
+}) =>
   <div>
     <Route
       path='/'
@@ -27,6 +30,9 @@ const DefaultRoutes = ({ Category, Post, Page, FrontPage, Error }) =>
       component={PostLoader}
       tag={Post}
       fallback={Error} />
+    <Route
+      path='*'
+      component={Error} />
   </div>
 
 DefaultRoutes.propTypes = {
