@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import AsyncProps from 'async-props'
 import fetch from 'isomorphic-fetch'
+import { has } from 'lodash'
 import MissingView from './missing-view'
 
 
@@ -34,7 +35,7 @@ export default class Loader extends Component {
     const Tag = this.props.route.tag
     const Error = this.props.route.fallback
 
-    if (this.props.data && this.props.data.data && this.props.data.data.status)
+    if (has(this.props, 'data.data.status'))
       return <Error />
 
     if (Tag)
