@@ -156,7 +156,10 @@ export default class Tapestry {
 
             let status = 200
 
-            if (has(asyncProps.propsArray[0], 'data.data.status'))
+            const failApi = has(asyncProps.propsArray[0], 'data.data.status')
+            const failRoute = renderProps.routes[1].path === '*'
+
+            if (failApi || failRoute)
               status = 404
 
             // 500 if error from AsyncProps

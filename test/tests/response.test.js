@@ -26,10 +26,10 @@ describe('Handing server responses', () => {
         done()
       })
   })
-  it('Route not matched, respond with a 200', (done) => {
+  it('Route not matched, respond with a 404', (done) => {
     request
       .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res) => {
-        expect(res.statusCode).to.equal(200)
+        expect(res.statusCode).to.equal(404)
         done()
       })
   })
