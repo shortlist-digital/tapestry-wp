@@ -18,8 +18,8 @@
     "docs:watch": "npm run docs:prepare && gitbook serve",
     "docs:git-push": "git push git@github.com:shortlist-digital/tapestry-wp gh-pages --force",
     "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book [skip ci]' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && npm run docs:git-push",
-    "preversion": "lint-staged",
-    "postversion": "git push && git push --tags"
+    "preversion": "npm run lint && npm run test",
+    "postversion": "git push && git push --tags && npm publish"
   },
   "author": "Jon Sherrard",
   "license": "ISC",
