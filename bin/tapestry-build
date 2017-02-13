@@ -2,13 +2,61 @@
 
 'use strict'
 
-const exec = require('child_process').exec
 const logger = require('../dist/logger')
 const cwd = process.cwd()
+const glob = require('glob-fs')({ gitignore: true })
+const babel = require('babel-core')
+const fs = require('fs-extra')
 
 logger.info('Preparing Tapestry…\n')
 
-exec(`babel ${cwd} --out-dir ${cwd}/.tapestry --presets=es2015,react  --ignore node_modules,__tests__,_scripts`, (err, stdout, stderr) => {
-  if (err) logger.error(err)
-  logger.success('Tapestry built! Run `tapestry start` to boot')
+const noTests = (file) => {
+    // Test if a .js file is within a __test__ directory, which we don't want to transpile
+   if (/__tests__/.test(file.path)) {
+    file.exclude = true
+  }
+  return file
+}
+
+const noPublic = (file) => {
+  // Test if a file is in a public directory we don't want to transpile
+  if (/public/.test(file.path)) {
+    file.exclude = true
+  }
+  return true
+}
+
+const noScripts = (file) => {
+  // Test if a file is in a public directory we don't want to transpile
+  if (/_scripts/.test(file.path)) {
+    file.exclude = true
+  }
+  return true
+}
+
+const transform = (filePath) => {
+  babel.transformFile(`${cwd}/${filePath}`, { presets: ['es2015', 'react'] }, (err, result) => {
+    if (err) {
+      return logger.error(err)
+    }
+    const outputFilePath = `${cwd}/.tapestry/app/${filePath}`
+    fs.ensureFileSync(outputFilePath)
+    fs.writeFile(outputFilePath, result.code, 'utf8', (err) => {
+      if (err) {
+        return logger.error(err)
+      }
+    })
+  })
+}
+
+glob.use(noTests).use(noPublic).use(noScripts).readdir('**/*.js', function (err, files) {
+  if (err) {
+    logger.error(err)
+  } else {
+    files.map((file, i) => {
+      console.log(file)
+      transform(file)
+    })
+   logger.success('Tapestry built! Run `tapestry start` to boot')
+  }
 })

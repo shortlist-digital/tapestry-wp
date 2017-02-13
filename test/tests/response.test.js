@@ -11,34 +11,31 @@ describe('Handing server responses', () => {
   }
 
 
-  beforeEach(done => {
-    mockApi({
-      path: '/wp-json/wp/v2/pages',
-      query: { filter: { name: 'home' }}
-    })
+  before(done => {
+    mockApi()
     tapestry = bootServer(config)
     tapestry.server.on('start', done)
   })
-  afterEach(() => tapestry.server.stop())
+  after(() => tapestry.server.stop())
 
 
   it('Route matched, respond with a 200', (done) => {
     request
-      .get(tapestry.server.info.uri, (err, res, body) => {
+      .get(tapestry.server.info.uri, (err, res) => {
         expect(res.statusCode).to.equal(200)
         done()
       })
   })
   it('Route not matched, respond with a 404', (done) => {
     request
-      .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res, body) => {
+      .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res) => {
         expect(res.statusCode).to.equal(404)
         done()
       })
   })
   it('Route matched but API lacks data, respond with a 404', (done) => {
     request
-      .get(`${tapestry.server.info.uri}/about/null-page`, (err, res, body) => {
+      .get(`${tapestry.server.info.uri}/about/null-page`, (err, res) => {
         expect(res.statusCode).to.equal(404)
         done()
       })

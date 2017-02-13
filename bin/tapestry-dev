@@ -5,10 +5,12 @@
 const path = require('path')
 const fs = require('fs')
 const _ = require('lodash')
+const validUrl = require('valid-url')
 const Server = require('../dist/server').default
 const Client = require('../dist/build').default
 const logger = require('../dist/logger')
 const cwd = process.cwd()
+const env = 'development'
 
 // project tapestry config path
 const treeClient = path.join(cwd, 'tapestry.config.js')
@@ -34,9 +36,19 @@ if (!_.isPlainObject(config.default))
 if (!_.has(config.default, 'siteUrl'))
   logger.error('tapestry.config.js export needs to include a siteUrl')
 
+// check siteUrl is a valid url
+if (!validUrl.isUri(config.default.siteUrl))
+  logger.error('siteUrl needs to be a valid URL e.g. http://wordpress.org')
+
 // kick off client build & server
 new Client({
   cwd,
-  env: 'development',
-  onComplete: () => new Server({ cwd, config })
+  env,
+  onComplete: () =>
+    new Server({
+      cwd,
+      env,
+      config,
+      configPath: treeClient
+    })
 })

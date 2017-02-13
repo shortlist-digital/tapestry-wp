@@ -6,10 +6,12 @@ import CleanPlugin from 'clean-webpack-plugin'
 export default ({ cwd, env }) => {
 
   const config = {
-    entry: 'tapestry-wp/dist/client.js',
+    entry: {
+      bundle: 'tapestry-wp/dist/client.js'
+    },
     output: {
       path: path.resolve(cwd, '_scripts'),
-      filename: 'bundle.js'
+      filename: '[name].js'
     },
     resolve: {
       alias: {
@@ -38,14 +40,16 @@ export default ({ cwd, env }) => {
   }
 
   if (env === 'production') {
+    config.output.filename = '[name].[chunkhash].js'
     config.resolve.alias = {
-      'tapestry.config.js': path.resolve(cwd, '.tapestry/tapestry.config.js')
+      'tapestry.config.js': path.resolve(cwd, '.tapestry/app/tapestry.config.js')
     }
     config.plugins.push(
       new webpack.DefinePlugin({
        'process.env.NODE_ENV': JSON.stringify('production')
       }),
       new webpack.optimize.UglifyJsPlugin({
+        comments: false,
         compress: {
           warnings: false
         }
@@ -55,12 +59,13 @@ export default ({ cwd, env }) => {
         debug: false
       }),
       function () {
-        this.plugin('done', stats =>
-          fs.writeFileSync(
-            path.resolve(cwd, 'stats.json'),
-            JSON.stringify(stats.toJson())
+        this.plugin('done', stats => {
+          const jsonStats = stats.toJson()
+          return fs.writeFileSync(
+            path.resolve(cwd, '.tapestry/assets.json'),
+            JSON.stringify(jsonStats.assetsByChunkName)
           )
-        )
+        })
       }
     )
   }
