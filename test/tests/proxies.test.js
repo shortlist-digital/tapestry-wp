@@ -9,7 +9,7 @@ describe('Handling proxies', () => {
   let proxyContents = 'Test file'
   let config = {
     proxyPaths: [proxyFile],
-    siteUrl: 'http://dummy.api:80'
+    siteUrl: 'http://dummy.api'
   }
 
 
