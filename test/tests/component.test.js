@@ -5,7 +5,6 @@ import { bootServer, mockApi } from '../utils'
 import FrontPage from '../components/front-page'
 import Error from '../components/error'
 import data from '../mocks/page.json'
-import { shallow } from 'enzyme'
 
 // test Tapestry components and data
 describe('Components', () => {
