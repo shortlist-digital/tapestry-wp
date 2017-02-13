@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import request from 'request'
-import { bootServer, mockProxy } from '../utils'
+import { bootServer, mockProxy, mockApi } from '../utils'
 
 describe('Handling proxies', () => {
 
@@ -9,11 +9,12 @@ describe('Handling proxies', () => {
   let proxyContents = 'Test file'
   let config = {
     proxyPaths: [proxyFile],
-    siteUrl: 'http://dummy.api:80'
+    siteUrl: 'http://dummy.api'
   }
 
 
   before(done => {
+    mockApi()
     mockProxy({
       path: proxyFile,
       resp: proxyContents

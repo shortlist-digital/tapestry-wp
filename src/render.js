@@ -4,6 +4,7 @@ import Helmet from 'react-helmet'
 import AsyncProps from 'async-props'
 import { renderStaticOptimized } from 'glamor/server'
 import { minify } from 'html-minifier'
+import { has } from 'lodash'
 import DefaultHTML from './default-html'
 import MissingView from './missing-view'
 
@@ -15,7 +16,9 @@ export const renderHtml = ({
   assets
 }) => {
 
-  const Error = loadContext.components.Error || MissingView
+  const Error = has(loadContext, 'loadContext.components.Error') ?
+    loadContext.components.Error :
+    MissingView
   // get html from props
   const data = {
     markup: renderStaticOptimized(() =>
