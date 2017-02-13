@@ -7,7 +7,7 @@ describe('Handing server responses', () => {
 
   let tapestry = null
   let config = {
-    siteUrl: 'http://dummy.api:80'
+    siteUrl: 'http://dummy.api'
   }
 
 
@@ -37,6 +37,13 @@ describe('Handing server responses', () => {
     request
       .get(`${tapestry.server.info.uri}/about/null-page`, (err, res) => {
         expect(res.statusCode).to.equal(404)
+        done()
+      })
+  })
+  it('Matched route has correct headers', (done) => {
+    request
+      .get(tapestry.server.info.uri, (err, res, body) => {
+        expect(res.headers['content-type']).to.equal('text/html; charset=utf-8')
         done()
       })
   })
