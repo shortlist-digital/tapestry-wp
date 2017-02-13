@@ -7,7 +7,7 @@ describe('Handing server responses', () => {
 
   let tapestry = null
   let config = {
-    siteUrl: 'http://dummy.api:80'
+    siteUrl: 'http://dummy.api'
   }
 
 
@@ -26,10 +26,10 @@ describe('Handing server responses', () => {
         done()
       })
   })
-  it('Route not matched, respond with a 404', (done) => {
+  it('Route not matched, respond with a 200', (done) => {
     request
       .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res) => {
-        expect(res.statusCode).to.equal(404)
+        expect(res.statusCode).to.equal(200)
         done()
       })
   })

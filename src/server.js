@@ -6,6 +6,7 @@ import { Server } from 'hapi'
 import h2o2 from 'h2o2'
 import Inert from 'inert'
 import { loadPropsOnServer } from 'async-props'
+import { has } from 'lodash'
 
 import DefaultRoutes from './default-routes'
 
@@ -153,6 +154,11 @@ export default class Tapestry {
           // get all the props yo
           loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
 
+            let status = 200
+
+            if (has(asyncProps.propsArray[0], 'data.data.status'))
+              status = 404
+
             // 500 if error from AsyncProps
             if (err) {
               error(err)
@@ -167,7 +173,7 @@ export default class Tapestry {
                 asyncProps,
                 assets: this.env === 'production' ? this.assets : null
               })
-            ).code(200)
+            ).code(status)
           })
         })
       }
