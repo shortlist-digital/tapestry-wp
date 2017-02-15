@@ -1,7 +1,4 @@
-bundle.js
-example-app/public/bundle.js
-dist
-
+_book
 # Created by https://www.gitignore.io/api/sublimetext,vim,osx,node
 
 ### SublimeText ###
@@ -118,3 +115,7 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+
+# Custom
+dist

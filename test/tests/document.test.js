@@ -1,34 +1,35 @@
+import React from 'react'
 import { expect } from 'chai'
 import request from 'request'
 import { bootServer, mockApi } from '../utils'
 import pageData from '../mocks/page.json'
-import style from '../../dist/default-style'
+import { css } from 'glamor'
 
 // test Tapestry components and data
 describe('HTML document', () => {
 
+  let color = '#639'
   let tapestry = null
   let config = {
-    siteUrl: 'http://dummy.api:80'
+    components: {
+      Post() { return <div className={css({ color: color })}>Test</div> }
+    },
+    siteUrl: 'http://dummy.api'
   }
 
 
-  beforeEach(done => {
-    mockApi({
-      path: '/wp-json/wp/v2/pages',
-      query: { filter: { name: 'home' }}
-    })
+  before(done => {
+    mockApi()
     tapestry = bootServer(config)
     tapestry.server.on('start', done)
   })
-  afterEach(() => tapestry.server.stop())
+  after(() => tapestry.server.stop())
 
 
   it('Data is correctly loaded on page', (done) => {
-    console.log(tapestry.server.info.uri)
     request
       .get(tapestry.server.info.uri, (err, res, body) => {
-        expect(body).to.contain(`window.__ASYNC_PROPS__ = [{"resp":${JSON.stringify(pageData)}}]`)
+        expect(body).to.contain(`window.__ASYNC_PROPS__ = [{"data":${JSON.stringify(pageData)}}]`)
         done()
       })
   })
@@ -39,10 +40,10 @@ describe('HTML document', () => {
         done()
       })
   })
-  it('Page should return default CSS', (done) => {
+  it('Page should render project Glamor CSS', (done) => {
     request
-      .get(tapestry.server.info.uri, (err, res, body) => {
-        expect(body).to.contain(style)
+      .get(`${tapestry.server.info.uri}/cat/slug/10`, (err, res, body) => {
+        expect(body).to.contain(color)
         done()
       })
   })

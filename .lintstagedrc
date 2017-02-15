@@ -1,0 +1,11 @@
+{
+  "*.{md,sh,txt,xml,html,json}": [
+    "editorconfig-tools fix",
+    "git add"
+  ],
+  "*.js": [
+    "eslint --fix",
+    "git add",
+    "npm test"
+  ]
+}
