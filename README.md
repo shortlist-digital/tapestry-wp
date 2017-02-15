@@ -1,6 +1,8 @@
 <a href="https://shortlist-digital.github.io/tapestry-wp"><img src="http://i.imgur.com/HtzivRT.png" height="120" /></a>
 ---
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/shortlist-digital/tapestry-wp.svg)](https://greenkeeper.io/)
+[![npm](https://img.shields.io/npm/v/tapestry-wp.svg)]()
 [![CircleCI](https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop.svg?style=shield)](https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop)
 [![Known Vulnerabilities](https://snyk.io/test/github/shortlist-digital/tapestry-wp/badge.svg)](https://snyk.io/test/github/shortlist-digital/tapestry-wp)
 
