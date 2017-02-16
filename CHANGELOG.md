@@ -1,3 +1,6 @@
+### v1.5.4
+* Added executable permissions to `tapestry-init` command
+
 ### v1.4.7
 * Removed `lodash` `once` dependency
 
