@@ -1,5 +1,5 @@
-// import fs from 'fs-extra'
-// import path from 'path'
+import fs from 'fs-extra'
+import path from 'path'
 import { match } from 'react-router'
 
 import { Server } from 'hapi'
@@ -26,7 +26,7 @@ export default class Tapestry {
     // override defaults
     this.assets = null
     if (env === 'production')
-      this.assets = ''//fs.readJsonSync(path.resolve(cwd, '.tapestry/assets.json'))
+      this.assets = fs.readJsonSync(path.resolve(cwd, 'example/.tapestry/assets.json'))
     // run server
     this.bootServer()
     this.registerProxies()

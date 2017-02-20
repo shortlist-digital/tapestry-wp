@@ -7,7 +7,7 @@ export default ({ cwd, env }) => {
 
   const config = {
     entry: {
-      bundle: 'tapestry-wp/dist/client.js'
+      bundle: path.resolve(cwd, 'src', 'client', 'webpack.entry.js')
     },
     output: {
       path: path.resolve(cwd, '_scripts'),
@@ -42,7 +42,7 @@ export default ({ cwd, env }) => {
   if (env === 'production') {
     config.output.filename = '[name].[chunkhash].js'
     config.resolve.alias = {
-      'tapestry.config.js': path.resolve(cwd, '.tapestry/app/tapestry.config.js')
+      'tapestry.config.js': path.resolve(cwd, 'example/.tapestry/app/tapestry.config.js')
     }
     config.plugins.push(
       new webpack.DefinePlugin({
@@ -62,7 +62,7 @@ export default ({ cwd, env }) => {
         this.plugin('done', stats => {
           const jsonStats = stats.toJson()
           return fs.writeFileSync(
-            path.resolve(cwd, '.tapestry/assets.json'),
+            path.resolve(cwd, 'example/.tapestry/assets.json'),
             JSON.stringify(jsonStats.assetsByChunkName)
           )
         })

@@ -7,8 +7,8 @@ const tapestry = require('../dist/server.bundle').default
 
 const cwd = process.cwd()
 
-tapestry({
+tapestry.boot({
   cwd: cwd,
-  env: 'development',
+  env: 'production',
   config: config
 })
