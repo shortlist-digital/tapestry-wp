@@ -1,8 +1,9 @@
 {
   "name": "tapestry-wp",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "Wordpress API Universal React Renderer",
   "main": "index.js",
+  "repository" : "shortlist-digital/tapestry-wp",
   "scripts": {
     "lint": "eslint . --fix --cache",
     "prepublish": "babel ./src --out-dir ./dist",
