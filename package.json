@@ -58,13 +58,14 @@
     "location-origin": "^1.1.4",
     "lodash": "^4.17.4",
     "pretty-bytes": "^4.0.2",
+    "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-helmet": "^4.0.0",
     "react-object-inspector": "^0.2.1",
     "react-router": "^3.0.0",
-    "react": "^15.4.1",
     "valid-url": "^1.0.9",
-    "webpack": "^2.2.0"
+    "webpack": "^2.2.0",
+    "webpack-node-externals": "^1.5.4"
   },
   "devDependencies": {
     "chai": "^3.5.0",
