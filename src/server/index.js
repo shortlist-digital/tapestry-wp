@@ -25,8 +25,7 @@ export default class Tapestry {
     this.silent = silent
     // override defaults
     this.assets = null
-    if (env === 'production')
-      this.assets = fs.readJsonSync(path.resolve(cwd, 'example/.tapestry/assets.json'))
+    if (env === 'production') this.assets = fs.readJsonSync(path.resolve(cwd, '.tapestry/assets.json'))
     // run server
     this.bootServer()
     this.registerProxies()

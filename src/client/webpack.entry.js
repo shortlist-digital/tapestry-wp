@@ -4,7 +4,7 @@ import { Router, browserHistory } from 'react-router'
 import AsyncProps from 'async-props'
 import 'location-origin'
 
-import DefaultRoutes from './default-routes'
+import DefaultRoutes from '../shared/default-routes'
 import config from 'tapestry.config.js'
 
 var onUpdateMethod = () => {}
