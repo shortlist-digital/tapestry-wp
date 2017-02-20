@@ -6,7 +6,7 @@ import { renderStaticOptimized } from 'glamor/server'
 import { minify } from 'html-minifier'
 import { has } from 'lodash'
 import DefaultHTML from './default-html'
-import MissingView from './missing-view'
+import MissingView from '../../shared/missing-view'
 
 
 export const renderHtml = ({

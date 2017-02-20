@@ -1,5 +1,5 @@
-import fs from 'fs-extra'
-import path from 'path'
+// import fs from 'fs-extra'
+// import path from 'path'
 import { match } from 'react-router'
 
 import { Server } from 'hapi'
@@ -8,10 +8,10 @@ import Inert from 'inert'
 import { loadPropsOnServer } from 'async-props'
 import { has } from 'lodash'
 
-import DefaultRoutes from './default-routes'
+import DefaultRoutes from '../shared/default-routes'
 
 import { renderHtml } from './render'
-import { success, error } from './logger'
+import { success, error } from '../utilities/logger'
 
 
 export default class Tapestry {
@@ -26,7 +26,7 @@ export default class Tapestry {
     // override defaults
     this.assets = null
     if (env === 'production')
-      this.assets = fs.readJsonSync(path.resolve(cwd, '.tapestry/assets.json'))
+      this.assets = ''//fs.readJsonSync(path.resolve(cwd, '.tapestry/assets.json'))
     // run server
     this.bootServer()
     this.registerProxies()
@@ -112,16 +112,16 @@ export default class Tapestry {
       path: '/{path*}',
       handler: (request, reply) => {
 
-        if (this.env === 'development') {
-          // clear the cached modules in memory
-          Object
-            .keys(require.cache)
-            .forEach(key => delete require.cache[key])
-          // re-require that config from the parent project to get the latest
-          const updatedConfig = require(this.configPath).default
-          // combine with previously set values (serverUri etc.)
-          Object.assign(this.config, updatedConfig)
-        }
+        // if (this.env === 'development') {
+        //   // clear the cached modules in memory
+        //   Object
+        //     .keys(require.cache)
+        //     .forEach(key => delete require.cache[key])
+        //   // re-require that config from the parent project to get the latest
+        //   const updatedConfig = require(this.configPath).default
+        //   // combine with previously set values (serverUri etc.)
+        //   Object.assign(this.config, updatedConfig)
+        // }
 
         match({
           routes: DefaultRoutes(this.config.components || {}),

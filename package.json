@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "repository": "shortlist-digital/tapestry-wp",
   "scripts": {
+    "build:server": "webpack --config src/webpack/server.config.js",
     "lint": "eslint . --fix --cache",
     "test": "mocha 'test/**/*.test.js' --compilers js:babel-core/register",
     "pre-commit-msg": "echo \"Performing pre-commit checks...\" && exit 0",
