@@ -1,11 +1,11 @@
 import nock from 'nock'
-import Server from '../dist/server'
+import tapestry from '../dist/server.bundle'
 import data from './mocks/page.json'
 
 const dataError = { data: { status: 404 } }
 
 export const bootServer = (config) =>
-  new Server({
+  tapestry.serverOnly({
     config: { default: config }
   }, { silent: true })
 

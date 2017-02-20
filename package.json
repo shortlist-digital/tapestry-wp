@@ -7,7 +7,7 @@
   "scripts": {
     "build:server": "webpack --config src/webpack/server.config.js",
     "lint": "eslint . --fix --cache",
-    "test": "mocha 'test/**/*.test.js' --compilers js:babel-core/register",
+    "test": "mocha 'test/**/*.test.js' --require test/babel-register",
     "pre-commit-msg": "echo \"Performing pre-commit checks...\" && exit 0",
     "lint-staged": "lint-staged",
     "prepublish": "",

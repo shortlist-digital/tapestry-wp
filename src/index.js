@@ -2,12 +2,13 @@ import Server from './server'
 import Client from './client'
 
 
-// tapestry() creates a client bundle and only starts the server once complete, this avoids the server booting without the client ready
-const tapestry = (opts) => {
-  // create the client bundle, then boot server
-  return new Client(Object.assign({
-    onComplete: () => new Server(opts)
-  }, opts))
+export default {
+  // boots the Tapestry server
+  serverOnly: (options, devOptions) => new Server(options, devOptions),
+  // creates the client bundle
+  clientOnly: options => new Client(options),
+  // create client bundle and boot server on callback, avoids the server booting without the client ready. Object.assign() used instead of spread operator as we're only supporting es2015 (currently)
+  boot: options => new Client(Object.assign({
+    onComplete: () => new Server(options)
+  }, options))
 }
-
-export default tapestry
