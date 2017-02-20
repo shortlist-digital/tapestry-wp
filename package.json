@@ -2,15 +2,16 @@
   "name": "tapestry-wp",
   "version": "1.5.5",
   "description": "Wordpress API Universal React Renderer",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "repository": "shortlist-digital/tapestry-wp",
   "scripts": {
     "lint": "eslint . --fix --cache",
-    "prepublish": "babel ./src --out-dir ./dist",
-    "watch": "babel ./src --watch --out-dir ./dist",
     "test": "mocha 'test/**/*.test.js' --compilers js:babel-core/register",
     "pre-commit-msg": "echo \"Performing pre-commit checks...\" && exit 0",
     "lint-staged": "lint-staged",
+    "prepublish": "",
+    "preversion": "npm run lint && npm run test",
+    "postversion": "git push && git push --tags && npm publish",
     "docs:clean": "rimraf _book",
     "docs:prepare": "gitbook install",
     "docs:rename-apple-icon": "cp _book/gitbook/images/favicon-152.png _book/gitbook/images/apple-touch-icon-precomposed-152.png",
@@ -18,14 +19,17 @@
     "docs:build": "npm run docs:prepare && gitbook build && npm run docs:favicon",
     "docs:watch": "npm run docs:prepare && gitbook serve",
     "docs:git-push": "git push git@github.com:shortlist-digital/tapestry-wp gh-pages --force",
-    "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book [skip ci]' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && npm run docs:git-push",
-    "preversion": "npm run lint && npm run test",
-    "postversion": "git push && git push --tags && npm publish"
+    "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book [skip ci]' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && npm run docs:git-push"
   },
-  "author": "Jon Sherrard",
+  "contributors": [
+    "Elliot Coad <elliot.coad@shortlist.com>",
+    "Jon Sherrard <jon.sherrard@shortlist.com>",
+    "Mat Hawley <mathew.hawley@shortlist.com>",
+    "Thomas Digby <thomas.digby@shortlist.com>"
+  ],
   "license": "ISC",
   "bin": {
-    "tapestry": "./bin/tapestry"
+    "tapestry": "./dist/bin/tapestry"
   },
   "engines": {
     "node": ">= 6.9.0",
