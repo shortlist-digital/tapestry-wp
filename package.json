@@ -29,7 +29,7 @@
   ],
   "license": "ISC",
   "bin": {
-    "tapestry": "./dist/bin/tapestry"
+    "tapestry": "./bin/tapestry"
   },
   "engines": {
     "node": ">= 6.9.0",
