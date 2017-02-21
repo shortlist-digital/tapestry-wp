@@ -1,13 +1,18 @@
-<a href="https://shortlist-digital.github.io/tapestry-wp"><img src="http://i.imgur.com/HtzivRT.png" height="120" /></a>
+<p align="center">
+  <a href="https://tapestry-wp.js.org">
+    <img src="http://i.imgur.com/HtzivRT.png" height="120" />
+  </a>
+</p>
+<p align="center">
+  Tapestry is a Universal JavaScript Application for rendering React front-ends via the Wordpress API.
+</p>
+<p align="center">
+  [![Greenkeeper badge](https://badges.greenkeeper.io/shortlist-digital/tapestry-wp.svg)](https://greenkeeper.io/)
+  [![npm](https://img.shields.io/npm/v/tapestry-wp.svg)]()
+  [![CircleCI](https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop.svg?style=shield)](https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop)
+  [![Known Vulnerabilities](https://snyk.io/test/github/shortlist-digital/tapestry-wp/badge.svg)](https://snyk.io/test/github/shortlist-digital/tapestry-wp)
+</p>
 ---
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/shortlist-digital/tapestry-wp.svg)](https://greenkeeper.io/)
-[![npm](https://img.shields.io/npm/v/tapestry-wp.svg)]()
-[![CircleCI](https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop.svg?style=shield)](https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop)
-[![Known Vulnerabilities](https://snyk.io/test/github/shortlist-digital/tapestry-wp/badge.svg)](https://snyk.io/test/github/shortlist-digital/tapestry-wp)
-
-Tapestry is a Universal JavaScript Application for rendering React front-ends via the Wordpress API.
-
 _**Note:** This is currently a work in progress and will likely undergo major public/private API changes and feature updates._
 
 ## Using Tapestry
