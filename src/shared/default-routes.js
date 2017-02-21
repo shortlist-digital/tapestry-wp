@@ -6,6 +6,7 @@ import PageLoader from './loader-page'
 import FrontPageLoader from './loader-front-page'
 import MissingView from './missing-view'
 
+
 const DefaultRoutes = ({
   Category, Post, Page, FrontPage, Error = MissingView
 }) =>

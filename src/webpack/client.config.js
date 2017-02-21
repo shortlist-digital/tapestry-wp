@@ -2,36 +2,33 @@ import fs from 'fs'
 import path from 'path'
 import webpack from 'webpack'
 import CleanPlugin from 'clean-webpack-plugin'
+import AssetsPlugin from 'assets-webpack-plugin'
+import rules from './rules'
 
 export default ({ cwd, env }) => {
 
   const config = {
+    target: 'web',
     entry: {
-      bundle: 'tapestry-wp/src/client/webpack.entry.js'
+      bundle: '../src/client/webpack.entry.js'
     },
     output: {
       path: path.resolve(cwd, '_scripts'),
-      filename: '[name].js'
+      filename: '[name].js',
+      publicPath: `/_scripts/`
     },
     resolve: {
       alias: {
         'tapestry.config.js': path.resolve(cwd, 'tapestry.config.js')
       }
     },
-    module: {
-      rules: [{
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        options: {
-          presets: [
-            ['es2015', { modules: false }],
-            'react'
-          ]
-        }
-      }]
-    },
+    module: rules,
     plugins: [
+      new AssetsPlugin({
+        filename: 'assets.json',
+        path: path.resolve(cwd, '.tapestry'),
+        prettyPrint: true
+      }),
       new CleanPlugin(['_scripts'], {
         root: cwd,
         verbose: false
@@ -41,15 +38,21 @@ export default ({ cwd, env }) => {
 
   if (env === 'production') {
     config.output.filename = '[name].[chunkhash].js'
+    config.entry.vendor = [
+      'react',
+      'react-dom',
+      'react-router',
+      'lodash',
+      'async-props'
+    ]
     config.plugins.push(
       new webpack.DefinePlugin({
        'process.env.NODE_ENV': JSON.stringify('production')
       }),
-      new webpack.optimize.UglifyJsPlugin({
-        comments: false,
-        compress: {
-          warnings: false
-        }
+      new webpack.optimize.CommonsChunkPlugin({
+        name: 'vendor',
+        minChunks: Infinity,
+        filename: 'vendor.[chunkhash].js'
       }),
       new webpack.LoaderOptionsPlugin({
         minimize: true,
@@ -57,13 +60,29 @@ export default ({ cwd, env }) => {
       }),
       function () {
         this.plugin('done', stats => {
-          const jsonStats = stats.toJson()
+          const jsonStats = stats.toJson({
+            chunkModules: true
+          })
           return fs.writeFileSync(
-            path.resolve(cwd, '.tapestry/assets.json'),
-            JSON.stringify(jsonStats.assetsByChunkName)
+            path.resolve(cwd, '.tapestry', 'stats.json'),
+            JSON.stringify(jsonStats)
           )
         })
-      }
+      },
+      new webpack.optimize.UglifyJsPlugin({
+        comments: false,
+        compress: {
+          screw_ie8: true,
+          warnings: false
+        },
+        mangle: {
+          screw_ie8: true
+        },
+        output: {
+          comments: false,
+          screw_ie8: true
+        }
+      })
     )
   }
 

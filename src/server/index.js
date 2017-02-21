@@ -24,8 +24,8 @@ export default class Tapestry {
     this.env = env
     this.silent = silent
     // override defaults
-    this.assets = null
-    if (env === 'production') this.assets = fs.readJsonSync(path.resolve(cwd, '.tapestry/assets.json'))
+    if (env !== 'test')
+      this.assets = fs.readJsonSync(path.resolve(cwd, '.tapestry/assets.json'))
     // run server
     this.bootServer()
     this.registerProxies()
@@ -135,7 +135,7 @@ export default class Tapestry {
             return reply(
               renderHtml({
                 loadContext,
-                assets: this.env === 'production' ? this.assets : null
+                assets: this.assets
               })
             ).code(404)
           }
@@ -173,7 +173,7 @@ export default class Tapestry {
                 renderProps,
                 loadContext,
                 asyncProps,
-                assets: this.env === 'production' ? this.assets : null
+                assets: this.assets
               })
             ).code(status)
           })
