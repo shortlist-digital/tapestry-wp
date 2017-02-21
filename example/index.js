@@ -3,11 +3,11 @@ require('babel-register')({
 })
 
 const config = require('./tapestry.config')
-const tapestry = require('../dist/server.bundle').default
+const tapestry = require('../dist/server.bundle').boot
 
 const cwd = process.cwd()
 
-tapestry.boot({
+tapestry({
   cwd: cwd,
   env: 'production',
   config: config
