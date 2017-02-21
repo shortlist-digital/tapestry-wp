@@ -6,8 +6,7 @@ const path = require('path')
 const fs = require('fs')
 const _ = require('lodash')
 const validUrl = require('valid-url')
-const Server = require('../dist/server').default
-const Client = require('../dist/build').default
+const tapestry = require('../dist/server.bundle').default
 const logger = require('../dist/logger')
 const cwd = process.cwd()
 const env = 'development'
@@ -41,14 +40,9 @@ if (!validUrl.isUri(config.default.siteUrl))
   logger.error('siteUrl needs to be a valid URL e.g. http://wordpress.org')
 
 // kick off client build & server
-new Client({
+tapestry.boot({
   cwd,
   env,
-  onComplete: () =>
-    new Server({
-      cwd,
-      env,
-      config,
-      configPath: treeClient
-    })
+  config,
+  configPath: treeClient
 })
