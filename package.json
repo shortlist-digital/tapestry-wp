@@ -66,6 +66,7 @@
     "react-helmet": "^4.0.0",
     "react-object-inspector": "^0.2.1",
     "react-router": "^3.0.0",
+    "stats-webpack-plugin": "^0.4.3",
     "valid-url": "^1.0.9",
     "webpack": "^2.2.0",
     "webpack-node-externals": "^1.5.4"
