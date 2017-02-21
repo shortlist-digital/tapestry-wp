@@ -10,7 +10,7 @@
     "test": "mocha 'test/**/*.test.js' --require test/babel-register",
     "pre-commit-msg": "echo \"Performing pre-commit checks...\" && exit 0",
     "lint-staged": "lint-staged",
-    "prepublish": "",
+    "prepublish": "npm run build:server",
     "preversion": "npm run lint && npm run test",
     "postversion": "git push && git push --tags && npm publish",
     "docs:clean": "rimraf _book",
