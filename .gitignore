@@ -121,6 +121,5 @@ jspm_packages
 _book
 dist
 
-# Example dir #
-.tapestry
-_scripts
+# Local testing dir #
+example
