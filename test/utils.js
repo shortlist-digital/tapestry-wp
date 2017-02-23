@@ -2,12 +2,16 @@ import nock from 'nock'
 import { server } from '../dist/server.bundle'
 import data from './mocks/page.json'
 
+const cwd = process.cwd()
+const env = 'test'
 const dataError = { data: { status: 404 } }
+
 
 export const bootServer = (config) =>
   server({
     config: { default: config },
-    env: 'test'
+    cwd,
+    env
   }, {
     silent: true
   })
