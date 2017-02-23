@@ -1,10 +1,10 @@
 .editorconfig
 .eslintcache
 .eslintignore
-.eslintrc
+.eslintrc.json
 .github
 .lintstagedrc
+assets
 circle.yml
 CNAME
-logo
 test
