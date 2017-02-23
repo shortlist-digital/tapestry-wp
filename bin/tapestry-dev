@@ -4,8 +4,10 @@
 
 const path = require('path')
 const fs = require('fs')
-const _ = require('lodash')
+const isPlainObject = require('lodash/isPlainObject')
+const has = require('lodash/has')
 const validUrl = require('valid-url')
+
 const tapestry = require('../dist/server.bundle').default
 const logger = require('../dist/logger')
 const cwd = process.cwd()
@@ -28,11 +30,11 @@ require('babel-register')({
 const config = require(treeClient)
 
 // check the config exports an object
-if (!_.isPlainObject(config.default))
+if (!isPlainObject(config.default))
   logger.error('tapestry.config.js needs to export an object')
 
 // check siteUrl has been passed
-if (!_.has(config.default, 'siteUrl'))
+if (!has(config.default, 'siteUrl'))
   logger.error('tapestry.config.js export needs to include a siteUrl')
 
 // check siteUrl is a valid url

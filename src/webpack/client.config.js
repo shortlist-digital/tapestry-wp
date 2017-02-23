@@ -49,12 +49,18 @@ export default ({ cwd, env }) => {
     config.output.filename = '[name].[chunkhash].js'
     // non-changing vendor packages to combine in a vendor bundle
     config.entry.vendor = [
-      'react',
+      'async-props',
       'react-dom',
       'react-router',
-      'lodash',
-      'async-props'
+      'react'
     ]
+    // replace react instance with preact (saves a heck lotta kb)
+    config.resolve.alias = Object.assign(
+      config.resolve.alias, {
+        'react': 'preact-compat/dist/preact-compat',
+        'react-dom': 'preact-compat/dist/preact-compat'
+      }
+    )
     config.plugins.push(
       // production flag for React/others to minify correctly
       new webpack.DefinePlugin({
@@ -72,7 +78,7 @@ export default ({ cwd, env }) => {
         debug: false
       }),
       // output chunk stats
-      new StatsPlugin(path.resolve(cwd, '.tapestry', 'stats.json'), {
+      new StatsPlugin('../.tapestry/stats.json', {
         chunkModules: true
       }),
       // minify/optimize output bundle, screw_ie8 a bunch
