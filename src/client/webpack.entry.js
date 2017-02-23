@@ -19,7 +19,7 @@ render(
     render={props =>
       <AsyncProps loadContext={config} {...props} />
     }
-    routes={DefaultRoutes(config.components)}>
+    routes={DefaultRoutes(config)}>
   </Router>,
   document.getElementById('root')
 )
