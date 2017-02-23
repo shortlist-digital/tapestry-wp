@@ -24,11 +24,11 @@ export const renderHtml = ({
     markup: renderStaticOptimized(() =>
       renderToString(
         renderProps ?
-        <AsyncProps
-          {...renderProps}
-          {...asyncProps}
-          loadContext={loadContext} /> :
-        <Error />
+          <AsyncProps
+            {...renderProps}
+            {...asyncProps}
+            loadContext={loadContext} /> :
+          <Error />
       )
     ),
     head: Helmet.rewind(),
