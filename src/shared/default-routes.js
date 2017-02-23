@@ -13,43 +13,50 @@ const DefaultRoutes = ({
   routes = []
 }) => {
 
+  // access components from config
+  const {
+    Category,
+    FrontPage,
+    Page,
+    Post
+  } = components
+  const Error = components.Error || MissingView
+
   // return Route with component directly
-  const staticRoutes = routes.map((route, i) =>
+  const renderStaticRoute = (route, i) =>
     <Route
       component={route.component}
       key={i}
       path={route.path} />
-  )
-  const Error = components.Error || MissingView
 
-  return <div>
+  return (<div>
     {
-      staticRoutes
+      routes.map(renderStaticRoute)
     }
     <Route
       path='/'
       component={FrontPageLoader}
-      tag={components.FrontPage}
+      tag={FrontPage}
       fallback={Error} />
     <Route
       path='about/:slug'
       component={PageLoader}
-      tag={components.Page}
+      tag={Page}
       fallback={Error} />
     <Route
       path=':category(/:subcategory)'
       component={CategoriesLoader}
-      tag={components.Category}
+      tag={Category}
       fallback={Error} />
     <Route
       path=':category(/:subcategory)/:slug/:id'
       component={PostLoader}
-      tag={components.Post}
+      tag={Post}
       fallback={Error} />
     <Route
       path='*'
       component={Error} />
-  </div>
+  </div>)
 }
 
 DefaultRoutes.propTypes = {
