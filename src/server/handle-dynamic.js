@@ -15,7 +15,7 @@ export default ({ server, config, assets }) => {
     handler: (request, reply) => {
 
       match({
-        routes: DefaultRoutes(config.components || {}),
+        routes: DefaultRoutes(config),
         location: request.url.path
       }, (err, redirectLocation, renderProps) => {
 

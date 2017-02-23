@@ -19,7 +19,7 @@ render(
     onUpdate={onUpdateMethod}
     history={browserHistory}
     render={renderAsyncProps}
-    routes={DefaultRoutes(config.components)}>
+    routes={DefaultRoutes(config)}>
   </Router>,
   document.getElementById('root')
 )
