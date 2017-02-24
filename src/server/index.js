@@ -16,7 +16,7 @@ export default class Tapestry {
   constructor ({ config, cwd, env }, { silent } = {}) {
 
     // allow access from class
-    this.config = config.default
+    this.config = config
     this.silent = silent
 
     // get client bundle data
