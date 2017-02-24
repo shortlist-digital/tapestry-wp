@@ -19,7 +19,7 @@ Map the Tapestry commands to `npm` scripts in your `package.json`
 ```js
 "scripts": {
   "start": "tapestry",
-  "start:prod": "tapestry build && tapestry start",
+  "start:prod": "tapestry start",
   "bootstrap": "tapestry init"
 }
 ```
