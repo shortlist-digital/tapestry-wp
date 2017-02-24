@@ -6,7 +6,11 @@ import { error } from './logger'
 const schema = joi.object({
   // required url
   siteUrl: joi.string().uri().required(),
-  // object containing React components
+  // optional string e.g. 'localhost', '0.0.0.0'
+  host: joi.string(),
+  // optional number e.g. 3030
+  port: joi.number(),
+  // optional object containing React components
   components: joi.object().keys({
     Category: joi.func(),
     Error: joi.func(),
@@ -14,14 +18,18 @@ const schema = joi.object({
     Page: joi.func(),
     Post: joi.func()
   }),
-  // array only containing route objects
+  // optional array containing only route objects
   routes: joi.array().items(
     // object containing a string path and React component
     joi.object({
       path: joi.string(),
       component: joi.func()
     })
-  )
+  ),
+  // optional array of proxy paths
+  proxyPaths: joi.array().items(joi.string()),
+  // optional function run when routing on the client
+  onPageUpdate: joi.func()
 })
 
 
