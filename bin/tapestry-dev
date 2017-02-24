@@ -1,54 +1,37 @@
 #!/usr/bin/env node
-
 'use strict'
 
 const path = require('path')
 const fs = require('fs')
-const _ = require('lodash')
-const validUrl = require('valid-url')
-const Server = require('../dist/server').default
-const Client = require('../dist/build').default
+
+const tapestry = require('../dist/server.bundle').default
 const logger = require('../dist/logger')
+const validator = require('../dist/validator').default
 const cwd = process.cwd()
 const env = 'development'
-
-// project tapestry config path
-const treeClient = path.join(cwd, 'tapestry.config.js')
-
-// check tapestry.config.js exists
-if (!fs.existsSync(treeClient))
-  logger.error(`tapestry.config.js not found in ${cwd}`)
-
-logger.info(`Booting Tapestry… \n`)
 
 // transpile any following imports
 require('babel-register')({
   presets: ['es2015', 'react']
 })
 
-const config = require(treeClient)
+// project tapestry config path
+const configPath = path.join(cwd, 'tapestry.config.js')
 
-// check the config exports an object
-if (!_.isPlainObject(config.default))
-  logger.error('tapestry.config.js needs to export an object')
+// check tapestry.config.js exists
+if (!fs.existsSync(configPath))
+  logger.error(`tapestry.config.js not found in ${cwd}`)
 
-// check siteUrl has been passed
-if (!_.has(config.default, 'siteUrl'))
-  logger.error('tapestry.config.js export needs to include a siteUrl')
+logger.info(`Booting Tapestry… \n`)
 
-// check siteUrl is a valid url
-if (!validUrl.isUri(config.default.siteUrl))
-  logger.error('siteUrl needs to be a valid URL e.g. http://wordpress.org')
+const config = require(configPath).default
 
-// kick off client build & server
-new Client({
-  cwd,
-  env,
-  onComplete: () =>
-    new Server({
-      cwd,
-      env,
-      config,
-      configPath: treeClient
-    })
-})
+// validate the config object
+validator(config, (sanitizedConfig) =>
+  // kick off client build & server
+  tapestry.boot({
+    config: sanitizedConfig,
+    cwd,
+    env
+  })
+)

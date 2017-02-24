@@ -6,7 +6,7 @@ import { renderStaticOptimized } from 'glamor/server'
 import { minify } from 'html-minifier'
 import { has } from 'lodash'
 import DefaultHTML from './default-html'
-import MissingView from './missing-view'
+import MissingView from '../../shared/missing-view'
 
 
 export const renderHtml = ({
@@ -24,11 +24,11 @@ export const renderHtml = ({
     markup: renderStaticOptimized(() =>
       renderToString(
         renderProps ?
-        <AsyncProps
-          {...renderProps}
-          {...asyncProps}
-          loadContext={loadContext} /> :
-        <Error />
+          <AsyncProps
+            {...renderProps}
+            {...asyncProps}
+            loadContext={loadContext} /> :
+          <Error />
       )
     ),
     head: Helmet.rewind(),

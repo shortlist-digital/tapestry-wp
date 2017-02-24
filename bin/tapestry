@@ -9,9 +9,10 @@ program
   .version(pkg.version)
   .description(pkg.description)
   .usage('[options]')
-  .command('dev', 'development mode (default)', { isDefault: true })
-  .command('start', 'production mode')
-  .command('build', 'build client bundle')
+  .command('dev', 'Run a Tapestry site in development mode', {
+    isDefault: true
+  })
+  .command('start', 'Run a Tapestry site in production mode')
   .command('init', 'Bootstrap a Tapestry project')
 
 program.parse(process.argv)

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import './default-style'
 
-const defaultHtml = ({ markup, head, asyncProps, assets }) => {
+const defaultHtml = ({ markup, head, asyncProps, assets = {} }) => {
   const attr = head.htmlAttributes.toComponent()
   return (
     <html lang="en" {...attr}>
@@ -11,7 +11,14 @@ const defaultHtml = ({ markup, head, asyncProps, assets }) => {
         {head.meta.toComponent()}
         {head.link.toComponent()}
         {head.script.toComponent()}
-        <script defer src={`/_scripts/${assets ? assets.bundle : 'bundle.js'}`} />
+        {
+          assets.vendor &&
+            <script defer src={assets.vendor.js} />
+        }
+        {
+          assets.bundle &&
+            <script defer src={assets.bundle.js} />
+        }
         <style dangerouslySetInnerHTML={{ __html: markup.css }} />
         <link rel="shortcut icon" href="/public/favicon.ico" />
       </head>

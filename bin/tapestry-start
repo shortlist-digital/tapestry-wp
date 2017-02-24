@@ -4,26 +4,27 @@
 
 const path = require('path')
 const fs = require('fs')
-const Server = require('../dist/server').default
-const Client = require('../dist/build').default
+const tapestry = require('../dist/server.bundle').default
 const logger = require('../dist/logger')
+const validator = require('../dist/validator')
+
 const cwd = process.cwd()
 const env = 'production'
 
-// compiled tapestry config path
-const treeServer = path.join(cwd, '.tapestry/app/tapestry.config.js')
 
-// check compiled tapestry directory exists
-if (!fs.existsSync(treeServer))
-  logger.error(`.tapestry directory not found in ${cwd}, have you run 'tapestry build' yet?`)
+// project tapestry config path
+const configPath = path.join(cwd, 'tapestry.config.js')
 
 logger.info(`Booting Tapestry… \n`)
 
-const config = require(treeServer)
+const config = require(configPath)
 
-// kick off client build & server
-new Client({
-  cwd,
-  env,
-  onComplete: () => new Server({ cwd, env, config })
-})
+// validate the config object
+validator(config, (sanitizedConfig) =>
+  // kick off client build & server
+  tapestry.boot({
+    config: sanitizedConfig,
+    cwd,
+    env
+  })
+)

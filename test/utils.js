@@ -1,13 +1,20 @@
 import nock from 'nock'
-import Server from '../dist/server'
+import { server } from '../dist/server.bundle'
 import data from './mocks/page.json'
 
+const cwd = process.cwd()
+const env = 'test'
 const dataError = { data: { status: 404 } }
 
+
 export const bootServer = (config) =>
-  new Server({
-    config: { default: config }
-  }, { silent: true })
+  server({
+    config,
+    cwd,
+    env
+  }, {
+    silent: true
+  })
 
 export const mockApi = () =>
   nock('http://dummy.api')

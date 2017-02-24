@@ -1,7 +1,7 @@
 import webpack from 'webpack'
 import bytes from 'pretty-bytes'
-import config from './webpack.config'
-import { success, error } from './logger'
+import config from '../webpack/client.config'
+import { success, error } from '../utilities/logger'
 
 export default class Build {
 
@@ -36,7 +36,8 @@ export default class Build {
   complete (stats) {
     // log output
     const output = stats.toJson()
-    success(`Client built: ${bytes(output.assets[0].size)}`)
+    if (output.assets.length)
+      success(`Client built: ${bytes(output.assets[0].size)}`)
     // run callback
     if (typeof this.opts.onComplete === 'function')
       this.opts.onComplete()

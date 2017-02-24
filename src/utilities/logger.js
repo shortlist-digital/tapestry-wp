@@ -2,7 +2,7 @@ import chalk from 'chalk'
 
 // log message to console and optionally cancel current process
 const log = (message, quit) => {
-  console.log(message)
+  console.log(message) // eslint-disable-line
   if (quit)
     // exit(0) avoids the irrelevant npm errors
     process.exit(0)
