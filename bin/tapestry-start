@@ -6,17 +6,25 @@ const path = require('path')
 const fs = require('fs')
 const tapestry = require('../dist/server.bundle').default
 const logger = require('../dist/logger')
+const validator = require('../dist/validator')
+
 const cwd = process.cwd()
 const env = 'production'
 
-// compiled tapestry config path
-const treeServer = path.join(cwd, '.tapestry/app/tapestry.config.js')
+
+// project tapestry config path
+const configPath = path.join(cwd, 'tapestry.config.js')
 
 logger.info(`Booting Tapestry… \n`)
 
-// kick off client build & server
-tapestry.boot({
-  cwd,
-  env,
-  config: require(treeServer)
-})
+const config = require(configPath)
+
+// validate the config object
+validator(config, (sanitizedConfig) =>
+  // kick off client build & server
+  tapestry.boot({
+    config: sanitizedConfig,
+    cwd,
+    env
+  })
+)

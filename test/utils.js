@@ -9,7 +9,7 @@ const dataError = { data: { status: 404 } }
 
 export const bootServer = (config) =>
   server({
-    config: { default: config },
+    config,
     cwd,
     env
   }, {
