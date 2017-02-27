@@ -1,6 +1,6 @@
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
-const rules = require('./rules')
+const shared = require('./shared')
 const cwd = process.cwd()
 
 // module.exports to enable CLI usage
@@ -21,7 +21,7 @@ module.exports = {
     libraryTarget: 'commonjs2'
   },
   // share module rules with client config
-  module: rules,
+  module: shared.module,
   // ignore any node_modules packages, rely on native node require
   externals: [nodeExternals()]
 }

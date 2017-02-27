@@ -3,7 +3,7 @@ import bytes from 'pretty-bytes'
 import config from '../webpack/client.config'
 import { success, error } from '../utilities/logger'
 
-export default class Build {
+export default class Client {
 
   constructor (opts) {
     // allow class access
