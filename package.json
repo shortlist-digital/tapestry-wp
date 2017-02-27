@@ -6,7 +6,7 @@
   "repository": "shortlist-digital/tapestry-wp",
   "scripts": {
     "build:server": "webpack --config src/webpack/server.config.js",
-    "build:utils": "babel ./src/utilities/validator.js --out-file ./dist/validator.js --presets=es2015,react && babel ./src/utilities/logger.js --out-file ./dist/logger.js --presets=es2015,react",
+    "build:utils": "babel src/utilities --out-dir dist --presets=es2015,react",
     "watch:server": "webpack --config src/webpack/server.config.js --watch",
     "lint": "eslint . --fix --cache",
     "test": "mocha 'test/**/*.test.js' --require test/babel-register",
