@@ -20,10 +20,10 @@ export default class Tapestry {
     this.silent = silent
 
     // get client bundle data
-    if (env !== 'test')
-      this.assets = fs.readJsonSync(
-        path.resolve(cwd, '.tapestry/assets.json')
-      )
+    if (env !== 'test') {
+      const assetsPath = path.resolve(cwd, '.tapestry', 'assets.json')
+      this.assets = fs.ensureFileSync(assetsPath)
+    }
 
     // create server instance
     this.server = this.bootServer()

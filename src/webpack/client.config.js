@@ -55,12 +55,9 @@ export default ({ cwd, env }) => {
       'react'
     ]
     // replace react instance with preact (saves a heck lotta kb)
-    config.resolve.alias = Object.assign(
-      config.resolve.alias, {
-        'react': 'preact-compat/dist/preact-compat',
-        'react-dom': 'preact-compat/dist/preact-compat'
-      }
-    )
+    config.resolve.alias = {
+      'tapestry.config.js': path.resolve(cwd, '.tapestry', 'app', 'tapestry.config.js')
+    }
     config.plugins.push(
       // production flag for React/others to minify correctly
       new webpack.DefinePlugin({
@@ -77,7 +74,7 @@ export default ({ cwd, env }) => {
         minimize: true,
         debug: false
       }),
-      // output chunk stats
+      // output chunk stats (path is relative to output path)
       new StatsPlugin('../.tapestry/stats.json', {
         chunkModules: true
       }),
