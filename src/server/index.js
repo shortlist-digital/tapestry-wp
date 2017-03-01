@@ -1,5 +1,3 @@
-import fs from 'fs-extra'
-import path from 'path'
 import { Server } from 'hapi'
 import h2o2 from 'h2o2'
 import Inert from 'inert'
@@ -13,17 +11,11 @@ import handleProxies from './handle-proxies'
 
 export default class Tapestry {
 
-  constructor ({ config, cwd, env }, { silent } = {}) {
+  constructor ({ config, assets = {} }, { silent } = {}) {
 
     // allow access from class
     this.config = config
     this.silent = silent
-
-    // get client bundle data
-    if (env !== 'test')
-      this.assets = fs.readJsonSync(
-        path.resolve(cwd, '.tapestry/assets.json')
-      )
 
     // create server instance
     this.server = this.bootServer()
@@ -32,7 +24,7 @@ export default class Tapestry {
     const data = {
       server: this.server,
       config: this.config,
-      assets: this.assets
+      assets
     }
     handleStatic(data)
     handleApi(data)

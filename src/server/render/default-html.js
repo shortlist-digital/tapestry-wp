@@ -6,19 +6,13 @@ const defaultHtml = ({ markup, head, asyncProps, assets = {} }) => {
   return (
     <html lang="en" {...attr}>
       <head>
-        {head.title.toComponent()}
-        {head.base.toComponent()}
-        {head.meta.toComponent()}
-        {head.link.toComponent()}
-        {head.script.toComponent()}
-        {
-          assets.vendor &&
-            <script defer src={assets.vendor.js} />
-        }
-        {
-          assets.bundle &&
-            <script defer src={assets.bundle.js} />
-        }
+        { head.title.toComponent() }
+        { head.base.toComponent() }
+        { head.meta.toComponent() }
+        { head.link.toComponent() }
+        { head.script.toComponent() }
+        { assets.vendor && <script defer src={assets.vendor.js} /> }
+        { assets.bundle && <script defer src={assets.bundle.js} /> }
         <style dangerouslySetInnerHTML={{ __html: markup.css }} />
         <link rel="shortcut icon" href="/public/favicon.ico" />
       </head>

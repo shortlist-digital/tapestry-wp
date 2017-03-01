@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-'use strict'
-
 const program = require('commander')
 const pkg = require('../package.json')
 
@@ -12,6 +10,7 @@ program
   .command('dev', 'Run a Tapestry site in development mode', {
     isDefault: true
   })
+  .command('build', 'Build a Tapestry site before running in production')
   .command('start', 'Run a Tapestry site in production mode')
   .command('init', 'Bootstrap a Tapestry project')
 

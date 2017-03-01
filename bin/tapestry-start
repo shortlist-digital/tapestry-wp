@@ -1,23 +1,20 @@
 #!/usr/bin/env node
 
-'use strict'
-
 const path = require('path')
 const fs = require('fs')
 const tapestry = require('../dist/server.bundle').default
 const logger = require('../dist/logger')
-const validator = require('../dist/validator')
+const validator = require('../dist/validator').default
 
 const cwd = process.cwd()
 const env = 'production'
 
 
-// project tapestry config path
-const configPath = path.join(cwd, 'tapestry.config.js')
-
 logger.info(`Booting Tapestry… \n`)
 
-const config = require(configPath)
+// project tapestry config path
+const configPath = path.join(cwd, '.tapestry', 'app', 'tapestry.config.js')
+const config = require(configPath).default
 
 // validate the config object
 validator(config, (sanitizedConfig) =>

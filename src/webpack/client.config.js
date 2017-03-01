@@ -3,7 +3,7 @@ import webpack from 'webpack'
 import CleanPlugin from 'clean-webpack-plugin'
 import AssetsPlugin from 'assets-webpack-plugin'
 import StatsPlugin from 'stats-webpack-plugin'
-import rules from './rules'
+import { module } from './shared'
 
 // exporting function to allow process.cwd() and environment to get passed through
 export default ({ cwd, env }) => {
@@ -12,13 +12,13 @@ export default ({ cwd, env }) => {
     // target the browser as runtime
     target: 'web',
     entry: {
-      bundle: '../src/client/webpack.entry.js'
+      bundle: 'tapestry-wp/src/client/webpack.entry.js'
     },
     // output bundle to _scripts, no caching required in dev mode so bundle.js is sufficient
     output: {
       path: path.resolve(cwd, '_scripts'),
       filename: '[name].js',
-      publicPath: `/_scripts/`
+      publicPath: '/_scripts/'
     },
     // when tapestry config is called from webpack.entry.js, resolve from the root of cwd
     resolve: {
@@ -27,7 +27,7 @@ export default ({ cwd, env }) => {
       }
     },
     // share module rules with server config
-    module: rules,
+    module: module,
     plugins: [
       // output public path data for each bundle
       new AssetsPlugin({
@@ -51,16 +51,14 @@ export default ({ cwd, env }) => {
     config.entry.vendor = [
       'async-props',
       'react-dom',
+      'react-helmet',
       'react-router',
       'react'
     ]
     // replace react instance with preact (saves a heck lotta kb)
-    config.resolve.alias = Object.assign(
-      config.resolve.alias, {
-        'react': 'preact-compat/dist/preact-compat',
-        'react-dom': 'preact-compat/dist/preact-compat'
-      }
-    )
+    config.resolve.alias = {
+      'tapestry.config.js': path.resolve(cwd, '.tapestry', 'app', 'tapestry.config.js')
+    }
     config.plugins.push(
       // production flag for React/others to minify correctly
       new webpack.DefinePlugin({
@@ -77,7 +75,7 @@ export default ({ cwd, env }) => {
         minimize: true,
         debug: false
       }),
-      // output chunk stats
+      // output chunk stats (path is relative to output path)
       new StatsPlugin('../.tapestry/stats.json', {
         chunkModules: true
       }),
