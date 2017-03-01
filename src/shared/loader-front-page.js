@@ -38,7 +38,7 @@ export default class Loader extends Component {
     const Tag = this.props.route.tag
     const Error = this.props.route.fallback
 
-    if (has(this.props, 'data.data.status'))
+    if (!this.props.data || has(this.props, 'data.data.status'))
       return <Error />
 
     if (Tag)
