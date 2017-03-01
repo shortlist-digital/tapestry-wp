@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-'use strict'
-
 const logger = require('../dist/logger')
 const cwd = process.cwd()
 const glob = require('glob-fs')({ gitignore: true })

@@ -18,7 +18,7 @@ export const boot = (options) => new Client(
       // get bundle data and pass through to server
       const assetsPath = path.resolve(options.cwd, '.tapestry', 'assets.json')
       const assets = fs.readJsonSync(assetsPath)
-      return new Server(Object.assign(options, { assets }))
+      return new Server(Object.assign({}, options, { assets }))
     }
   }, options)
 )

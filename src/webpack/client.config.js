@@ -51,6 +51,7 @@ export default ({ cwd, env }) => {
     config.entry.vendor = [
       'async-props',
       'react-dom',
+      'react-helmet',
       'react-router',
       'react'
     ]
