@@ -60,6 +60,7 @@
     "html-minifier": "^3.3.0",
     "inert": "^4.0.3",
     "isomorphic-fetch": "^2.2.1",
+    "joi": "^10.2.2",
     "location-origin": "^1.1.4",
     "lodash": "^4.17.4",
     "pretty-bytes": "^4.0.2",
@@ -76,9 +77,10 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "editorconfig-tools": "^0.1.1",
-    "eslint-plugin-jsx-a11y": "^3.0.2",
-    "eslint-plugin-react": "^6.8.0",
     "eslint": "^3.14.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.8.0",
     "gitbook-cli": "^2.3.0",
     "icon-gen": "^1.0.7",
     "lint-staged": "^3.3.0",
@@ -87,7 +89,7 @@
     "pre-commit": "^1.2.2",
     "react-addons-test-utils": "^15.4.2",
     "request": "^2.79.0",
-    "rimraf": "^2.5.4"
+    "rimraf": "^2.6.1"
   },
   "pre-commit": [
     "pre-commit-msg",
