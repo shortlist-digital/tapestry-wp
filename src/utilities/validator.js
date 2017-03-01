@@ -10,6 +10,8 @@ const schema = joi.object({
   host: joi.string(),
   // optional number e.g. 3030
   port: joi.number(),
+  // optional number for page id or string for page name
+  frontPage: [joi.number(), joi.string()],
   // optional object containing React components
   components: joi.object().keys({
     Category: joi.func(),
