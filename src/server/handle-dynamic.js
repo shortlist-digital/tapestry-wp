@@ -1,11 +1,11 @@
 import { match } from 'react-router'
-
 import { loadPropsOnServer } from 'async-props'
 import { has } from 'lodash'
 
 import DefaultRoutes from '../shared/default-routes'
 import { renderHtml } from './render'
 import { error } from '../utilities/logger'
+
 
 export default ({ server, config, assets }) => {
 
@@ -27,7 +27,7 @@ export default ({ server, config, assets }) => {
           return reply(
             renderHtml({
               loadContext,
-              assets: this.assets
+              assets
             })
           ).code(404)
         }

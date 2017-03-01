@@ -1,7 +1,9 @@
 import webpack from 'webpack'
 import bytes from 'pretty-bytes'
+
 import config from '../webpack/client.config'
 import { success, error } from '../utilities/logger'
+
 
 export default class Client {
 

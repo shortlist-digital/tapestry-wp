@@ -1,3 +1,5 @@
+import fs from 'fs-extra'
+import path from 'path'
 import Server from './server'
 import Client from './client'
 
@@ -12,7 +14,12 @@ export const client = (options) => new Client(options)
 // create client bundle and boot server on callback, avoids the server booting without the client ready. Object.assign() used instead of spread operator as we're only supporting es2015 (currently)
 export const boot = (options) => new Client(
   Object.assign({
-    onComplete: () => new Server(options)
+    onComplete: () => {
+      // get bundle data and pass through to server
+      const assetsPath = path.resolve(options.cwd, '.tapestry', 'assets.json')
+      const assets = fs.readJsonSync(assetsPath)
+      return new Server(Object.assign(options, { assets }))
+    }
   }, options)
 )
 
