@@ -27,7 +27,8 @@ const noScripts = file => {
 
 const transform = (filePath) =>
   babel.transformFile(`${cwd}/${filePath}`, {
-    presets: ['es2015', 'react']
+    presets: ['es2015', 'react'],
+    plugins: ['lodash', 'transform-object-rest-spread']
   }, (err, result) => {
     if (err) return logger.error(err)
     const outputFilePath = `${cwd}/.tapestry/app/${filePath}`
