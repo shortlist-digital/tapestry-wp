@@ -1,22 +1,15 @@
 import fs from 'fs-extra'
 import path from 'path'
+
 import Server from './server'
 import Client from './client'
 import validator from './utilities/validator'
 
+// parent project tapestry config, aliased through webpack/client.config.js
 import config from 'tapestry.config.js'
 
-// allows destructured imports
-// import { boot } from 'tapestry-wp'
-// boot()
-
-// boots the Tapestry server
-export const server = (options, devOptions) => new Server(options, devOptions)
-// creates the client bundle
-export const client = (options) => new Client(options)
-
 // create client bundle and boot server on callback, avoids the server booting without the client ready.
-export const boot = (options) =>
+export default (options) =>
   validator(config, (sanitizedConfig) => {
     // collect bundle asset info and boot server
     const onComplete = () => {
@@ -34,12 +27,3 @@ export const boot = (options) =>
       ...{ config: sanitizedConfig }
     })
   })
-
-// allows default import
-// import tapestry from 'tapestry-wp'
-// tapestry.boot()
-export default {
-  server,
-  client,
-  boot
-}

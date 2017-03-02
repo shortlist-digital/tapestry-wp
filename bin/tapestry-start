@@ -34,6 +34,6 @@ compiler.run((err, stats) => {
   // server path relative to root
   const serverPath = path.resolve(cwd, '.tapestry/server.bundle.js')
   // require server and boot
-  const server = require(serverPath)
-  server.boot({ cwd, env, configCustom })
+  const server = require(serverPath).default
+  server({ cwd, env, configCustom })
 })
