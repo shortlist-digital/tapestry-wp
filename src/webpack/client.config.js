@@ -11,12 +11,15 @@ export default ({ cwd, env }) => {
   const config = {
     // target the browser as runtime
     target: 'web',
+    // enable sourcemap
+    devtool: 'source-map',
     entry: {
       bundle: 'tapestry-wp/src/client/webpack.entry.js'
     },
     // output bundle to _scripts, no caching required in dev mode so bundle.js is sufficient
     output: {
       path: path.resolve(cwd, '_scripts'),
+      sourceMapFilename: '[name].map',
       filename: '[name].js',
       publicPath: '/_scripts/'
     },
@@ -45,9 +48,12 @@ export default ({ cwd, env }) => {
 
   // production specific config
   if (env === 'production') {
+    // disable sourcemap
+    config.devtool = false
     // expose chunkhash naming for long-life caching
     config.output.filename = '[name].[chunkhash].js'
     // non-changing vendor packages to combine in a vendor bundle
+    // react-helmet isn't required by Tapestry on the client but it will very likely be put to use by the user so including it in the vendor file
     config.entry.vendor = [
       'async-props',
       'glamor',
@@ -67,7 +73,7 @@ export default ({ cwd, env }) => {
         minChunks: Infinity,
         filename: 'vendor.[chunkhash].js'
       }),
-      //
+      // https://webpack.js.org/plugins/loader-options-plugin/
       new webpack.LoaderOptionsPlugin({
         minimize: true,
         debug: false

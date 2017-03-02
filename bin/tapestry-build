@@ -1,0 +1,49 @@
+#!/usr/bin/env node
+
+const logger = require('../dist/logger')
+const cwd = process.cwd()
+const glob = require('glob-fs')({ gitignore: true })
+const babel = require('babel-core')
+const fs = require('fs-extra')
+
+
+logger.info('Preparing Tapestry…\n')
+
+// Test if a .js file is within a __test__ directory, which we don't want to transpile
+const noTests = file => {
+  if (/__tests__/.test(file.path)) file.exclude = true
+  return file
+}
+// Test if a file is in a public directory we don't want to transpile
+const noPublic = file => {
+  if (/public/.test(file.path)) file.exclude = true
+  return true
+}
+// Test if a file is in a public directory we don't want to transpile
+const noScripts = file => {
+  if (/_scripts/.test(file.path)) file.exclude = true
+  return true
+}
+
+const transform = (filePath) =>
+  babel.transformFile(`${cwd}/${filePath}`, {
+    presets: ['es2015', 'react'],
+    plugins: ['lodash', 'transform-object-rest-spread']
+  }, (err, result) => {
+    if (err) return logger.error(err)
+    const outputFilePath = `${cwd}/.tapestry/app/${filePath}`
+    fs.ensureFileSync(outputFilePath)
+    fs.writeFile(outputFilePath, result.code, 'utf8', (err) => {
+      if (err) return logger.error(err)
+    })
+  })
+
+glob
+  .use(noTests)
+  .use(noPublic)
+  .use(noScripts)
+  .readdir('**/*.js', (err, files) => {
+    if (err) return logger.error(err)
+    files.map(file => transform(file))
+    logger.success('Tapestry built! Run `tapestry start` to boot')
+  })

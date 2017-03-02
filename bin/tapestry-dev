@@ -14,7 +14,8 @@ const userWebpackPath = path.resolve(cwd, 'webpack.config.js')
 
 // transpile any following imports
 require('babel-register')({
-  presets: ['es2015', 'react']
+  presets: ['es2015', 'react'],
+  plugins: ['lodash', 'transform-object-rest-spread']
 })
 
 let userConfig = {}

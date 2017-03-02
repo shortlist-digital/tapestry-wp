@@ -14,27 +14,26 @@ import config from 'tapestry.config.js'
 export const server = (options, devOptions) => new Server(options, devOptions)
 // creates the client bundle
 export const client = (options) => new Client(options)
-// create client bundle and boot server on callback, avoids the server booting without the client ready. Object.assign() used instead of spread operator as we're only supporting es2015 (currently)
-export const boot = (options) => {
 
-  return validator(config, (sanitizedConfig) => {
-
+// create client bundle and boot server on callback, avoids the server booting without the client ready.
+export const boot = (options) =>
+  validator(config, (sanitizedConfig) => {
+    // collect bundle asset info and boot server
     const onComplete = () => {
       const assetsPath = path.resolve(options.cwd, '.tapestry', 'assets.json')
       const assets = fs.readJsonSync(assetsPath)
-      new Server(Object.assign({}, options, { assets }, { config: sanitizedConfig }))
+      return new Server({
+        ...options,
+        assets,
+        ...{ config: sanitizedConfig }
+      })
     }
-    return new Client(Object.assign(
-      {},
-      options,
-      { onComplete },
-      { config: sanitizedConfig },
-      {
-        userConfig: options.userConfig
-      }
-    ))
+    return new Client({
+      ...options,
+      onComplete,
+      ...{ config: sanitizedConfig }
+    })
   })
-}
 
 // allows default import
 // import tapestry from 'tapestry-wp'

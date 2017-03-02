@@ -7,7 +7,7 @@ module.exports = {
         loader: 'babel-loader',
         options: {
           presets: ['es2015', 'react'],
-          plugins: ['lodash']
+          plugins: ['lodash', 'transform-object-rest-spread']
         }
       }]
     }]
