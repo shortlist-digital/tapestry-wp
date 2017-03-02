@@ -19,6 +19,8 @@
   },
   "extends": [
     "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
     "plugin:react/recommended",
     "plugin:jsx-a11y/recommended"
   ],
@@ -36,6 +38,9 @@
       "varsIgnorePattern": "AsyncProps"
     }],
     "semi": [2, "never"],
+    "import/no-unresolved": [2, {
+      "ignore": ["tapestry.config.js"]
+    }],
     "react/jsx-curly-spacing": [2, "never", {
       "allowMultiline": false
     }],
