@@ -2,35 +2,63 @@
 
 const path = require('path')
 const fs = require('fs')
-
-const tapestry = require('../dist/server.bundle').default
 const logger = require('../dist/logger')
 const validator = require('../dist/validator').default
 const cwd = process.cwd()
 const env = 'development'
+const webpack = require('webpack')
+const serverConfig = require('../src/webpack/server.config')
 
 // transpile any following imports
 require('babel-register')({
   presets: ['es2015', 'react']
 })
 
+let webpackConfig = serverConfig
+
+const exists = fs.existsSync(path.resolve(cwd, 'webpack.config.js'))
+const customConfig = require(path.resolve(cwd, 'webpack.config.js'))
+if (exists)
+  webpackConfig = customConfig(serverConfig, { cwd, env }, webpack)
+
+// console.log(webpackConfig)
+const compiler = webpack(webpackConfig)
+
+compiler.run((err, stats) => {
+  const tapestry = require('../dist/server.bundle').default
+  // console.log(tapestry.boot)
+  tapestry.boot({ cwd, env })
+})
+
+
+
 // project tapestry config path
-const configPath = path.join(cwd, 'tapestry.config.js')
+// const configPath = path.join(cwd, 'tapestry.config.js')
 
 // check tapestry.config.js exists
-if (!fs.existsSync(configPath))
-  logger.error(`tapestry.config.js not found in ${cwd}`)
+// if (!fs.existsSync(configPath))
+//   logger.error(`tapestry.config.js not found in ${cwd}`)
+//
+// logger.info(`Booting Tapestry… \n`)
 
-logger.info(`Booting Tapestry… \n`)
-
-const config = require(configPath).default
+// const config = require(configPath).default
 
 // validate the config object
-validator(config, (sanitizedConfig) =>
+// validator(config, (sanitizedConfig) => {
+  // kick off server build
+    // if user webpack
+
+// this.compiler = webpack(webpackConfig)
+// // this.devNotified = false
+// // // run once if production, watch if development
+// // if (opts.env !== 'development') {
+// this.compiler.run((err, stats) => {
+//   console.log(err)
+  // tapestry.boot({ cwd, env })
+// })
+    // } else {
+    //   this.compiler.watch({}, this.watch.bind(this))
+    // }
   // kick off client build & server
-  tapestry.boot({
-    config: sanitizedConfig,
-    cwd,
-    env
-  })
-)
+
+// })

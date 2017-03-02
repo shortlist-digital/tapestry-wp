@@ -12,11 +12,11 @@ module.exports = {
     __dirname: true
   },
   entry: {
-    bundle: path.resolve(cwd, 'src', 'index.js')
+    bundle: 'tapestry-wp/src/index.js'
   },
   // output bundle to dist dir, commonjs2 exports the bundle as module.exports
   output: {
-    path: path.resolve(cwd, 'dist'),
+    path: 'tapestry-wp/dist',
     filename: 'server.[name].js',
     libraryTarget: 'commonjs2'
   },

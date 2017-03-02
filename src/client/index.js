@@ -10,7 +10,11 @@ export default class Client {
   constructor (opts) {
     // allow class access
     this.opts = opts
-    this.compiler = webpack(config(opts))
+    // if user webpack
+    this.config = typeof opts.webpack === 'function' ?
+      opts.webpack(config(opts), { env }, webpack) :
+      config(opts)
+    this.compiler = webpack(this.config)
     this.devNotified = false
     // run once if production, watch if development
     if (opts.env !== 'development') {
