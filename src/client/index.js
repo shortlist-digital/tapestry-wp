@@ -1,20 +1,29 @@
 import webpack from 'webpack'
 import bytes from 'pretty-bytes'
 
-import config from '../webpack/client.config'
+import defaultConfig from '../webpack/client.config'
 import { success, error } from '../utilities/logger'
+import customConfig from '../utilities/config.custom'
 
 
 export default class Client {
 
   constructor (opts) {
+
+    const data = {
+      cwd: opts.cwd,
+      env: opts.env
+    }
+    const webpackConfig = customConfig({
+      userConfig: opts.userConfig,
+      options: data,
+      defaultConfig,
+      webpack
+    })
+
     // allow class access
     this.opts = opts
-    // if user webpack
-    this.config = typeof opts.webpack === 'function' ?
-      opts.webpack(config(opts), { env }, webpack) :
-      config(opts)
-    this.compiler = webpack(this.config)
+    this.compiler = webpack(webpackConfig)
     this.devNotified = false
     // run once if production, watch if development
     if (opts.env !== 'development') {

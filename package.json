@@ -5,9 +5,7 @@
   "main": "./dist/index.js",
   "repository": "shortlist-digital/tapestry-wp",
   "scripts": {
-    "build:server": "webpack --config src/webpack/server.config.js --hide-modules",
     "build:utils": "babel src/utilities --out-dir dist --presets=es2015,react",
-    "watch:server": "webpack --config src/webpack/server.config.js --watch",
     "lint": "eslint . --fix --cache",
     "test": "mocha 'test/**/*.test.js' --require test/babel-register",
     "pre-commit-msg": "echo \"Performing pre-commit checks...\" && exit 0",

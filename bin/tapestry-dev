@@ -2,63 +2,37 @@
 
 const path = require('path')
 const fs = require('fs')
+const webpack = require('webpack')
+
 const logger = require('../dist/logger')
-const validator = require('../dist/validator').default
+const defaultConfig = require('../src/webpack/server.config')
+const customConfig = require('../dist/config.custom').default
+
 const cwd = process.cwd()
 const env = 'development'
-const webpack = require('webpack')
-const serverConfig = require('../src/webpack/server.config')
+const userWebpackPath = path.resolve(cwd, 'webpack.config.js')
 
 // transpile any following imports
 require('babel-register')({
   presets: ['es2015', 'react']
 })
 
-let webpackConfig = serverConfig
+let userConfig = {}
 
-const exists = fs.existsSync(path.resolve(cwd, 'webpack.config.js'))
-const customConfig = require(path.resolve(cwd, 'webpack.config.js'))
-if (exists)
-  webpackConfig = customConfig(serverConfig, { cwd, env }, webpack)
+if (fs.existsSync(userWebpackPath)) {
+  const userConfigModule = require(userWebpackPath)
+  userConfig = userConfigModule.default || userConfigModule
+}
 
-// console.log(webpackConfig)
+const webpackConfig = customConfig({
+  userConfig,
+  defaultConfig,
+  options: { cwd, env }
+})
 const compiler = webpack(webpackConfig)
 
 compiler.run((err, stats) => {
-  const tapestry = require('../dist/server.bundle').default
-  // console.log(tapestry.boot)
-  tapestry.boot({ cwd, env })
+
+  const server = require(path.resolve(cwd, '.tapestry/server.bundle.js'))
+  server.boot({ cwd, env, userConfig })
 })
-
-
-
-// project tapestry config path
-// const configPath = path.join(cwd, 'tapestry.config.js')
-
-// check tapestry.config.js exists
-// if (!fs.existsSync(configPath))
-//   logger.error(`tapestry.config.js not found in ${cwd}`)
-//
-// logger.info(`Booting Tapestry… \n`)
-
-// const config = require(configPath).default
-
-// validate the config object
-// validator(config, (sanitizedConfig) => {
-  // kick off server build
-    // if user webpack
-
-// this.compiler = webpack(webpackConfig)
-// // this.devNotified = false
-// // // run once if production, watch if development
-// // if (opts.env !== 'development') {
-// this.compiler.run((err, stats) => {
-//   console.log(err)
-  // tapestry.boot({ cwd, env })
-// })
-    // } else {
-    //   this.compiler.watch({}, this.watch.bind(this))
-    // }
-  // kick off client build & server
-
-// })

@@ -2,26 +2,36 @@
 
 const path = require('path')
 const fs = require('fs')
-const tapestry = require('../dist/server.bundle').default
+const webpack = require('webpack')
+
 const logger = require('../dist/logger')
 const validator = require('../dist/validator').default
+const defaultConfig = require('../src/webpack/server.config')
+const customConfig = require('../dist/config.custom').default
 
 const cwd = process.cwd()
 const env = 'production'
-
+const userWebpackPath = path.resolve(cwd, 'webpack.config.js')
 
 logger.info(`Booting Tapestry… \n`)
 
-// project tapestry config path
-const configPath = path.join(cwd, '.tapestry', 'app', 'tapestry.config.js')
-const config = require(configPath).default
+let userConfig = {}
 
-// validate the config object
-validator(config, (sanitizedConfig) =>
-  // kick off client build & server
-  tapestry.boot({
-    config: sanitizedConfig,
-    cwd,
-    env
-  })
-)
+if (fs.existsSync(userWebpackPath)) {
+  const userConfigModule = require(userWebpackPath)
+  userConfig = userConfigModule.default || userConfigModule
+}
+
+const webpackConfig = customConfig({
+  userConfig,
+  defaultConfig,
+  options: { cwd, env }
+})
+const compiler = webpack(webpackConfig)
+
+compiler.run((err, stats) => {
+
+  const server = require(path.resolve(cwd, '.tapestry/server.bundle.js'))
+
+  server.boot({ cwd, env, userConfig })
+})

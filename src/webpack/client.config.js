@@ -50,15 +50,12 @@ export default ({ cwd, env }) => {
     // non-changing vendor packages to combine in a vendor bundle
     config.entry.vendor = [
       'async-props',
+      'glamor',
       'react-dom',
       'react-helmet',
       'react-router',
       'react'
     ]
-    // replace react instance with preact (saves a heck lotta kb)
-    config.resolve.alias = {
-      'tapestry.config.js': path.resolve(cwd, '.tapestry', 'app', 'tapestry.config.js')
-    }
     config.plugins.push(
       // production flag for React/others to minify correctly
       new webpack.DefinePlugin({
