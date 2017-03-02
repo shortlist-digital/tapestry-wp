@@ -14,7 +14,7 @@ module.exports = {
   entry: {
     server: 'tapestry-wp/src/index.js'
   },
-  // output bundle to dist dir, commonjs2 exports the bundle as module.exports
+  // output bundle to .tapestry dir, commonjs2 exports the bundle as module.exports
   output: {
     path: '.tapestry',
     filename: '[name].bundle.js',
@@ -22,12 +22,14 @@ module.exports = {
   },
   // share module rules with client config
   module: shared.module,
+  // aliasing the users config
   resolve: {
     alias: {
       'tapestry.config.js': path.resolve(cwd, 'tapestry.config.js')
     }
   },
   // ignore any node_modules packages, rely on native node require
+  // whitelist entry point otherwise ignored
   externals: [
     nodeExternals({
       whitelist: ['tapestry-wp/src/index.js']
