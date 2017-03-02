@@ -1,32 +1,28 @@
 import webpack from 'webpack'
 import bytes from 'pretty-bytes'
 
-import defaultConfig from '../webpack/client.config'
+import configDefault from '../webpack/client.config'
 import { success, error } from '../utilities/logger'
-import customConfig from '../utilities/config.custom'
+import mergeConfigs from '../utilities/merge-config'
 
 
 export default class Client {
 
-  constructor (opts) {
-
-    const data = {
-      cwd: opts.cwd,
-      env: opts.env
-    }
-    const webpackConfig = customConfig({
-      userConfig: opts.userConfig,
-      options: data,
-      defaultConfig,
+  constructor ({ cwd, env, configCustom, onComplete }) {
+    // allow class access
+    this.onComplete = onComplete
+    this.devNotified = false
+    // combine default/user webpack config
+    const webpackConfig = mergeConfigs({
+      configCustom,
+      configDefault,
+      options: { cwd, env },
       webpack
     })
-
-    // allow class access
-    this.opts = opts
+    // kick off webpack compilation
     this.compiler = webpack(webpackConfig)
-    this.devNotified = false
     // run once if production, watch if development
-    if (opts.env !== 'development') {
+    if (env !== 'development') {
       this.compiler.run((err, stats) => this.run(err, stats))
     } else {
       this.compiler.watch({}, this.watch.bind(this))
@@ -54,7 +50,7 @@ export default class Client {
     if (output.assets.length)
       success(`Client built: ${bytes(output.assets[0].size)}`)
     // run callback
-    if (typeof this.opts.onComplete === 'function')
-      this.opts.onComplete()
+    if (typeof this.onComplete === 'function')
+      this.onComplete()
   }
 }
