@@ -1,6 +1,6 @@
 {
   "name": "tapestry-wp",
-  "version": "1.6.0-2",
+  "version": "1.6.0",
   "description": "Wordpress API Universal React Renderer",
   "main": "./dist/index.js",
   "repository": "shortlist-digital/tapestry-wp",
