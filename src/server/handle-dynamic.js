@@ -19,9 +19,7 @@ export default ({ server, config, assets }) => {
   })
 
   // Reset the cache on global server event
-  server.on('reset-cache', () => {
-    cache.reset()
-  })
+  server.on('reset-cache', cache.reset)
 
   server.route({
     method: 'GET',

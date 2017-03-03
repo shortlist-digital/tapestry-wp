@@ -11,9 +11,7 @@ export default ({ server, config }) => {
     maxAge: 1000*60*2
   })
 
-  server.on('reset-cache', () => {
-    cache.reset()
-  })
+  server.on('reset-cache', cache.reset)
 
   server.route({
     method: 'GET',
