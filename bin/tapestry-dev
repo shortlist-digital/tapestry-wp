@@ -28,7 +28,8 @@ if (fs.existsSync(configCustomPath)) {
 const webpackConfig = mergeConfigs({
   configCustom,
   configDefault,
-  options: { cwd, env }
+  options: { cwd, env },
+  webpack
 })
 // kick off webpack compilation
 const compiler = webpack(webpackConfig)
