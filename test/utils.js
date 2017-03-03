@@ -1,5 +1,5 @@
 import nock from 'nock'
-import { server } from '../dist/server.bundle'
+import Server from '../src/server'
 import data from './mocks/page.json'
 
 const cwd = process.cwd()
@@ -8,7 +8,7 @@ const dataError = { data: { status: 404 } }
 
 
 export const bootServer = (config) =>
-  server({
+  new Server({
     config,
     cwd,
     env

@@ -2,12 +2,15 @@
 
 const path = require('path')
 const fs = require('fs')
+const webpack = require('webpack')
 
-const tapestry = require('../dist/server.bundle').default
 const logger = require('../dist/logger')
-const validator = require('../dist/validator').default
+const mergeConfigs = require('../dist/merge-config').default
+const configDefault = require('../src/webpack/server.config')
+
 const cwd = process.cwd()
 const env = 'development'
+const configCustomPath = path.resolve(cwd, 'webpack.config.js')
 
 // transpile any following imports
 require('babel-register')({
@@ -15,23 +18,26 @@ require('babel-register')({
   plugins: ['lodash', 'transform-object-rest-spread']
 })
 
-// project tapestry config path
-const configPath = path.join(cwd, 'tapestry.config.js')
-
-// check tapestry.config.js exists
-if (!fs.existsSync(configPath))
-  logger.error(`tapestry.config.js not found in ${cwd}`)
-
-logger.info(`Booting Tapestry… \n`)
-
-const config = require(configPath).default
-
-// validate the config object
-validator(config, (sanitizedConfig) =>
-  // kick off client build & server
-  tapestry.boot({
-    config: sanitizedConfig,
-    cwd,
-    env
-  })
-)
+// fetch user webpack config
+let configCustom = null
+if (fs.existsSync(configCustomPath)) {
+  const module = require(configCustomPath)
+  configCustom = module.default || module
+}
+// combine default/user webpack config
+const webpackConfig = mergeConfigs({
+  configCustom,
+  configDefault,
+  options: { cwd, env }
+})
+// kick off webpack compilation
+const compiler = webpack(webpackConfig)
+compiler.run((err, stats) => {
+  // handle error
+  if (err) logger.error(err)
+  // server path relative to root
+  const serverPath = path.resolve(cwd, '.tapestry/server.bundle.js')
+  // require server and boot
+  const server = require(serverPath).default
+  server({ cwd, env, configCustom })
+})
