@@ -53,18 +53,16 @@ export default ({ cwd, env }) => {
     // expose chunkhash naming for long-life caching
     config.output.filename = '[name].[chunkhash].js'
     // non-changing vendor packages to combine in a vendor bundle
-    // react-helmet isn't required by Tapestry on the client but it will very likely be put to use by the user so including it in the vendor file
+    // react-helmet/glamor aren't required by Tapestry on the client, but they're very likely be put to use by the user so including it in the vendor file
     config.entry.vendor = [
       'async-props',
+      'glamor',
       'react-dom',
       'react-helmet',
       'react-router',
       'react'
     ]
-    // replace react instance with preact (saves a heck lotta kb)
-    config.resolve.alias = {
-      'tapestry.config.js': path.resolve(cwd, '.tapestry', 'app', 'tapestry.config.js')
-    }
+    // config.plugins already defined so lets push any extras
     config.plugins.push(
       // production flag for React/others to minify correctly
       new webpack.DefinePlugin({

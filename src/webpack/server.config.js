@@ -12,16 +12,27 @@ module.exports = {
     __dirname: true
   },
   entry: {
-    bundle: path.resolve(cwd, 'src', 'index.js')
+    server: 'tapestry-wp/src/index.js'
   },
-  // output bundle to dist dir, commonjs2 exports the bundle as module.exports
+  // output bundle to .tapestry dir, commonjs2 exports the bundle as module.exports
   output: {
-    path: path.resolve(cwd, 'dist'),
-    filename: 'server.[name].js',
+    path: '.tapestry',
+    filename: '[name].bundle.js',
     libraryTarget: 'commonjs2'
   },
   // share module rules with client config
   module: shared.module,
+  // aliasing the users config
+  resolve: {
+    alias: {
+      'tapestry.config.js': path.resolve(cwd, 'tapestry.config.js')
+    }
+  },
   // ignore any node_modules packages, rely on native node require
-  externals: [nodeExternals()]
+  // whitelist entry point otherwise ignored
+  externals: [
+    nodeExternals({
+      whitelist: ['tapestry-wp/src/index.js']
+    })
+  ]
 }
