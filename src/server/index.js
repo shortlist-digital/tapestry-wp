@@ -20,6 +20,9 @@ export default class Tapestry {
     // create server instance
     this.server = this.bootServer()
 
+    // register reset-cache event
+    this.server.event('reset-cache')
+
     // handle server routing
     const data = {
       server: this.server,

@@ -18,12 +18,16 @@ describe('HTML document', () => {
   }
 
 
-  before(done => {
+  beforeEach(done => {
     mockApi()
     tapestry = bootServer(config)
     tapestry.server.on('start', done)
   })
-  after(() => tapestry.server.stop())
+
+  afterEach(() => {
+    tapestry.server.emit('reset-cache')
+    tapestry.server.stop()
+  })
 
 
   it('Data is correctly loaded on page', (done) => {
