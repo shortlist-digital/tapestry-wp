@@ -55,20 +55,10 @@ export default class Client {
   }
 
   logAssets (stats) {
-    // log out name/size with a 4 space indent
-    const printAsset = asset =>
-      asset.chunkNames.length > 0 && `
-    ${asset.name} ${bytes(asset.size)}`
-    const assets = stats.assets
-    // if multiple assets
-    if (assets.length > 1) {
-      // break onto new lines and loop through each
-      return assets
-        .map(printAsset)
-        .filter(Boolean)
-    } else {
-      // return inline
-      return `${assets[0].name} ${bytes(assets[0].size)}`
-    }
+    // return line-break and indented
+    return stats.assets
+      .map(asset => asset.chunkNames.length > 0 &&
+        `\n    ${asset.name} ${bytes(asset.size)}`)
+      .filter(Boolean)
   }
 }
