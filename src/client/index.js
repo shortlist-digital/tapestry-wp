@@ -45,12 +45,20 @@ export default class Client {
     }
   }
   complete (stats) {
-    // log output
-    const output = stats.toJson()
-    if (output.assets.length)
-      success(`Client built: ${bytes(output.assets[0].size)}`)
+    // got some assets? cool, log em out
+    const jsonStats = stats.toJson()
+    if (jsonStats.assets.length)
+      success(`Client built: ${this.logAssets(jsonStats)}`)
     // run callback
     if (typeof this.onComplete === 'function')
       this.onComplete()
+  }
+
+  logAssets (stats) {
+    // return line-break and indented
+    return stats.assets
+      .map(asset => asset.chunkNames.length > 0 &&
+        `\n    ${asset.name} ${bytes(asset.size)}`)
+      .filter(Boolean)
   }
 }
