@@ -24,8 +24,9 @@ const schema = joi.object({
   routes: joi.array().items(
     // object containing a string path and React component
     joi.object({
-      path: joi.string(),
-      component: joi.func()
+      component: joi.func(),
+      getComponent: joi.func(),
+      path: joi.string()
     })
   ),
   // optional array of proxy paths
