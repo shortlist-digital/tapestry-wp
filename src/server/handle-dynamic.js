@@ -7,9 +7,6 @@ import { renderHtml } from './render'
 import { error } from '../utilities/logger'
 import LRU from 'lru-cache'
 
-
-
-
 export default ({ server, config, assets }) => {
 
   // Create a new cache | 100 pages only, expire after 2 minutes

@@ -2,7 +2,6 @@
 import LRU from 'lru-cache'
 import fetch from 'isomorphic-fetch'
 
-
 export default ({ server, config }) => {
 
   // Create a new cache | 100 requests only, expire after 2 minutes
