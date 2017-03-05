@@ -8,7 +8,7 @@ import config from 'tapestry.config.js'
 
 // methods in use on the <Router />
 const onUpdate = () =>
-  typeof config.onPageUpdate === 'function' && config.onPageUpdate
+  typeof config.onPageUpdate === 'function' && config.onPageUpdate()
 const renderAsyncProps = props =>
   <AsyncProps loadContext={config} {...props} />
 
