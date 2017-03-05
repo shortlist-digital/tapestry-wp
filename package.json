@@ -1,6 +1,6 @@
 {
   "name": "tapestry-wp",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Wordpress API Universal React Renderer",
   "main": "./dist/index.js",
   "repository": "shortlist-digital/tapestry-wp",
@@ -43,6 +43,7 @@
     "babel-core": "^6.23.1",
     "babel-loader": "^6.3.2",
     "babel-plugin-lodash": "^3.2.11",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-react": "^6.23.0",

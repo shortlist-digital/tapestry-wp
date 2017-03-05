@@ -24,10 +24,18 @@ const schema = joi.object({
   routes: joi.array().items(
     // object containing a string path and React component
     joi.object({
-      path: joi.string(),
-      component: joi.func()
+      component: joi.func(),
+      getComponent: joi.func(),
+      path: joi.string()
     })
   ),
+  // optional loaders exporting a fetch request
+  loaders: joi.object().keys({
+    Category: joi.func(),
+    FrontPage: joi.func(),
+    Page: joi.func(),
+    Post: joi.func()
+  }),
   // optional array of proxy paths
   proxyPaths: joi.array().items(joi.string()),
   // optional function run when routing on the client
