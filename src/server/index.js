@@ -7,6 +7,7 @@ import handleStatic from './handle-static'
 import handleApi from './handle-api'
 import handleDynamic from './handle-dynamic'
 import handleProxies from './handle-proxies'
+import CacheManager from '../utilities/cache-manager'
 
 
 export default class Tapestry {
@@ -19,6 +20,11 @@ export default class Tapestry {
 
     // create server instance
     this.server = this.bootServer()
+
+    // register reset-cache event
+    this.server.event('reset-cache')
+    // Clear all caches on reset-cache event
+    this.server.on('reset-cache', CacheManager.clearAll)
 
     // handle server routing
     const data = {

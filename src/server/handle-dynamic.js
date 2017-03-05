@@ -5,9 +5,12 @@ import { has } from 'lodash'
 import DefaultRoutes from '../shared/default-routes'
 import { renderHtml } from './render'
 import { error } from '../utilities/logger'
-
+import CacheManager from '../utilities/cache-manager'
 
 export default ({ server, config, assets }) => {
+
+  // Create a new cache
+  const cache = CacheManager.createCache('html')
 
   server.route({
     method: 'GET',
@@ -58,15 +61,28 @@ export default ({ server, config, assets }) => {
             return reply(err).code(500)
           }
 
-          // 200 with rendered HTML
-          reply(
-            renderHtml({
+          // Find HTML based on path - might be undefined
+          const cachedHTML = cache.get(request.url.path)
+
+          // respond with HTML from cache if not undefined
+          if (cachedHTML) {
+            reply(cachedHTML).code(status)
+          } else {
+            // No HTML found for this path, or cache expired
+            // Regenerate HTML from scratch
+            const html = renderHtml({
               renderProps,
               loadContext,
               asyncProps,
               assets
             })
-          ).code(status)
+
+            // 200 with rendered HTML
+            // We can only get here if there's nothing cached for this URL path
+            // Bung the HTML into the cache
+            cache.set(request.url.path, html)
+            reply(html).code(status)
+          }
         })
       })
     }
