@@ -1,16 +1,11 @@
 
-import LRU from 'lru-cache'
 import fetch from 'isomorphic-fetch'
+import CacheManager from '../utilities/cache-manager'
 
 export default ({ server, config }) => {
 
   // Create a new cache | 100 requests only, expire after 2 minutes
-  const cache = LRU({
-    max: 100,
-    maxAge: 1000*60*2
-  })
-
-  server.on('reset-cache', cache.reset)
+  const cache = CacheManager.createCache('api')
 
   server.route({
     method: 'GET',

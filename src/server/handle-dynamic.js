@@ -5,18 +5,12 @@ import { has } from 'lodash'
 import DefaultRoutes from '../shared/default-routes'
 import { renderHtml } from './render'
 import { error } from '../utilities/logger'
-import LRU from 'lru-cache'
+import CacheManager from '../utilities/cache-manager'
 
 export default ({ server, config, assets }) => {
 
-  // Create a new cache | 100 pages only, expire after 2 minutes
-  const cache = LRU({
-    max: 100,
-    maxAge: 1000*60*2
-  })
-
-  // Reset the cache on global server event
-  server.on('reset-cache', cache.reset)
+  // Create a new cache
+  const cache = CacheManager.createCache('html')
 
   server.route({
     method: 'GET',
