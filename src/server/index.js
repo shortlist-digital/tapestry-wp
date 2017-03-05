@@ -7,6 +7,7 @@ import handleStatic from './handle-static'
 import handleApi from './handle-api'
 import handleDynamic from './handle-dynamic'
 import handleProxies from './handle-proxies'
+import handlePurge from './handle-purge'
 import CacheManager from '../utilities/cache-manager'
 
 
@@ -21,8 +22,9 @@ export default class Tapestry {
     // create server instance
     this.server = this.bootServer()
 
-    // register reset-cache event
+    // register server events
     this.server.event('reset-cache')
+    this.server.event('purge-html-cache-by-key')
     // Clear all caches on reset-cache event
     this.server.on('reset-cache', CacheManager.clearAll)
 
@@ -33,6 +35,7 @@ export default class Tapestry {
       assets
     }
     handleStatic(data)
+    handlePurge(data)
     handleApi(data)
     handleProxies(data)
     handleDynamic(data)

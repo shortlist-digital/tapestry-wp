@@ -11,6 +11,10 @@ export default ({ server, config, assets }) => {
 
   // Create a new cache
   const cache = CacheManager.createCache('html')
+ // Allow purge of individual URL
+  server.on('purge-html-cache-by-key', (key) => {
+    cache.del(key)
+  })
 
   server.route({
     method: 'GET',
@@ -63,6 +67,7 @@ export default ({ server, config, assets }) => {
 
           // Find HTML based on path - might be undefined
           const cachedHTML = cache.get(request.url.path)
+
 
           // respond with HTML from cache if not undefined
           if (cachedHTML) {
