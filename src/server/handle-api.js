@@ -21,13 +21,10 @@ export default ({ server, config }) => {
         fetch(remote)
           .then(response => response.json())
           .then(resp => {
-            const data = ('0' in resp) || resp instanceof Array ?
-              resp[0] :
-              resp
             // We can only get here if there's nothing cached
             // Put the response into the cache using the request path as a key
-            cache.set(remote, data)
-            reply(data)
+            cache.set(remote, resp)
+            reply(resp)
           })
       }
     }
