@@ -15,6 +15,9 @@ describe('Custom routes', () => {
     }, {
       path: 'static-route-with-param/:custom',
       component: (props) => <p>{props.params.custom}</p>
+    }, {
+      path: 'static-route-async',
+      component: () => <p>This is async</p>
     }],
     siteUrl: 'http://dummy.api'
   }
@@ -38,6 +41,13 @@ describe('Custom routes', () => {
     request
       .get(`${tapestry.server.info.uri}/static-route-with-param/test-parameter`, (err, res, body) => {
         expect(body).to.contain('test-parameter')
+        done()
+      })
+  })
+  it('Static route matches, returns async component', (done) => {
+    request
+      .get(`${tapestry.server.info.uri}/static-route-async`, (err, res, body) => {
+        expect(body).to.contain('This is async')
         done()
       })
   })

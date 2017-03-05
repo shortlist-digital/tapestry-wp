@@ -56,9 +56,9 @@ export default class Client {
 
   logAssets (stats) {
     // return line-break and indented
+    // stats.json shouldn't be shared with user
     return stats.assets
-      .map(asset => asset.chunkNames.length > 0 &&
-        `\n    ${asset.name} ${bytes(asset.size)}`)
-      .filter(Boolean)
+      .filter(asset => !asset.name.includes('stats.json'))
+      .map(asset => `\n    ${asset.name} ${bytes(asset.size)}`)
   }
 }

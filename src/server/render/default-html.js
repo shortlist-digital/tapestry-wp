@@ -3,6 +3,7 @@ import './default-style'
 
 const defaultHtml = ({ markup, head, asyncProps, assets = {} }) => {
   const attr = head.htmlAttributes.toComponent()
+  const hasProps = asyncProps.propsArray.length > 0
   return (
     <html lang="en" {...attr}>
       <head>
@@ -18,7 +19,7 @@ const defaultHtml = ({ markup, head, asyncProps, assets = {} }) => {
       </head>
       <body>
         <div id="root" dangerouslySetInnerHTML={{ __html: markup.html }} />
-        <script dangerouslySetInnerHTML={{ __html: `window.__ASYNC_PROPS__ = ${JSON.stringify(asyncProps.propsArray)}` }} />
+        { hasProps && <script dangerouslySetInnerHTML={{ __html: `window.__ASYNC_PROPS__ = ${JSON.stringify(asyncProps.propsArray)}` }} /> }
       </body>
     </html>
   )
