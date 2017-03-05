@@ -28,6 +28,13 @@ const schema = joi.object({
       component: joi.func()
     })
   ),
+  // optional loaders exporting a fetch request
+  loaders: joi.object().keys({
+    Category: joi.func(),
+    FrontPage: joi.func(),
+    Page: joi.func(),
+    Post: joi.func()
+  }),
   // optional array of proxy paths
   proxyPaths: joi.array().items(joi.string()),
   // optional function run when routing on the client
