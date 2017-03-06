@@ -68,7 +68,6 @@ export default ({ server, config, assets }) => {
           // Find HTML based on path - might be undefined
           const cachedHTML = cache.get(request.url.path)
 
-
           // respond with HTML from cache if not undefined
           if (cachedHTML) {
             reply(cachedHTML).code(status)

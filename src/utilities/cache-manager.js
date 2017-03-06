@@ -18,8 +18,4 @@ export default class CacheManager {
       cache.reset()
     )
   }
-
-  static getCache (name) {
-    internalCaches[name]
-  }
 }
