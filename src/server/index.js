@@ -9,7 +9,6 @@ import handleDynamic from './handle-dynamic'
 import handleProxies from './handle-proxies'
 import CacheManager from '../utilities/cache-manager'
 
-
 export default class Tapestry {
 
   constructor ({ config, assets = {} }, { silent } = {}) {
@@ -20,6 +19,13 @@ export default class Tapestry {
 
     // create server instance
     this.server = this.bootServer()
+
+    // Important bit:
+    this.server.ext('onPreResponse', (request, reply) => {
+      request.response.headers &&
+        (request.response.headers['X-Powered-By'] = 'Tapestry')
+      reply.continue()
+    })
 
     // register reset-cache event
     this.server.event('reset-cache')
