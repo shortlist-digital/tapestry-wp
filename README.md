@@ -1,4 +1,14 @@
 <a href="https://shortlist-digital.github.io/tapestry-wp"><img src="http://i.imgur.com/HtzivRT.png" height="120" /></a>
+
+## WordPress theming with React ⚛
+
+* Unbelievably fast. 
+* Client side SPA routing with React Router.
+* Glamor CSS.
+* Code splitting out of the box.
+* Server-side-rendered.
+* Minimal configuration.
+* WordPress for your CMS.
 ---
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/shortlist-digital/tapestry-wp.svg)](https://greenkeeper.io/)
