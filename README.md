@@ -18,9 +18,8 @@
 
 Tapestry is a Universal JavaScript Application for rendering React front-ends via the Wordpress API.
 
-_**Note:** This is currently a work in progress and will likely undergo major public/private API changes and feature updates._
+## Quick Start
 
-## Using Tapestry
 Install  `tapestry-wp` through `npm` or `yarn`
 ```text
 npm install tapestry-wp --save
