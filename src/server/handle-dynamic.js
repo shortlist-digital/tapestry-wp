@@ -16,6 +16,7 @@ export default ({ server, config, assets }) => {
     method: 'GET',
     path: '/{path*}',
     handler: (request, reply) => {
+
       match({
         routes: DefaultRoutes(config),
         location: request.url.path
