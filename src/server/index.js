@@ -39,8 +39,8 @@ export default class Tapestry {
       assets
     }
     handleStatic(data)
-    handleApi(data)
     handleProxies(data)
+    handleApi(data)
     handleDynamic(data)
 
     // kick off server

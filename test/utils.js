@@ -19,18 +19,20 @@ export const bootServer = (config) =>
 export const mockApi = () =>
   nock('http://dummy.api')
 
-    .get('/wp-json/wp/v2/pages')
-    .times(5)
-    .query({ filter: { name: 'home' }})
-    .reply(200, data)
-
-    .get('/wp-json/wp/v2/posts/10?_embed')
+    .get('/wp-json/wp/v2/pages?slug=home&_embed')
     .times(5)
     .reply(200, data)
 
-    .get('/wp-json/wp/v2/pages')
+    .get('/wp-json/wp/v2/posts?slug=slug?_embed')
     .times(5)
-    .query({ filter: { name: 'null-page' }})
+    .reply(200, data)
+
+    .get('/wp-json/wp/v2/pages?slug=test.txt&_embed')
+    .times(5)
+    .reply(404, dataError)
+
+    .get('/wp-json/wp/v2/pages?slug=null-page&_embed')
+    .times(5)
     .reply(404, dataError)
 
     .get('/wp-json/wp/v2/posts')
