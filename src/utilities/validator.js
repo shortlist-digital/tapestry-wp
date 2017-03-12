@@ -38,6 +38,8 @@ const schema = joi.object({
   }),
   // optional array of proxy paths
   proxyPaths: joi.array().items(joi.string()),
+  // optional object of redirects
+  redirectPaths: joi.object(),
   // optional function run when routing on the client
   onPageUpdate: joi.func()
 })
