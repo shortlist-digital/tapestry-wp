@@ -13,7 +13,7 @@ export default class Loader extends Component {
     if (customLoader) return customLoader(loadContext.siteUrl, cb)
 
     const baseUrl = `${loadContext.siteUrl}/wp-json/wp/v2`
-    const path = `posts?filter[category_name]=${params.subcategory || params.category}?_embed`
+    const path = `posts?filter[category_name]=${params.subcategory || params.category}&_embed`
 
     // LoadContext is basicaly an object we can pass around
     // the sever with our components and some baseUrl on it

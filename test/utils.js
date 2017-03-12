@@ -23,7 +23,7 @@ export const mockApi = () =>
     .times(5)
     .reply(200, data)
 
-    .get('/wp-json/wp/v2/posts?slug=slug?_embed')
+    .get('/wp-json/wp/v2/posts?slug=slug&_embed')
     .times(5)
     .reply(200, data)
 
