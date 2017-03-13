@@ -5,6 +5,7 @@ import AsyncProps from 'async-props'
 import 'location-origin'
 import DefaultRoutes from '../shared/default-routes'
 import config from 'tapestry.config.js'
+import runtime from 'service-worker-plugin/runtime'
 
 // methods in use on the <Router />
 const onUpdate = () =>
@@ -29,3 +30,5 @@ match({ routes, history }, (error, redirectLocation, renderProps) =>
     targetNode
   )
 )
+
+runtime.register()

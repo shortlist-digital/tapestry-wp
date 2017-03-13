@@ -3,6 +3,7 @@ import webpack from 'webpack'
 import CleanPlugin from 'clean-webpack-plugin'
 import AssetsPlugin from 'assets-webpack-plugin'
 import StatsPlugin from 'stats-webpack-plugin'
+import ServiceWorkerPlugin from 'service-worker-plugin'
 import { module } from './shared'
 
 // exporting function to allow process.cwd() and environment to get passed through
@@ -96,6 +97,34 @@ export default ({ cwd, env }) => {
         output: {
           comments: false,
           screw_ie8: true
+        }
+      }),
+      new ServiceWorkerPlugin({
+        cache: {
+          precache: ['\\.js'],
+          strategy: [{
+            type: 'prefer-cache',
+            matches: ['\\.js']
+          }]
+        }
+      }, {
+        experiment_with_notifications: {
+          cache: {
+            precache: ['\\.js'],
+            strategy: [{
+              type: 'prefer-cache',
+              matches: ['\\.js']
+            }]
+          },
+          notifications: {
+            default: {
+              title: 'Pinterest',
+              body: 'You\'ve got new Pins!'
+            }
+          },
+          log: {
+            notificationClicked: '/api/notifications/web/click/'
+          }
         }
       })
     )
