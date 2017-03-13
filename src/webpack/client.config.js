@@ -14,7 +14,7 @@ export default ({ cwd, env }) => {
     // enable sourcemap
     devtool: 'source-map',
     entry: {
-      bundle: ['tapestry-wp/src/client/webpack.entry.js']
+      bundle: 'tapestry-wp/src/client/webpack.entry.js'
     },
     // output bundle to _scripts, no caching required in dev mode so bundle.js is sufficient
     output: {
