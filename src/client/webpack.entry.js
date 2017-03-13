@@ -3,6 +3,7 @@ import { render } from 'react-dom'
 import { Router, match, browserHistory } from 'react-router'
 import AsyncProps from 'async-props'
 import 'location-origin'
+import 'es6-promise/auto'
 import DefaultRoutes from '../shared/default-routes'
 import config from 'tapestry.config.js'
 

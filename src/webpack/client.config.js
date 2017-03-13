@@ -13,10 +13,8 @@ export default ({ cwd, env }) => {
     target: 'web',
     // enable sourcemap
     devtool: 'source-map',
-    // polyfill methods outside of babel presets
-    // https://babeljs.io/docs/usage/polyfill/
     entry: {
-      bundle: ['babel-polyfill', 'tapestry-wp/src/client/webpack.entry.js']
+      bundle: ['tapestry-wp/src/client/webpack.entry.js']
     },
     // output bundle to _scripts, no caching required in dev mode so bundle.js is sufficient
     output: {
