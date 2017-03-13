@@ -7,6 +7,7 @@ import handleStatic from './handle-static'
 import handleApi from './handle-api'
 import handleDynamic from './handle-dynamic'
 import handleProxies from './handle-proxies'
+import handleRedirects from './handle-redirects'
 import CacheManager from '../utilities/cache-manager'
 
 export default class Tapestry {
@@ -38,9 +39,10 @@ export default class Tapestry {
       config: this.config,
       assets
     }
+    handleRedirects(data)
     handleStatic(data)
-    handleApi(data)
     handleProxies(data)
+    handleApi(data)
     handleDynamic(data)
 
     // kick off server

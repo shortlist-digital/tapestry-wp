@@ -12,7 +12,6 @@ describe('Handling proxies', () => {
     siteUrl: 'http://dummy.api'
   }
 
-
   before(done => {
     mockApi()
     mockProxy({
@@ -22,6 +21,7 @@ describe('Handling proxies', () => {
     tapestry = bootServer(config)
     tapestry.server.on('start', done)
   })
+
   after(() => tapestry.server.stop())
 
   it('Proxy should return correct content', (done) => {
@@ -31,6 +31,7 @@ describe('Handling proxies', () => {
           done()
         })
   })
+
   it('Undeclared proxy should return 404', (done) => {
     request
       .get(`${tapestry.server.info.uri}/test.txt`, (err, res) => {
