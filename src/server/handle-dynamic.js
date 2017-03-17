@@ -47,6 +47,12 @@ export default ({ server, config, assets }) => {
 
         // get all the props yo
         loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
+          // 500 if error from AsyncProps
+          if (err) {
+            error(err)
+            return reply(err).code(500)
+          }
+          
           let status = 200
 
           const failApi = has(asyncProps.propsArray[0], 'data.data.status')
@@ -54,12 +60,6 @@ export default ({ server, config, assets }) => {
 
           if (failApi || failRoute)
             status = 404
-
-          // 500 if error from AsyncProps
-          if (err) {
-            error(err)
-            return reply(err).code(500)
-          }
 
           // Find HTML based on path - might be undefined
           const cachedHTML = cache.get(request.url.path)
