@@ -14,7 +14,7 @@ export default class Loader extends Component {
 
     const baseUrl = `${loadContext.serverUri || window.location.origin}/api/v1`
 
-    let path = `pages?slug=home&_embed`
+    let path = `posts?_embed`
     if (parseInt(loadContext.frontPage))
       path = `pages/${loadContext.frontPage}`
     else if (typeof loadContext.frontPage === 'string')
@@ -25,7 +25,7 @@ export default class Loader extends Component {
     return fetch(`${baseUrl}/${path}`)
       .then(resp => resp.json())
       .then(resp => {
-        const data = ('0' in resp) || resp instanceof Array ? resp[0] : resp
+        const data = resp
         return cb(null, { data })
       })
       .catch(error => cb(error))
