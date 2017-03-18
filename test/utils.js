@@ -19,6 +19,10 @@ export const bootServer = (config) =>
 export const mockApi = () =>
   nock('http://dummy.api')
 
+    .get('/wp-json/wp/v2/posts?_embed')
+    .times(5)
+    .reply(200, data)
+
     .get('/wp-json/wp/v2/pages?slug=home&_embed')
     .times(5)
     .reply(200, data)
