@@ -13,13 +13,6 @@ const DefaultRoutes = ({
   routes = []
 }) => {
 
-  // access components from config
-  const {
-    Category,
-    FrontPage,
-    Page,
-    Post
-  } = components
   const Error = components.Error || MissingView
 
   // return static Route with component directly
@@ -47,23 +40,23 @@ const DefaultRoutes = ({
       <Route
         path='/'
         component={FrontPageLoader}
-        tag={FrontPage}
-        fallback={Error} />
+        config={components}
+        id={'FrontPage'} />
       <Route
         path=':page(/:subpage)'
         component={PageLoader}
-        tag={Page}
-        fallback={Error} />
+        config={components}
+        id={'Page'} />
       <Route
         path='/category/:category(/:subcategory)'
         component={CategoriesLoader}
-        tag={Category}
-        fallback={Error} />
+        config={components}
+        id={'Category'} />
       <Route
         path='/:year/:monthnum/:day/:postname'
         component={PostLoader}
-        tag={Post}
-        fallback={Error} />
+        config={components}
+        id={'Post'} />
       <Route
         path='*'
         component={Error} />
