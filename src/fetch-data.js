@@ -15,11 +15,10 @@ export default function fetchData(TopLevelComponent) {
     }
 
     render() {
-      const Error = MissingView
       // check data exists and isnt a server errored response
       // eslin
       if (!this.props.data || has(this.props.data, 'data.status'))
-        return <Error />
+        return <MissingView />
       const resp = this.props.data
       let data = ('0' in resp) || resp instanceof Array ? { posts: toArray(resp) } : resp
       if (data.posts.length == 1)  {
