@@ -27,14 +27,6 @@ const getApiPath = (type, params, context) => {
       return `pages?slug=${params.subpage || params.page}&_embed`
   }
 }
-const normalizeResponse = resp => {
-  // if resp is a single item array, return object within
-  if (resp.constructor === Array && resp.length === 1) {
-    return resp[0]
-  }
-  // more normalizing to happen here if iterable array like objects exist etc.
-  return resp
-}
 
 export default (type, { params, loadContext, cb }) => {
   // go run the custom loader if declared
@@ -53,8 +45,6 @@ export default (type, { params, loadContext, cb }) => {
       return resp
     })
     .then(resp => resp.json())
-    .then(resp => cb(null, {
-      data: normalizeResponse(resp)
-    }))
+    .then(resp => cb(null, { data: resp }))
     .catch(error => cb(error))
 }
