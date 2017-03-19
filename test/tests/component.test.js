@@ -20,7 +20,6 @@ describe('Components', () => {
     siteUrl: 'http://dummy.api'
   }
 
-
   before(done => {
     mockApi()
     tapestry = bootServer(config)

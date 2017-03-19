@@ -6,7 +6,6 @@ const cwd = process.cwd()
 const env = 'test'
 const dataError = { data: { status: 404 } }
 
-
 export const bootServer = (config) =>
   new Server({
     config,

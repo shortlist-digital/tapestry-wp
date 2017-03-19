@@ -22,7 +22,6 @@ describe('Custom routes', () => {
     siteUrl: 'http://dummy.api'
   }
 
-
   before(done => {
     tapestry = bootServer(config)
     tapestry.server.on('start', done)

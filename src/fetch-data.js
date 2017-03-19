@@ -5,6 +5,7 @@ import AsyncProps from 'async-props'
 import { has } from 'lodash'
 import MissingView from './shared/missing-view'
 import fetchRouteData from './shared/fetch-route-data'
+import { toArray } from 'lodash'
 
 export default function fetchData(TopLevelComponent) {
   class FetchDataHOC extends Component {
@@ -19,7 +20,12 @@ export default function fetchData(TopLevelComponent) {
       // eslin
       if (!this.props.data || has(this.props.data, 'data.status'))
         return <Error />
-      return <TopLevelComponent {...this.props} />
+      const resp = this.props.data
+      let data = ('0' in resp) || resp instanceof Array ? { posts: toArray(resp) } : resp
+      if (data.posts.length == 1)  {
+        data = data.posts[0]
+      }
+      return <TopLevelComponent {...data} />
     }
   }
   FetchDataHOC.displayName = `fetchData(${TopLevelComponent.name})`
