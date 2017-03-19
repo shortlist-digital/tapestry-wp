@@ -25,6 +25,8 @@ const getApiPath = (type, params, context) => {
     case 'Page':
       // return single page from slug
       return `pages?slug=${params.subpage || params.page}&_embed`
+    case 'MissingView':
+      return `posts?_embed`
   }
 }
 

@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import { Route } from 'react-router'
 import MissingView from './missing-view'
+import fetchData from '../fetch-data'
 
 const DefaultRoutes = ({
   components = {},
@@ -40,16 +41,16 @@ const DefaultRoutes = ({
       }
       <Route
         path='/'
-        component={FrontPage || Page}  />
+        component={fetchData(FrontPage || Page || Error)}  />
       <Route
         path=':page(/:subpage)'
-        component={Page} />
+        component={fetchData(Page || MissingView)} />
       <Route
         path='/category/:category(/:subcategory)'
-        component={Category} />
+        component={fetchData(Category || MissingView)} />
       <Route
         path='/:year/:monthnum/:day/:postname'
-        component={Post} />
+        component={fetchData(Post || MissingView)} />
       <Route
         path='*'
         component={Error} />
