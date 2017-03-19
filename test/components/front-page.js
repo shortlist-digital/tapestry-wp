@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { Component } from 'react'
+import fetchData from '../../src/fetch-data'
 
-export default props =>
+const FrontPage = props =>
   <div>
-    <h1>{props.title.rendered}</h1>
+    <h1>{props.data.title.rendered}</h1>
   </div>
+
+export default fetchData(FrontPage)

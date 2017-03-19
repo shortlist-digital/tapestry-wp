@@ -1,12 +1,6 @@
 import React, { PropTypes } from 'react'
 import { Route } from 'react-router'
-
-import CategoriesLoader from './loader-categories'
-import PostLoader from './loader-post'
-import PageLoader from './loader-page'
-import FrontPageLoader from './loader-front-page'
 import MissingView from './missing-view'
-
 
 const DefaultRoutes = ({
   components = {},
@@ -32,6 +26,13 @@ const DefaultRoutes = ({
     )
   }
 
+  const {
+    FrontPage,
+    Page,
+    Category,
+    Post
+  } = components
+
   return (
     <div>
       {
@@ -39,24 +40,16 @@ const DefaultRoutes = ({
       }
       <Route
         path='/'
-        component={FrontPageLoader}
-        config={components}
-        id={'FrontPage'} />
+        component={FrontPage || Page}  />
       <Route
         path=':page(/:subpage)'
-        component={PageLoader}
-        config={components}
-        id={'Page'} />
+        component={Page} />
       <Route
         path='/category/:category(/:subcategory)'
-        component={CategoriesLoader}
-        config={components}
-        id={'Category'} />
+        component={Category} />
       <Route
         path='/:year/:monthnum/:day/:postname'
-        component={PostLoader}
-        config={components}
-        id={'Post'} />
+        component={Post} />
       <Route
         path='*'
         component={Error} />

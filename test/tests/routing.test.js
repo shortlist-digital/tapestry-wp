@@ -27,8 +27,8 @@ describe('Custom routes', () => {
     tapestry = bootServer(config)
     tapestry.server.on('start', done)
   })
-  after(() => tapestry.server.stop())
 
+  after(() => tapestry.server.stop())
 
   it('Static route matches, returns static component', (done) => {
     request
@@ -37,6 +37,7 @@ describe('Custom routes', () => {
         done()
       })
   })
+
   it('Static route with parameter matched, parameters available in props', (done) => {
     request
       .get(`${tapestry.server.info.uri}/static-route-with-param/test-parameter`, (err, res, body) => {
@@ -44,6 +45,7 @@ describe('Custom routes', () => {
         done()
       })
   })
+
   it('Static route matches, returns async component', (done) => {
     request
       .get(`${tapestry.server.info.uri}/static-route-async`, (err, res, body) => {
