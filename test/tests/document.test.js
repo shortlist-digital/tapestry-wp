@@ -35,6 +35,14 @@ describe('HTML document', () => {
       })
   })
 
+   it('If no component passed, Missing component rendered', (done) => {
+    request
+      .get(`${tapestry.server.info.uri}/2017/01/01/hi`, (err, res, body) => {
+        expect(body).to.contain('Missing component')
+        done()
+      })
+  })
+
   it('Page should render project Glamor CSS', (done) => {
     request
       .get(`${tapestry.server.info.uri}/sample-page`, (err, res, body) => {
