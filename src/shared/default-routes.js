@@ -44,13 +44,13 @@ const DefaultRoutes = ({
         component={fetchData(FrontPage || Page || Error)}  />
       <Route
         path=':page(/:subpage)'
-        component={fetchData(Page || MissingView)} />
+        component={fetchData(Page || Error)} />
       <Route
         path='/category/:category(/:subcategory)'
-        component={fetchData(Category || MissingView)} />
+        component={fetchData(Category || Error)} />
       <Route
         path='/:year/:monthnum/:day/:postname'
-        component={fetchData(Post || MissingView)} />
+        component={fetchData(Post || Error)} />
       <Route
         path='*'
         component={Error} />
