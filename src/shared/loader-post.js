@@ -1,17 +1,17 @@
 import { Component, PropTypes } from 'react'
 import AsyncProps from 'async-props'
-import handleRouteData from './handle-route-data'
-import handleRouteRender from './handle-route-render'
+import fetchRouteData from './fetch-route-data'
+import renderRoute from './render-route'
 
 
 export default class Loader extends Component {
 
   static loadProps({ params, loadContext }, cb) {
-    return handleRouteData('Post', { params, loadContext, cb })
+    return fetchRouteData('Post', { params, loadContext, cb })
   }
 
   render () {
-    return handleRouteRender(this.props.route, this.props.data)
+    return renderRoute(this.props.route, this.props.data)
   }
 }
 
