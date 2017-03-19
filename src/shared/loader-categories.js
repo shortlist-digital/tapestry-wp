@@ -1,7 +1,7 @@
 import { Component, PropTypes } from 'react'
 import AsyncProps from 'async-props'
 import fetchRouteData from './fetch-route-data'
-import  renderRoute from './render-route'
+import renderRoute from './render-route'
 
 
 export default class Loader extends Component {
