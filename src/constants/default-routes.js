@@ -1,4 +1,4 @@
-
+// array of routes supplied with Tapestry
 export default ({
   FrontPage, Post, Page, Category
 }) => [{

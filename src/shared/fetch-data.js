@@ -5,12 +5,12 @@ import isEmpty from 'lodash/isEmpty'
 import fetchRouteData from './fetch-route-data'
 import MissingView from './missing-view'
 
-export default function renderRoute(TopLevelComponent) {
+const fetchData = (TopLevelComponent) => {
 
-  class DataFetcher extends Component {
+  class AsyncPropsWrapper extends Component {
 
     static loadProps({ params, loadContext }, cb) {
-      // get endpoint, either as a string of function
+      // get endpoint, either as a string or function
       let endpoint = TopLevelComponent.endpoint
       if (typeof endpoint === 'function') {
         endpoint = TopLevelComponent.endpoint(params)
@@ -27,9 +27,11 @@ export default function renderRoute(TopLevelComponent) {
     }
   }
 
-  DataFetcher.propTypes = {
+  AsyncPropsWrapper.propTypes = {
     data: PropTypes.any
   }
 
-  return DataFetcher
+  return AsyncPropsWrapper
 }
+
+export default fetchData
