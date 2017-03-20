@@ -2,7 +2,7 @@ import { match } from 'react-router'
 import { loadPropsOnServer } from 'async-props'
 import { has } from 'lodash'
 
-import DefaultRoutes from '../shared/default-routes'
+import Routes from '../shared/router'
 import { renderHtml } from './render'
 import { error } from '../utilities/logger'
 import CacheManager from '../utilities/cache-manager'
@@ -18,7 +18,7 @@ export default ({ server, config, assets }) => {
     handler: (request, reply) => {
 
       match({
-        routes: DefaultRoutes(config),
+        routes: Routes(config),
         location: request.url.path
       }, (err, redirectLocation, renderProps) => {
 
@@ -52,7 +52,7 @@ export default ({ server, config, assets }) => {
             error(err)
             return reply(err).code(500)
           }
-          
+
           let status = 200
 
           const failApi = has(asyncProps.propsArray[0], 'data.data.status')
