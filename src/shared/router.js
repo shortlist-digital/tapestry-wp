@@ -4,7 +4,7 @@ import MissingView from './missing-view'
 import defaultRoutes from './default-routes'
 import fetchData from './fetch-data'
 
-const componentStuff = (component, route) => {
+const maybeWrapComponent = (component, route) => {
   return route.endpoint ?
     fetchData(component, route.endpoint) :
     component
@@ -29,10 +29,10 @@ const Router = (config) => {
           {
             getComponent: (loc, cb) => route
             .getComponent()
-            .then(module => cb(null, componentStuff(module.default, route)))
+            .then(module => cb(null, maybeWrapComponent(module.default, route)))
             .catch(err => cb(err))
           } : {
-            component: componentStuff(route.component, route)
+            component: maybeWrapComponent(route.component, route)
           }
           // return individual route
           return (
