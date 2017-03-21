@@ -26,7 +26,8 @@ const schema = joi.object({
     joi.object({
       component: joi.func(),
       getComponent: joi.func(),
-      path: joi.string()
+      path: joi.string(),
+      endpoint: joi.alternatives().try(joi.string(), joi.func())
     })
   ),
   // optional loaders exporting a fetch request
