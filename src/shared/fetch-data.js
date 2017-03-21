@@ -26,7 +26,7 @@ const fetchData = (TopLevelComponent, endpoint) => {
       }
       const resp = this.props.data
       let data = ('0' in resp) || resp instanceof Array ? { posts: toArray(resp) } : resp
-      if (data.posts.length == 1)  {
+      if (data.posts && data.posts.length == 1)  {
         data = data.posts[0]
       }
       // otherwise return the actual component
