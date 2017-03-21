@@ -67,7 +67,7 @@
     "pretty-bytes": "^4.0.2",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "react-helmet": "^4.0.0",
+    "react-helmet": "^5.0.0",
     "react-object-inspector": "^0.2.1",
     "react-router": "^3.0.2",
     "stats-webpack-plugin": "^0.5.0",
