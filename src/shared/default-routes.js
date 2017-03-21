@@ -12,7 +12,7 @@ export default ({
 }, {
   path: '/category/:category(/:subcategory)',
   component: Category,
-  endpoint: params => `posts?slug=${params.postname}&_embed`
+  endpoint: params => `posts?filter[category_name]=${params.category|| params.subcategory}&_embed`
 }, {
   path: '/:year/:monthnum/:day/:postname',
   component: Post,
