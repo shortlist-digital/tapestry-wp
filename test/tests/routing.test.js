@@ -3,6 +3,7 @@ import request from 'request'
 import { expect } from 'chai'
 import Post from '../components/post'
 import { bootServer, mockApi } from '../utils'
+import pageData from '../mocks/page.json'
 
 // test a super basic Tapestry server with minimal config
 describe('Custom routes', () => {
@@ -18,11 +19,16 @@ describe('Custom routes', () => {
     }, {
       path: 'static-route-async',
       component: () => <p>This is async</p>
+    }, {
+      path: 'custom-endpoint/:dynamic',
+      component: (props) => <p>{props.title.rendered}</p>,
+      endpoint: (params) => `posts?slug=${params.dynamic}&_embed`
     }],
     siteUrl: 'http://dummy.api'
   }
 
   before(done => {
+    mockApi()
     tapestry = bootServer(config)
     tapestry.server.on('start', done)
   })
@@ -49,6 +55,14 @@ describe('Custom routes', () => {
     request
       .get(`${tapestry.server.info.uri}/static-route-async`, (err, res, body) => {
         expect(body).to.contain('This is async')
+        done()
+      })
+  })
+
+  it('Dynamic route matches, queries custom endpoint', (done) => {
+    request
+      .get(`${tapestry.server.info.uri}/custom-endpoint/hi`, (err, res, body) => {
+        expect(body).to.contain(`window.__ASYNC_PROPS__ = [{"data":${JSON.stringify(pageData)}}]`)
         done()
       })
   })
