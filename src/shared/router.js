@@ -7,7 +7,7 @@ import fetchData from './fetch-data'
 const componentStuff = (component, route) => {
   return route.endpoint ?
     fetchData(component, route.endpoint) :
-    module.default
+    component
 }
 
 const Router = (config) => {

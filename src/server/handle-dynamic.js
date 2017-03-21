@@ -22,8 +22,6 @@ export default ({ server, config, assets }) => {
         location: request.url.path
       }, (err, redirectLocation, renderProps) => {
 
-        console.log(err)
-
         // 500 if error from Router
         if (err) {
           error(err)
