@@ -1,6 +1,6 @@
 // array of routes supplied with Tapestry
 export default ({
-  FrontPage, Post, Page, Category
+  FrontPage, Post, Page, Category, Error
 }) => [{
   path: '/',
   component: FrontPage,

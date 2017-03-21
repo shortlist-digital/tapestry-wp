@@ -22,6 +22,14 @@ export default ({ server, config, assets }) => {
         location: request.url.path
       }, (err, redirectLocation, renderProps) => {
 
+        console.log(err)
+
+        // 500 if error from Router
+        if (err) {
+          error(err)
+          return reply(err.message).code(500)
+        }
+
         // define global deets for nested components
         const loadContext = config
 
@@ -33,12 +41,6 @@ export default ({ server, config, assets }) => {
               assets
             })
           ).code(404)
-        }
-
-        // 500 if error from Router
-        if (err) {
-          error(err)
-          return reply(err.message).code(500)
         }
 
         // 301/2 if redirect

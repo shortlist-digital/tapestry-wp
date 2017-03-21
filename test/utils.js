@@ -30,6 +30,10 @@ export const mockApi = () =>
     .times(5)
     .reply(200, pageData)
 
+    .get('/wp-json/wp/v2/posts?slug=hi&_embed')
+    .times(5)
+    .reply(200, pageData)
+
     .get('/wp-json/wp/v2/pages?slug=sample-page&_embed')
     .times(5)
     .reply(200, pageData)

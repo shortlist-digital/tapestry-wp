@@ -11,7 +11,7 @@ describe('Custom routes', () => {
   let config = {
     routes: [{
       path: 'static-route',
-      component: () => <Post />
+      component: Post
     }, {
       path: 'static-route-with-param/:custom',
       component: (props) => <p>{props.params.custom}</p>
