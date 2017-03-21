@@ -4,7 +4,7 @@ import { has } from 'lodash'
 
 import Routes from '../shared/router'
 import { renderHtml } from './render'
-import { error } from '../utilities/logger'
+import { logErrorObject } from '../utilities/logger'
 import CacheManager from '../utilities/cache-manager'
 
 export default ({ server, config, assets }) => {
@@ -24,7 +24,7 @@ export default ({ server, config, assets }) => {
 
         // 500 if error from Router
         if (err) {
-          error(err)
+          logErrorObject(err)
           return reply(err.message).code(500)
         }
 
@@ -49,7 +49,7 @@ export default ({ server, config, assets }) => {
         loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
           // 500 if error from AsyncProps
           if (err) {
-            error(err)
+            logErrorObject(err)
             return reply(err).code(500)
           }
 
