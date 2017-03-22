@@ -4,14 +4,16 @@ import { logErrorObject } from './logger'
 
 // define valid config schema
 const schema = joi.object({
+  // DEPRECATED optional number for page id or string for page name
+  frontPage: joi.any().forbidden(),
+  // DEPRECATED optional loaders exporting a fetch request
+  loaders: joi.any().forbidden(),
   // required url
   siteUrl: joi.string().uri().required(),
   // optional string e.g. 'localhost', '0.0.0.0'
   host: joi.string(),
   // optional number e.g. 3030
   port: joi.number(),
-  // DEPRECATED optional number for page id or string for page name
-  frontPage: joi.any().forbidden(),
   // optional object containing React components
   components: joi.object().keys({
     Category: joi.func(),
@@ -30,13 +32,6 @@ const schema = joi.object({
       endpoint: joi.alternatives().try(joi.string(), joi.func())
     })
   ),
-  // optional loaders exporting a fetch request
-  loaders: joi.object().keys({
-    Category: joi.func(),
-    FrontPage: joi.func(),
-    Page: joi.func(),
-    Post: joi.func()
-  }),
   // optional array of proxy paths
   proxyPaths: joi.array().items(joi.string()),
   // optional object of redirects
