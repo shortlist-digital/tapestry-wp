@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import request from 'request'
 import { bootServer, mockApi } from '../utils'
 import FrontPage from '../components/front-page'
-import Error from '../components/error'
+import CustomError from '../components/error'
 import Post from '../components/post'
 import pageData from '../mocks/page.json'
 
@@ -15,7 +15,7 @@ describe('Components', () => {
     components: {
       Post,
       FrontPage,
-      Error
+      CustomError
     },
     siteUrl: 'http://dummy.api'
   }
