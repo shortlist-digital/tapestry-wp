@@ -1,26 +1,35 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 
-const FrontPage = props =>
+// remove protocol and host from URL string
+const getRelativeUrl = url =>
+  url.replace(/^(?:\/\/|[^\/]+)*\//, '/')
+
+const FrontPage = ({ posts }) =>
   <main>
     <ul>
       {
-        Object
-        .keys(props)
-        .map(key => {
-          const post = props[key]
-          const date = new Date(post.date)
-          const slug = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}/${post.slug}`
-          return (
-            <li key={key}>
-              <Link to={slug}>
-                {post.title.rendered}
-              </Link>
-            </li>
-          )
-        })
+        posts.map(post => (
+          <li key={post.id}>
+            <Link to={getRelativeUrl(post.link)}>
+              {post.title.rendered}
+            </Link>
+          </li>
+        ))
       }
     </ul>
   </main>
+
+FrontPage.propTypes = {
+  posts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      link: PropTypes.string,
+      title: PropTypes.shape({
+        rendered: PropTypes.string
+      })
+    })
+  ).isRequired
+}
 
 export default FrontPage

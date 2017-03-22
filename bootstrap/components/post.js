@@ -5,7 +5,11 @@ const Post = props =>
     <h1>
       {props.title.rendered}
     </h1>
-    <p>{new Date(props.date).toJSON().slice(0,10)}</p>
+    <p>
+      {
+        new Date(props.date).toJSON().slice(0, 10)
+      }
+    </p>
     <div dangerouslySetInnerHTML={{
       __html: props.content.rendered
     }} />
