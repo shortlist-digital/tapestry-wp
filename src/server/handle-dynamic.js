@@ -2,9 +2,9 @@ import { match } from 'react-router'
 import { loadPropsOnServer } from 'async-props'
 import { has } from 'lodash'
 
-import DefaultRoutes from '../shared/default-routes'
+import Routes from '../shared/router'
 import { renderHtml } from './render'
-import { error } from '../utilities/logger'
+import { logErrorObject } from '../utilities/logger'
 import CacheManager from '../utilities/cache-manager'
 
 export default ({ server, config, assets }) => {
@@ -18,9 +18,15 @@ export default ({ server, config, assets }) => {
     handler: (request, reply) => {
 
       match({
-        routes: DefaultRoutes(config),
+        routes: Routes(config),
         location: request.url.path
       }, (err, redirectLocation, renderProps) => {
+
+        // 500 if error from Router
+        if (err) {
+          logErrorObject(err)
+          return reply(err.message).code(500)
+        }
 
         // define global deets for nested components
         const loadContext = config
@@ -35,12 +41,6 @@ export default ({ server, config, assets }) => {
           ).code(404)
         }
 
-        // 500 if error from Router
-        if (err) {
-          error(err)
-          return reply(err.message).code(500)
-        }
-
         // 301/2 if redirect
         if (redirectLocation)
           return reply.redirect(redirectLocation)
@@ -49,10 +49,10 @@ export default ({ server, config, assets }) => {
         loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
           // 500 if error from AsyncProps
           if (err) {
-            error(err)
+            logErrorObject(err)
             return reply(err).code(500)
           }
-          
+
           let status = 200
 
           const failApi = has(asyncProps.propsArray[0], 'data.data.status')
