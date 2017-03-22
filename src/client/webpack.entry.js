@@ -4,7 +4,7 @@ import { Router, match, browserHistory } from 'react-router'
 import AsyncProps from 'async-props'
 import 'location-origin'
 import 'es6-promise/auto'
-import Routes from '../shared/router'
+import RouteWrapper from '../shared/route-wrapper'
 import config from 'tapestry.config.js'
 
 // methods in use on the <Router />
@@ -14,7 +14,7 @@ const renderAsyncProps = props =>
   <AsyncProps loadContext={config} {...props} />
 
 // define routes/history for react-router
-const routes = Routes(config)
+const routes = RouteWrapper(config)
 const history = browserHistory
 const targetNode = document.getElementById('root')
 

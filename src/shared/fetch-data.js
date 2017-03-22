@@ -5,6 +5,7 @@ import toArray from 'lodash/toArray'
 import isEmpty from 'lodash/isEmpty'
 import fetchRouteData from './fetch-route-data'
 import MissingView from './missing-view'
+import shortid from 'shortid'
 
 const fetchData = (TopLevelComponent, endpoint) => {
 
@@ -19,6 +20,10 @@ const fetchData = (TopLevelComponent, endpoint) => {
       return fetchRouteData({ endpoint, loadContext, cb })
     }
 
+    componentWillReceiveProps() {
+      this.forceUpdate()
+    }
+
     render() {
       // check data exists and isnt a server errored response
       if (!this.props.data || isEmpty(this.props.data) || has(this.props.data, 'data.status'))  {
@@ -30,9 +35,11 @@ const fetchData = (TopLevelComponent, endpoint) => {
         data = data.posts[0]
       }
       // otherwise return the actual component
-      return <TopLevelComponent {...data} />
+      return <TopLevelComponent key={shortid.generate()} {...data} />
     }
   }
+
+  AsyncPropsWrapper.displayName =`wrappedForDataFetching(${TopLevelComponent.name})`
 
   AsyncPropsWrapper.propTypes = {
     data: PropTypes.any

@@ -3,6 +3,7 @@ import { Route } from 'react-router'
 import MissingView from './missing-view'
 import defaultRoutes from './default-routes'
 import fetchData from './fetch-data'
+import shortid from 'shortid'
 
 const maybeWrapComponent = (component, route) => {
   return route.endpoint ?
@@ -10,7 +11,7 @@ const maybeWrapComponent = (component, route) => {
     component
 }
 
-const Router = (config) => {
+const RouteWrapper = (config) => {
   // if user routes have been defined, take those in preference to the defaults
   const routes = config.routes || defaultRoutes(config.components)
   // loops over routes and return react-router <Route /> components
@@ -37,7 +38,7 @@ const Router = (config) => {
           // return individual route
           return (
             <Route
-              key={i}
+              key={shortid.generate()}
               path={route.path}
               {...component}
             />
@@ -48,4 +49,4 @@ const Router = (config) => {
   )
 }
 
-export default Router
+export default RouteWrapper

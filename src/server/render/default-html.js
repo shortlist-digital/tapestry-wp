@@ -3,7 +3,7 @@ import './default-style'
 
 const defaultHtml = ({ markup, head, asyncProps, assets = {} }) => {
   const attr = head.htmlAttributes.toComponent()
-  const hasProps = asyncProps.propsArray.length > 0
+  const hasProps = asyncProps.propsArray && asyncProps.propsArray.length > 0
   return (
     <html lang="en" {...attr}>
       <head>
