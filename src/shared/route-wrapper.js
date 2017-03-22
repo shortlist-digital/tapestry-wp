@@ -18,7 +18,7 @@ const RouteWrapper = (config) => {
   return (
     <div>
       {
-        routes.map((route, i) => {
+        routes.map((route) => {
           // cancel if component not defined in user config, joi will validate user routes for component/path keys
           if (!route.component) {
             route.component = MissingView
