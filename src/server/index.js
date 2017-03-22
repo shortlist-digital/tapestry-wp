@@ -2,7 +2,7 @@ import { Server } from 'hapi'
 import h2o2 from 'h2o2'
 import Inert from 'inert'
 
-import { success, error } from '../utilities/logger'
+import { success, logErrorObject } from '../utilities/logger'
 import handleStatic from './handle-static'
 import handleApi from './handle-api'
 import handleDynamic from './handle-dynamic'
@@ -64,7 +64,7 @@ export default class Tapestry {
     // run server
     this.server.start(err => {
       if (err)
-        error(err)
+        logErrorObject(err)
       if (!this.silent)
         success(`Server ready: ${this.server.info.uri}`)
     })

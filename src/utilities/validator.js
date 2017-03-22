@@ -1,5 +1,5 @@
 import joi from 'joi'
-import { error } from './logger'
+import { logErrorObject } from './logger'
 
 
 // define valid config schema
@@ -26,7 +26,8 @@ const schema = joi.object({
     joi.object({
       component: joi.func(),
       getComponent: joi.func(),
-      path: joi.string()
+      path: joi.string(),
+      endpoint: joi.alternatives().try(joi.string(), joi.func())
     })
   ),
   // optional loaders exporting a fetch request
@@ -47,7 +48,7 @@ const schema = joi.object({
 
 const logErrors = (err) => {
   // for each error message, output to console
-  error(`There are some issues with your tapestry.config.js\n ${err.details.reduce((prev, item) => `${prev}\n  ${item.message}`, '')}`)
+  logErrorObject({message: `There are some issues with your tapestry.config.js\n ${err.details.reduce((prev, item) => `${prev}\n  ${item.message}`, '')}`})
 }
 
 const validator = (config, cb) => {
