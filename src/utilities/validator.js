@@ -11,9 +11,7 @@ const schema = joi.object({
   // optional number e.g. 3030
   port: joi.number(),
   // DEPRECATED optional number for page id or string for page name
-  frontPage: joi.any().forbidden().error(
-    new Error('frontPage has been deprecated in favour of custom routes, read more at tapestry-wp.js.org')
-  ),
+  frontPage: joi.any().forbidden(),
   // optional object containing React components
   components: joi.object().keys({
     Category: joi.func(),
