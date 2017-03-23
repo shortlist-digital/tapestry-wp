@@ -46,7 +46,7 @@ describe('HTML document', () => {
   })
   it('Page should render project Glamor CSS', (done) => {
     request
-      .get(`${tapestry.server.info.uri}/2017/01/01/slug`, (err, res, body) => {
+      .get(`${tapestry.server.info.uri}/cat/slug/10`, (err, res, body) => {
         expect(body).to.contain(color)
         done()
       })

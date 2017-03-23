@@ -13,8 +13,7 @@ export default class Loader extends Component {
     if (customLoader) return customLoader(loadContext, cb)
 
     const baseUrl = `${loadContext.serverUri||window.location.origin}`
-    const slug = params.subpage || params.page
-    const path = `api/v1/pages?slug=${slug}&_embed`
+    const path = `api/v1/pages?filter[name]=${params.slug}`
 
     // LoadContext is basicaly an object we can pass around
     // the sever with our components and some baseUrl on it

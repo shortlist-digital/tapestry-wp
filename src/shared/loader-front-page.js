@@ -14,11 +14,11 @@ export default class Loader extends Component {
 
     const baseUrl = `${loadContext.serverUri || window.location.origin}/api/v1`
 
-    let path = `pages?slug=home&_embed`
+    let path = `pages?filter[name]=home`
     if (parseInt(loadContext.frontPage))
       path = `pages/${loadContext.frontPage}`
     else if (typeof loadContext.frontPage === 'string')
-      path = `pages?slug=${loadContext.frontPage}`
+      path = `pages?filter[name]=${loadContext.frontPage}`
 
     // LoadContext is basicaly an object we can pass around
     // the sever with our components and some baseUrl on it
