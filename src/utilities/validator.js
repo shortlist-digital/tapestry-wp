@@ -2,6 +2,16 @@ import joi from 'joi'
 import { errorMessage } from './logger'
 
 
+const options = {
+  abortEarly: false, // we want all the errors, not just the first
+  language: {
+    any: {
+      unknown: 'has been deprecated, refer to tapestry-wp.js.org for config options'
+    }
+  }
+}
+
+
 // define valid config schema
 const schema = joi.object({
   // DEPRECATED optional number for page id or string for page name
@@ -49,9 +59,7 @@ const logErrors = (err) => {
 const validator = (config, cb) => {
   // run the users config object through joi.validate
   // joi will parse the config and match the defined schema
-  joi.validate(config, schema, {
-    abortEarly: false // we want all the errors, not just the first
-  }, (err, value) => {
+  joi.validate(config, schema, options, (err, value) => {
     // handle validation errors
     if (err)
       return logErrors(err)
