@@ -12,7 +12,7 @@
     "lint-staged": "lint-staged",
     "prepublish": "npm run build:utils",
     "preversion": "npm run lint && npm run test",
-    "postversion": "git push && git push --tags && npm publish",
+    "postversion": "git push && git push --tags",
     "docs:build": "npm run docs:prepare && gitbook build && npm run docs:favicon",
     "docs:clean": "rimraf _book",
     "docs:favicon": "icon-gen -i logo/tapestry-logo-glyph.svg -o _book/gitbook/images/ -m all -n ico=favicon -r && npm run docs:rename-apple-icon",

@@ -50,17 +50,17 @@ const DefaultRoutes = ({
         tag={FrontPage}
         fallback={Error} />
       <Route
-        path=':page(/:subpage)'
+        path='about/:slug'
         component={PageLoader}
         tag={Page}
         fallback={Error} />
       <Route
-        path='/category/:category(/:subcategory)'
+        path=':category(/:subcategory)'
         component={CategoriesLoader}
         tag={Category}
         fallback={Error} />
       <Route
-        path='/:year/:monthnum/:day/:postname'
+        path=':category(/:subcategory)/:slug/:id'
         component={PostLoader}
         tag={Post}
         fallback={Error} />
