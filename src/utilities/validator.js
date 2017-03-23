@@ -15,7 +15,7 @@ const schema = joi.object({
   // optional object containing React components
   components: joi.object().keys({
     Category: joi.func(),
-    Error: joi.func(),
+    CustomError: joi.func(),
     FrontPage: joi.func(),
     Page: joi.func(),
     Post: joi.func()
