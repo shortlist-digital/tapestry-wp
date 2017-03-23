@@ -3,8 +3,9 @@ import Progress from 'react-progress'
 
 const ProgressIndicator = (props) =>
   <div>
-    <Progress percent={60} stlye={{zIndex: 999999999}} />
-    {props.children}
+    <Progress percent={60} style={{zIndex: 999999999}} />
+    {/* props.children is essentially the <Router /> component */}
+    {props.children || <h1>No Routes defined!</h1>}
   </div>
 
 ProgressIndicator.propTypes = {
