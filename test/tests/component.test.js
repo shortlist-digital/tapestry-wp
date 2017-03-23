@@ -36,6 +36,14 @@ describe('Components', () => {
       })
   })
 
+  it('CustomError will be rendered if declared', (done) => {
+    request
+      .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res, body) => {
+        expect(body).to.contain('This is an error page')
+        done()
+      })
+  })
+
   it('Helmet <head> is rendered', (done) => {
     request
       .get(`${tapestry.server.info.uri}/2017/01/01/slug`, (err, res, body) => {

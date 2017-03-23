@@ -33,4 +33,3 @@ export const logErrorObject = (errorObject, quit = true) => {
   errorMessage(errorObject.message)
   logObject(errorObject, quit)
 }
-

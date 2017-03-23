@@ -14,8 +14,9 @@ const schema = joi.object({
   frontPage: [joi.number(), joi.string()],
   // optional object containing React components
   components: joi.object().keys({
+    Error: joi.any().forbidden(), // DEPRECATED component
     Category: joi.func(),
-    Error: joi.func(),
+    CustomError: joi.func(),
     FrontPage: joi.func(),
     Page: joi.func(),
     Post: joi.func()
