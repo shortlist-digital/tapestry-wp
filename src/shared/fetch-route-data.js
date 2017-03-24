@@ -1,10 +1,11 @@
 import axios from 'axios'
 import mitt from 'mitt'
+import { logErrorObject } from '../utilities/logger'
 
 let emitter = mitt()
 
-export default ({ endpoint, loadContext, cb }) => {
-
+export default ({ loadFrom, loadContext, cb }) => {
+  const endpoint = loadFrom
   // create API path
   const baseUrl = `${loadContext.serverUri || window.location.origin}/api/v1`
   // go and fetch data from constructed API path
@@ -30,6 +31,7 @@ export default ({ endpoint, loadContext, cb }) => {
       if (typeof window !== 'undefined') {
         window.tapestryEmitter.emit('dataStop', 'stop')
       }
+      logErrorObject(error)
       cb(error)
     })
 }
