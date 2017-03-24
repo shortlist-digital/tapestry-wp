@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react'
+import { has } from 'lodash'
 import './default-style'
 
 const defaultHtml = ({ markup, head, asyncProps, assets = {} }) => {
   const attr = head.htmlAttributes.toComponent()
-  const hasProps = asyncProps.propsArray.length > 0
+  const hasProps = has(asyncProps, 'propsArray')
   return (
     <html lang="en" {...attr}>
       <head>
