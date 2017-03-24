@@ -22,15 +22,15 @@ export const mockApi = () =>
     .times(5)
     .reply(200, pageData)
 
-    .get('/wp-json/wp/v2/pages?slug=home&_embed')
-    .times(5)
-    .reply(200, pageData)
-
-    .get('/wp-json/wp/v2/posts?slug=slug&_embed')
-    .times(5)
-    .reply(200, pageData)
-
     .get('/wp-json/wp/v2/posts?slug=hi&_embed')
+    .times(10)
+    .reply(200, pageData)
+
+    .get('/wp-json/wp/v2/pages')
+    .times(5)
+    .reply(200, pageData)
+
+    .get('/wp-json/wp/v2/pages?slug=home&_embed')
     .times(5)
     .reply(200, pageData)
 

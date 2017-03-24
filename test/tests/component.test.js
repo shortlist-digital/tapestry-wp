@@ -46,7 +46,7 @@ describe('Components', () => {
 
   it('Helmet <head> is rendered', (done) => {
     request
-      .get(`${tapestry.server.info.uri}/2017/01/01/slug`, (err, res, body) => {
+      .get(`${tapestry.server.info.uri}/2017/12/01/hi`, (err, res, body) => {
         expect(body).to.contain('Content in title tag')
         done()
       })
