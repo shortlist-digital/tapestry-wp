@@ -15,7 +15,7 @@ const fetchData = (TopLevelComponent, endpoint) => {
       let loadFrom = this.endpoint
       // get endpoint, either as a string or function
       if (typeof this.endpoint === 'function') {
-        loadFrom = endpoint = endpoint(params)
+        loadFrom = endpoint(params)
       }
       // go get all that data
       return fetchRouteData({ loadFrom, loadContext, cb })
