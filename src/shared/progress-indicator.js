@@ -25,8 +25,10 @@ class ProgressIndicator extends Component {
       }, 1000)
     }
     if (type == 'dataStart') {
+      let updateState = this.state.percent + 10
+      this.setState({percent: updateState })
       this.interval = setInterval(() => {
-        let updateState = this.state.percent + 10
+        updateState = this.state.percent + 10
         this.setState({percent: updateState })
       }, 500)
     }
