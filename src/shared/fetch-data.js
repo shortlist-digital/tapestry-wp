@@ -35,7 +35,12 @@ const fetchData = (TopLevelComponent, endpoint) => {
         data = data.posts[0]
       }
       // otherwise return the actual component
-      return <TopLevelComponent key={uid()} {...data} />
+      return (
+        <TopLevelComponent
+          key={uid()}
+          {...data}
+        />
+      )
     }
   }
 
