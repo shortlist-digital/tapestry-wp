@@ -3,7 +3,7 @@ import mitt from 'mitt'
 
 let emitter = mitt()
 
-export default ({ endpoint, loadContext, cb, }) => {
+export default ({ endpoint, loadContext, cb }) => {
 
   // create API path
   const baseUrl = `${loadContext.serverUri || window.location.origin}/api/v1`

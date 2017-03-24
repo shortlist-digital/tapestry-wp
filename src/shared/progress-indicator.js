@@ -16,7 +16,7 @@ class ProgressIndicator extends Component {
     window.tapestryEmitter.on('*', this.handleChange)
   }
 
-  handleChange(type, event) {
+  handleChange(type) {
     if (type == 'dataStop') {
       clearInterval(this.interval)
       this.setState({percent: 100})
@@ -26,7 +26,6 @@ class ProgressIndicator extends Component {
     }
     if (type == 'dataStart') {
       this.interval = setInterval(() => {
-        console.log('Ticking')
         let updateState = this.state.percent + 10
         this.setState({percent: updateState })
       }, 500)
