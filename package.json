@@ -65,6 +65,7 @@
     "location-origin": "^1.1.4",
     "lodash": "^4.17.4",
     "lru-cache": "^4.0.2",
+    "mitt": "^1.1.0",
     "pretty-bytes": "^4.0.2",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
