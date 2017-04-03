@@ -2,7 +2,7 @@ import webpack from 'webpack'
 import bytes from 'pretty-bytes'
 
 import configDefault from '../webpack/client.config'
-import { success, error } from '../utilities/logger'
+import { success, errorObject } from '../utilities/logger'
 import mergeConfigs from '../utilities/merge-config'
 
 
@@ -31,13 +31,13 @@ export default class Client {
 
   run (err, stats) {
     // handle error
-    if (err) error(err)
+    if (err) errorObject(err)
     // log complete
     this.complete(stats)
   }
   watch (err, stats) {
     // handle error
-    if (err) error(err)
+    if (err) errorObject(err)
     // log complete
     if (!this.devNotified) {
       this.complete(stats)
