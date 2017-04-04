@@ -1,6 +1,6 @@
 import axios from 'axios'
 import CacheManager from '../utilities/cache-manager'
-import { logErrorObject } from '../utilities/logger'
+import { errorObject } from '../utilities/logger'
 
 export default ({ server, config }) => {
 
@@ -43,7 +43,7 @@ export default ({ server, config }) => {
             return response
           })
           .catch(error => {
-            logErrorObject(error)
+            errorObject(error)
           })
       }
     }

@@ -17,8 +17,15 @@ export const bootServer = (config) =>
 
 export const mockApi = () =>
   nock('http://dummy.api')
-
     .get('/wp-json/wp/v2/posts?_embed')
+    .times(5)
+    .reply(200, pageData)
+
+    .get('/wp-json/wp/v2/posts?slug=hi&_embed')
+    .times(10)
+    .reply(200, pageData)
+
+    .get('/wp-json/wp/v2/pages')
     .times(5)
     .reply(200, pageData)
 
@@ -26,21 +33,13 @@ export const mockApi = () =>
     .times(5)
     .reply(200, pageData)
 
-    .get('/wp-json/wp/v2/posts?slug=slug&_embed')
-    .times(5)
-    .reply(200, pageData)
-
-    .get('/wp-json/wp/v2/posts?slug=hi&_embed')
-    .times(5)
-    .reply(200, pageData)
-
     .get('/wp-json/wp/v2/pages?slug=sample-page&_embed')
     .times(5)
     .reply(200, pageData)
 
-    .get('/wp-json/wp/v2/pages?slug=test.txt&_embed')
+    .get('/wp-json/wp/v2/posts/10?_embed')
     .times(5)
-    .reply(404, dataError)
+    .reply(200, pageData)
 
     .get('/wp-json/wp/v2/pages?slug=null-page&_embed')
     .times(5)
@@ -48,6 +47,11 @@ export const mockApi = () =>
 
 export const mockProxy = ({ path, resp }) =>
   nock('http://dummy.api')
+
     .get(path)
     .times(5)
     .reply(200, resp)
+
+    .get('/wp-json/wp/v2/pages?slug=test.txt&_embed')
+    .times(5)
+    .reply(404, dataError)

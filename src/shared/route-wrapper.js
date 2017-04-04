@@ -1,9 +1,9 @@
 import React from 'react'
 import { Route } from 'react-router'
+import { generate as uid } from 'shortid'
 import MissingView from './missing-view'
 import defaultRoutes from './default-routes'
 import fetchData from './fetch-data'
-import shortid from 'shortid'
 import ProgressIndicator from './progress-indicator'
 
 const maybeWrapComponent = (component, route) => {
@@ -39,7 +39,7 @@ const RouteWrapper = (config) => {
           // return individual route
           return (
             <Route
-              key={shortid.generate()}
+              key={uid()}
               path={route.path}
               {...component}
             />

@@ -16,8 +16,8 @@ export const renderHtml = ({
   assets
 }) => {
 
-  const Error = has(loadContext, 'loadContext.components.Error') ?
-    loadContext.components.Error :
+  const CustomError = has(loadContext, 'loadContext.components.CustomError') ?
+    loadContext.components.CustomError :
     MissingView
   // get html from props
   const data = {
@@ -28,7 +28,7 @@ export const renderHtml = ({
             {...renderProps}
             {...asyncProps}
             loadContext={loadContext} /> :
-          <Error />
+          <CustomError />
       )
     ),
     head: Helmet.rewind(),

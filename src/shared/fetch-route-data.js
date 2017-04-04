@@ -1,6 +1,6 @@
 import axios from 'axios'
 import mitt from 'mitt'
-import { logErrorObject } from '../utilities/logger'
+import { errorObject } from '../utilities/logger'
 
 let emitter = mitt()
 
@@ -31,7 +31,7 @@ export default ({ loadFrom, loadContext, cb }) => {
       if (typeof window !== 'undefined') {
         window.tapestryEmitter.emit('dataStop', 'stop')
       }
-      logErrorObject(error)
+      errorObject(error)
       cb(error)
     })
 }

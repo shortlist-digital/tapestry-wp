@@ -1,6 +1,6 @@
 // array of routes supplied with Tapestry
 export default ({
-  FrontPage, Post, Page, Category, Error
+  FrontPage, Post, Page, Category, CustomError
 }) => [{
   path: '/',
   component: FrontPage,
@@ -14,10 +14,10 @@ export default ({
   component: Category,
   endpoint: params => `posts?filter[category_name]=${params.category|| params.subcategory}&_embed`
 }, {
-  path: '/:year/:monthnum/:postname',
+  path: '/:year/:monthnum/:day/:postname',
   component: Post,
   endpoint: params => `posts?slug=${params.postname}&_embed`
 }, {
   path: '*',
-  component: Error
+  component: CustomError
 }]
