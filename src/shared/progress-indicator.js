@@ -1,14 +1,19 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { css } from 'glamor'
 
-const style = width => css({
+const style = ({ percent, complete }) => css({
   backgroundColor: 'red',
   height: '2px',
   left: 0,
   position: 'fixed',
   top: 0,
-  transition: 'width 50ms ease-out',
-  width: width ? width : '100%',
+  opacity: complete ? 0 : 1,
+  transition: `
+    visibility 150ms,
+    opacity 150ms ease-out,
+    width 150ms ease-in-out`,
+  width: `${percent}%`,
+  visibility: complete ? 'hidden' : 'visible',
   zIndex: 10000
 })
 
@@ -17,52 +22,61 @@ class ProgressIndicator extends Component {
   constructor() {
     super()
     this.state = {
-      percent: 0
+      percent: 0,
+      complete: true
     }
-    this.handleChange = this.handleChange.bind(this)
+    // this.handleChange = this.handleChange.bind(this)
     this.interval = null
+    this.percentIncrease = 8
+    this.increaseDelay = 750
   }
 
   componentDidMount() {
-    window.tapestryEmitter.on('*', this.handleChange)
+    window.tapestryEmitter.on('*', type => {
+      if (type === 'dataStart') this.handleDataStart()
+      if (type === 'dataStop') this.handleDataStop()
+    })
   }
 
-  handleChange(type) {
-    if (type == 'dataStop') {
-      clearInterval(this.interval)
-      this.setState({percent: 100})
-      setTimeout(() => {
-        this.setState({percent: 0})
-      }, 1000)
-    }
-    if (type == 'dataStart') {
-      let updateState = this.state.percent + 10
-      this.setState({percent: updateState })
-      this.interval = setInterval(() => {
-        updateState = this.state.percent + 10
-        this.setState({percent: updateState })
-      }, 500)
-    }
+  handleDataStart() {
+    this.setState({
+      percent: this.percentIncrease,
+      complete: false
+    })
+    this.interval = setInterval(() => {
+      this.setState({
+        percent: this.state.percent + this.percentIncrease
+      })
+    }, this.increaseDelay)
+  }
+
+  handleDataStop() {
+    clearInterval(this.interval)
+    this.setState({
+      percent: 100,
+      complete: true
+    })
+    setTimeout(() => {
+      this.setState({
+        percent: 0
+      })
+    }, this.increaseDelay)
   }
 
   render() {
     return (
       <div>
-        <div className={style(this.state.percent)}></div>
-        {/* <Progress percent={this.state.percent} height={2} speed={0.1} style={{zIndex: 999999999}} /> */}
-        {/* props.children is essentially the <Router /> component */}
-        {this.props.children || <h1>No Routes defined!</h1>}
+        <div className={style(this.state)} />
+        {this.props.children}
       </div>
     )
   }
 }
 
-
 ProgressIndicator.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ])
 }
-
 export default ProgressIndicator
