@@ -1,21 +1,33 @@
 import joi from 'joi'
-import { logErrorObject } from './logger'
+import { errorMessage } from './logger'
+
+const options = {
+  abortEarly: false, // we want all the errors, not just the first
+  language: {
+    any: {
+      unknown: 'has been deprecated, refer to tapestry-wp.js.org for config options'
+    }
+  }
+}
 
 
 // define valid config schema
 const schema = joi.object({
+  // DEPRECATED optional number for page id or string for page name
+  frontPage: joi.any().forbidden(),
+  // DEPRECATED optional loaders exporting a fetch request
+  loaders: joi.any().forbidden(),
   // required url
   siteUrl: joi.string().uri().required(),
   // optional string e.g. 'localhost', '0.0.0.0'
   host: joi.string(),
   // optional number e.g. 3030
   port: joi.number(),
-  // optional number for page id or string for page name
-  frontPage: [joi.number(), joi.string()],
   // optional object containing React components
   components: joi.object().keys({
+    Error: joi.any().forbidden(), // DEPRECATED component
     Category: joi.func(),
-    Error: joi.func(),
+    CustomError: joi.func(),
     FrontPage: joi.func(),
     Page: joi.func(),
     Post: joi.func()
@@ -30,13 +42,6 @@ const schema = joi.object({
       endpoint: joi.alternatives().try(joi.string(), joi.func())
     })
   ),
-  // optional loaders exporting a fetch request
-  loaders: joi.object().keys({
-    Category: joi.func(),
-    FrontPage: joi.func(),
-    Page: joi.func(),
-    Post: joi.func()
-  }),
   // optional array of proxy paths
   proxyPaths: joi.array().items(joi.string()),
   // optional object of redirects
@@ -48,15 +53,13 @@ const schema = joi.object({
 
 const logErrors = (err) => {
   // for each error message, output to console
-  logErrorObject({message: `There are some issues with your tapestry.config.js\n ${err.details.reduce((prev, item) => `${prev}\n  ${item.message}`, '')}`})
+  errorMessage(`There are some issues with your tapestry.config.js\n ${err.details.reduce((prev, item) => `${prev}\n  ${item.message}`, '')}`)
 }
 
 const validator = (config, cb) => {
   // run the users config object through joi.validate
   // joi will parse the config and match the defined schema
-  joi.validate(config, schema, {
-    abortEarly: false // we want all the errors, not just the first
-  }, (err, value) => {
+  joi.validate(config, schema, options, (err, value) => {
     // handle validation errors
     if (err)
       return logErrors(err)

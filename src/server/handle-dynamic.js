@@ -2,9 +2,9 @@ import { match } from 'react-router'
 import { loadPropsOnServer } from 'async-props'
 import { has } from 'lodash'
 
-import Routes from '../shared/router'
+import RouteWrapper from '../shared/route-wrapper'
 import { renderHtml } from './render'
-import { logErrorObject } from '../utilities/logger'
+import { errorObject } from '../utilities/logger'
 import CacheManager from '../utilities/cache-manager'
 
 export default ({ server, config, assets }) => {
@@ -18,13 +18,13 @@ export default ({ server, config, assets }) => {
     handler: (request, reply) => {
 
       match({
-        routes: Routes(config),
+        routes: RouteWrapper(config),
         location: request.url.path
       }, (err, redirectLocation, renderProps) => {
 
         // 500 if error from Router
         if (err) {
-          logErrorObject(err)
+          errorObject(err)
           return reply(err.message).code(500)
         }
 
@@ -49,7 +49,7 @@ export default ({ server, config, assets }) => {
         loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
           // 500 if error from AsyncProps
           if (err) {
-            logErrorObject(err)
+            errorObject(err)
             return reply(err).code(500)
           }
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route } from 'react-router'
+import { generate as uid } from 'shortid'
 import MissingView from './missing-view'
 import defaultRoutes from './default-routes'
 import fetchData from './fetch-data'
@@ -10,14 +11,14 @@ const maybeWrapComponent = (component, route) => {
     component
 }
 
-const Router = (config) => {
+const RouteWrapper = (config) => {
   // if user routes have been defined, take those in preference to the defaults
   const routes = config.routes || defaultRoutes(config.components)
   // loops over routes and return react-router <Route /> components
   return (
     <div>
       {
-        routes.map((route, i) => {
+        routes.map((route) => {
           // cancel if component not defined in user config, joi will validate user routes for component/path keys
           if (!route.component) {
             route.component = MissingView
@@ -37,7 +38,7 @@ const Router = (config) => {
           // return individual route
           return (
             <Route
-              key={i}
+              key={uid()}
               path={route.path}
               {...component}
             />
@@ -48,4 +49,4 @@ const Router = (config) => {
   )
 }
 
-export default Router
+export default RouteWrapper

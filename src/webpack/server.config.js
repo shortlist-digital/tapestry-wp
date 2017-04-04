@@ -22,7 +22,7 @@ module.exports = ({ cwd, env }) => {
     },
     // output bundle to .tapestry dir, commonjs2 exports the bundle as module.exports
     output: {
-      path: '.tapestry',
+      path: path.resolve(cwd, '.tapestry'),
       filename: '[name].bundle.js',
       libraryTarget: 'commonjs2'
     },
