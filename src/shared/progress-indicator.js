@@ -1,5 +1,16 @@
 import React, { Component } from 'react'
-import Progress from 'react-progress'
+import { css } from 'glamor'
+
+const style = width => css({
+  backgroundColor: 'red',
+  height: '2px',
+  left: 0,
+  position: 'fixed',
+  top: 0,
+  transition: 'width 50ms ease-out',
+  width: width ? width : '100%',
+  zIndex: 10000
+})
 
 class ProgressIndicator extends Component {
 
@@ -37,7 +48,8 @@ class ProgressIndicator extends Component {
   render() {
     return (
       <div>
-        <Progress percent={this.state.percent} height={2} speed={0.1} style={{zIndex: 999999999}} />
+        <div className={style(this.state.percent)}></div>
+        {/* <Progress percent={this.state.percent} height={2} speed={0.1} style={{zIndex: 999999999}} /> */}
         {/* props.children is essentially the <Router /> component */}
         {this.props.children || <h1>No Routes defined!</h1>}
       </div>
