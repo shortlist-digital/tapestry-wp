@@ -1,7 +1,6 @@
 import joi from 'joi'
 import { errorMessage } from './logger'
 
-
 const options = {
   abortEarly: false, // we want all the errors, not just the first
   language: {
