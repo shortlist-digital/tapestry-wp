@@ -8,10 +8,13 @@ const style = ({ percent, complete }) => css({
   position: 'fixed',
   top: 0,
   opacity: complete ? 0 : 1,
-  transition: `
-    visibility 150ms,
-    opacity 150ms ease-out,
-    width 150ms ease-in-out`,
+  transition: complete ?
+    `visibility 150ms linear 100ms,
+     opacity 150ms ease-out 100ms,
+     width 200ms ease-in-out` :
+    `visibility 150ms,
+     opacity 150ms ease-out,
+     width 150ms ease-in-out`,
   width: `${percent}%`,
   visibility: complete ? 'hidden' : 'visible',
   zIndex: 10000
@@ -25,10 +28,10 @@ class ProgressIndicator extends Component {
       percent: 0,
       complete: true
     }
-    // this.handleChange = this.handleChange.bind(this)
     this.interval = null
-    this.percentIncrease = 8
-    this.increaseDelay = 750
+    this.initialPercentage = 15
+    this.percentageIncrease = 5
+    this.increaseInterval = 500
   }
 
   componentDidMount() {
@@ -40,14 +43,14 @@ class ProgressIndicator extends Component {
 
   handleDataStart() {
     this.setState({
-      percent: this.percentIncrease,
+      percent: this.initialPercentage,
       complete: false
     })
     this.interval = setInterval(() => {
       this.setState({
-        percent: this.state.percent + this.percentIncrease
+        percent: this.state.percent + this.percentageIncrease
       })
-    }, this.increaseDelay)
+    }, this.increaseInterval)
   }
 
   handleDataStop() {
@@ -60,7 +63,7 @@ class ProgressIndicator extends Component {
       this.setState({
         percent: 0
       })
-    }, this.increaseDelay)
+    }, this.increaseInterval)
   }
 
   render() {
@@ -79,4 +82,5 @@ ProgressIndicator.propTypes = {
     PropTypes.node
   ])
 }
+
 export default ProgressIndicator
