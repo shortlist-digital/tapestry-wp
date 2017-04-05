@@ -1,8 +1,8 @@
-import axios from 'axios'
+import fetch from 'isomorphic-fetch'
 import mitt from 'mitt'
 import { errorObject } from '../utilities/logger'
 
-let emitter = mitt()
+mitt()
 
 export default ({ loadFrom, loadContext, cb }) => {
   const endpoint = loadFrom
@@ -13,14 +13,13 @@ export default ({ loadFrom, loadContext, cb }) => {
   if (typeof window !== 'undefined') {
     window.tapestryEmitter.emit('dataStart', 'start')
   }
-  return axios.get(`${baseUrl}/${endpoint}`, {
-    onDownloadProgress: (event) => emitter.emit('dataProgress', event)
-  })
-    .then(resp => {
-      // catch server error
-      if (resp.statusText !== 'OK') throw new Error(resp)
-      return resp.data
-    })
+  return fetch(`${baseUrl}/${endpoint}`)
+    // .then(resp => {
+    //   // catch server error
+    //   // if (!resp.ok) throw new Error(resp)
+    //   return resp
+    // })
+    .then(resp => resp.json())
     .then(resp => {
       if (typeof window !== 'undefined') {
         window.tapestryEmitter.emit('dataStop', 'stop')

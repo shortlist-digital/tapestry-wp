@@ -1,4 +1,4 @@
-import axios from 'axios'
+import fetch from 'isomorphic-fetch'
 import CacheManager from '../utilities/cache-manager'
 import { errorObject } from '../utilities/logger'
 
@@ -16,35 +16,24 @@ export default ({ server, config }) => {
       const cacheRecord = cache.get(remote)
       // If we find a response in the cache send it back
       if (cacheRecord) {
-        const response = reply(cacheRecord.response)
-        if (cacheRecord.contentLength) {
-          response.header('X-Content-Length', cacheRecord.contentLength)
-        }
-        return response
+        reply(cacheRecord.response)
       } else {
-        axios.get(remote)
+        fetch(remote)
+          // .then(resp => {
+          //   // catch server error
+          //   if (!resp.ok) throw new Error(resp)
+          //   return resp
+          // })
+          .then(resp => resp.json())
           .then(resp => {
-            // catch server error
-            if (resp.statusText !== 'OK') throw new Error(resp)
-            return resp
-          })
-          .then(resp => {
-            const contentLength = resp.headers['content-length'] || resp.headers['Content-Length'] || null
             // We can only get here if there's nothing cached
             // Put the response into the cache using the request path as a key
             cache.set(remote, {
-              response: resp.data,
-              contentLength: contentLength
+              response: resp
             })
-            const response = reply(resp.data)
-            if (contentLength) {
-              response.header('X-Content-Length', contentLength)
-            }
-            return response
+            reply(resp)
           })
-          .catch(error => {
-            errorObject(error)
-          })
+          .catch(error => errorObject(error))
       }
     }
   })
