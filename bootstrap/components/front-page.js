@@ -1,12 +1,16 @@
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
+import styles from '../styles'
 
 // remove protocol and host from URL string
 const getRelativeUrl = url =>
   url.replace(/^(?:\/\/|[^\/]+)*\//, '/')
 
 const FrontPage = ({ posts }) =>
-  <main>
+  <main className={styles.wrapper}>
+    <h1 className={styles.heading}>
+      Posts
+    </h1>
     <ul>
       {
         posts.map(post => (
@@ -23,7 +27,7 @@ const FrontPage = ({ posts }) =>
 FrontPage.propTypes = {
   posts: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       link: PropTypes.string,
       title: PropTypes.shape({
         rendered: PropTypes.string

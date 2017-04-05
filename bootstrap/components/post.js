@@ -1,18 +1,18 @@
 import React, { PropTypes } from 'react'
+import styles from '../styles'
 
 const Post = props =>
-  <main>
-    <h1>
-      {props.title.rendered}
+  <main className={styles.wrapper}>
+    <h1 className={styles.heading}>
+      {decodeURIComponent(props.title.rendered)}
     </h1>
-    <p>
-      {
-        new Date(props.date).toJSON().slice(0, 10)
-      }
+    <p className={styles.date}>
+      {`Published — ${new Date(props.date).toJSON().slice(0, 10)}`}
     </p>
-    <div dangerouslySetInnerHTML={{
-      __html: props.content.rendered
-    }} />
+    <div
+      className={styles.content}
+      dangerouslySetInnerHTML={{ __html: props.content.rendered }}
+    />
   </main>
 
 Post.propTypes = {
