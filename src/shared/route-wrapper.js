@@ -4,6 +4,7 @@ import { generate as uid } from 'shortid'
 import MissingView from './missing-view'
 import defaultRoutes from './default-routes'
 import fetchData from './fetch-data'
+import ProgressIndicator from './progress-indicator'
 
 const maybeWrapComponent = (component, route) => {
   return route.endpoint ?
@@ -16,7 +17,7 @@ const RouteWrapper = (config) => {
   const routes = config.routes || defaultRoutes(config.components)
   // loops over routes and return react-router <Route /> components
   return (
-    <div>
+    <Route component={ProgressIndicator}>
       {
         routes.map((route) => {
           // cancel if component not defined in user config, joi will validate user routes for component/path keys
@@ -45,7 +46,7 @@ const RouteWrapper = (config) => {
           )
         })
       }
-    </div>
+    </Route>
   )
 }
 

@@ -12,12 +12,13 @@ const fetchData = (TopLevelComponent, endpoint) => {
   class AsyncPropsWrapper extends Component {
 
     static loadProps({ params, loadContext }, cb) {
+      let loadFrom = this.endpoint
       // get endpoint, either as a string or function
-      if (typeof endpoint === 'function') {
-        endpoint = endpoint(params)
+      if (typeof this.endpoint === 'function') {
+        loadFrom = endpoint(params)
       }
       // go get all that data
-      return fetchRouteData({ endpoint, loadContext, cb })
+      return fetchRouteData({ loadFrom, loadContext, cb })
     }
 
     componentWillReceiveProps() {
@@ -45,6 +46,7 @@ const fetchData = (TopLevelComponent, endpoint) => {
   }
 
   AsyncPropsWrapper.displayName = `wrappedForDataFetching(${TopLevelComponent.name})`
+  AsyncPropsWrapper.endpoint = endpoint
 
   AsyncPropsWrapper.propTypes = {
     data: PropTypes.any

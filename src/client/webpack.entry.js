@@ -6,6 +6,11 @@ import 'location-origin'
 import 'es6-promise/auto'
 import RouteWrapper from '../shared/route-wrapper'
 import config from 'tapestry.config.js'
+import mitt from 'mitt'
+
+if (window !== 'undefined') {
+  window.tapestryEmitter = mitt()
+}
 
 // methods in use on the <Router />
 const onUpdate = () =>
