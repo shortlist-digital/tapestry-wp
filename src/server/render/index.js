@@ -4,7 +4,7 @@ import Helmet from 'react-helmet'
 import AsyncProps from 'async-props'
 import { renderStaticOptimized } from 'glamor/server'
 import { minify } from 'html-minifier'
-import { has } from 'lodash'
+import has from 'lodash/has'
 import DefaultHTML from './default-html'
 import MissingView from '../../shared/missing-view'
 
