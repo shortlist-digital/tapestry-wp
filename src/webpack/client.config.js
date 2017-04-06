@@ -8,7 +8,8 @@ import { module } from './shared'
 
 // exporting function to allow process.cwd() and environment to get passed through
 export default ({ cwd, env }) => {
-
+  // expose environment to user
+  const __DEV__ = env === 'development'
   const config = {
     // target the browser as runtime
     target: 'web',
@@ -33,6 +34,8 @@ export default ({ cwd, env }) => {
     // share module rules with server config
     module: module,
     plugins: [
+      // expose environment to user
+      new webpack.DefinePlugin({ __DEV__ }),
       // output public path data for each bundle
       new AssetsPlugin({
         filename: 'assets.json',
@@ -106,25 +109,6 @@ export default ({ cwd, env }) => {
             type: 'prefer-cache',
             matches: ['\\.js']
           }]
-        }
-      }, {
-        experiment_with_notifications: {
-          cache: {
-            precache: ['\\.js'],
-            strategy: [{
-              type: 'prefer-cache',
-              matches: ['\\.js']
-            }]
-          },
-          notifications: {
-            default: {
-              title: 'Pinterest',
-              body: 'You\'ve got new Pins!'
-            }
-          },
-          log: {
-            notificationClicked: '/api/notifications/web/click/'
-          }
         }
       })
     )

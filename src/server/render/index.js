@@ -5,7 +5,6 @@ import AsyncProps from 'async-props'
 import { renderStaticOptimized } from 'glamor/server'
 import { minify } from 'html-minifier'
 import { has } from 'lodash'
-
 import DefaultHTML from './default-html'
 import MissingView from '../../shared/missing-view'
 
@@ -17,8 +16,8 @@ export const renderHtml = ({
   assets
 }) => {
 
-  const Error = has(loadContext, 'loadContext.components.Error') ?
-    loadContext.components.Error :
+  const CustomError = has(loadContext, 'loadContext.components.CustomError') ?
+    loadContext.components.CustomError :
     MissingView
   // get html from props
   const data = {
@@ -29,7 +28,7 @@ export const renderHtml = ({
             {...renderProps}
             {...asyncProps}
             loadContext={loadContext} /> :
-          <Error />
+          <CustomError />
       )
     ),
     head: Helmet.rewind(),
