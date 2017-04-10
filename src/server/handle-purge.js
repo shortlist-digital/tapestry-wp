@@ -8,6 +8,7 @@ export default ({ server, config }) => {
       routes: RouteWrapper(config),
       location: path
     }, (err, redirectLocation, renderProps) => {
+      // The HOC data loader component is always at index [1] while there is progres bar
       let endpoint = renderProps.components[1].endpoint
       if (typeof endpoint == 'function') {
         endpoint = endpoint(renderProps.params)
