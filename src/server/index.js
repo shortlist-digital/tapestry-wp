@@ -22,7 +22,7 @@ export default class Tapestry {
     // create server instance
     this.server = this.bootServer()
 
-     // Important bit:
+    // Important bit:
     this.server.ext('onPreResponse', (request, reply) => {
       request.response.headers &&
         (request.response.headers['X-Powered-By'] = 'Tapestry')
