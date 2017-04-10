@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 import request from 'request'
 import { bootServer, mockProxy, mockApi } from '../utils'
+import Page from '../components/page.js'
 
 describe('Handling proxies', () => {
 
@@ -9,9 +10,11 @@ describe('Handling proxies', () => {
   let proxyContents = 'Test file'
   let config = {
     proxyPaths: [proxyFile],
-    siteUrl: 'http://dummy.api'
+    siteUrl: 'http://dummy.api',
+    components: {
+      Page
+    }
   }
-
 
   before(done => {
     mockApi()
@@ -22,6 +25,7 @@ describe('Handling proxies', () => {
     tapestry = bootServer(config)
     tapestry.server.on('start', done)
   })
+
   after(() => tapestry.server.stop())
 
   it('Proxy should return correct content', (done) => {
@@ -31,6 +35,7 @@ describe('Handling proxies', () => {
           done()
         })
   })
+
   it('Undeclared proxy should return 404', (done) => {
     request
       .get(`${tapestry.server.info.uri}/test.txt`, (err, res) => {

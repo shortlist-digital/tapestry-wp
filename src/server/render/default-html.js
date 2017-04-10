@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react'
+import has from 'lodash/has'
 import './default-style'
 
 const defaultHtml = ({ markup, head, asyncProps, assets = {} }) => {
   const attr = head.htmlAttributes.toComponent()
-  const hasProps = asyncProps.propsArray.length > 0
+  const hasProps = has(asyncProps, 'propsArray')
   return (
     <html lang="en" {...attr}>
       <head>
@@ -11,9 +12,9 @@ const defaultHtml = ({ markup, head, asyncProps, assets = {} }) => {
         { head.base.toComponent() }
         { head.meta.toComponent() }
         { head.link.toComponent() }
-        { head.script.toComponent() }
         { assets.vendor && <script defer src={assets.vendor.js} /> }
         { assets.bundle && <script defer src={assets.bundle.js} /> }
+        { head.script.toComponent() }
         <style dangerouslySetInnerHTML={{ __html: markup.css }} />
         <link rel="shortcut icon" href="/public/favicon.ico" />
       </head>
@@ -33,7 +34,7 @@ defaultHtml.propTypes = {
   }).isRequired,
   head: PropTypes.object.isRequired,
   asyncProps: PropTypes.shape({
-    propsArray: PropTypes.array.isRequired
+    propsArray: PropTypes.array
   }),
   assets: PropTypes.object
 }

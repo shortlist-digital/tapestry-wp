@@ -2,14 +2,14 @@ import { Server } from 'hapi'
 import h2o2 from 'h2o2'
 import Inert from 'inert'
 
-import { success, error } from '../utilities/logger'
+import { success, errorObject } from '../utilities/logger'
 import handleStatic from './handle-static'
 import handleApi from './handle-api'
 import handleDynamic from './handle-dynamic'
 import handleProxies from './handle-proxies'
 import handlePurge from './handle-purge'
+import handleRedirects from './handle-redirects'
 import CacheManager from '../utilities/cache-manager'
-
 
 export default class Tapestry {
 
@@ -22,8 +22,19 @@ export default class Tapestry {
     // create server instance
     this.server = this.bootServer()
 
+     // Important bit:
+    this.server.ext('onPreResponse', (request, reply) => {
+      request.response.headers &&
+        (request.response.headers['X-Powered-By'] = 'Tapestry')
+      reply.continue()
+    })
+
+
     // register server events
+
+    // register reset-cache event
     this.server.event('reset-cache')
+    // Register event for clearing caches by key
     this.server.event('purge-html-cache-by-key')
     // Clear all caches on reset-cache event
     this.server.on('reset-cache', CacheManager.clearAll)
@@ -34,6 +45,7 @@ export default class Tapestry {
       config: this.config,
       assets
     }
+    handleRedirects(data)
     handleStatic(data)
     handlePurge(data)
     handleApi(data)
@@ -58,8 +70,7 @@ export default class Tapestry {
   startServer () {
     // run server
     this.server.start(err => {
-      if (err)
-        error(err)
+      if (err) errorObject(err)
       if (!this.silent)
         success(`Server ready: ${this.server.info.uri}`)
     })
