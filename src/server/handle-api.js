@@ -7,6 +7,11 @@ export default ({ server, config }) => {
   // Create a new cache | 100 requests only, expire after 2 minutes
   const cache = CacheManager.createCache('api')
 
+  // Allow purge of individual URL
+  server.on('purge-api-cache-by-key', (key) => {
+    cache.del(key)
+  })
+
   server.route({
     method: 'GET',
     path: '/api/v1/{query*}',

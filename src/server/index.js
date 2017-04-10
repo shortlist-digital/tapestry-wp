@@ -36,6 +36,7 @@ export default class Tapestry {
     this.server.event('reset-cache')
     // Register event for clearing caches by key
     this.server.event('purge-html-cache-by-key')
+    this.server.event('purge-api-cache-by-key')
     // Clear all caches on reset-cache event
     this.server.on('reset-cache', CacheManager.clearAll)
 

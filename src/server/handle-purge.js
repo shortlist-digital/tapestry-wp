@@ -1,11 +1,31 @@
+import { match } from 'react-router'
+import RouteWrapper from '../shared/route-wrapper'
 const purgePath = process.env.SECRET_PURGE_PATH || 'purge'
-export default ({ server }) => {
+
+
+export default ({ server, config }) => {
+  const calculateApiRoute = (path, cb) => {
+    match({
+      routes: RouteWrapper(config),
+      location: path
+    }, (err, redirectLocation, renderProps) => {
+      let endpoint = renderProps.components[1].endpoint
+      if (typeof endpoint == 'function') {
+        endpoint = endpoint(renderProps.params)
+      }
+      cb(endpoint)
+    })
+  }
   server.route({
     method: 'GET',
     path: `/${purgePath}/{path*}`,
     handler: (request, reply) => {
-      server.emit('purge-html-cache-by-key', `/${request.params.path}`)
-      reply({status: `Purged ${request.params.path}`}, 200)
+      calculateApiRoute(request.params.path, (apiRoute) => {
+        const remote = `${config.siteUrl}/wp-json/wp/v2/${apiRoute}`
+        server.emit('purge-html-cache-by-key', `/${request.params.path}`)
+        server.emit('purge-api-cache-by-key', `${remote}`)
+        reply({status: `Purged ${request.params.path}`}, 200)
+      })
     }
   })
 }
