@@ -29,10 +29,9 @@ export default class Tapestry {
       reply.continue()
     })
 
-
-    // register server events
-
-    // register reset-cache event
+    // Register server events
+    // ----------
+    // Register reset-cache event
     this.server.event('reset-cache')
     // Register event for clearing caches by key
     this.server.event('purge-html-cache-by-key')
