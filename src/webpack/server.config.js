@@ -11,6 +11,8 @@ module.exports = ({ cwd, env }) => {
   return {
     // target node as runtime
     target: 'node',
+    // enable sourcemaps
+    devtool: 'sourcemap',
     // enable webpack node polyfill for __dirname
     node: {
       __dirname: true
@@ -41,7 +43,12 @@ module.exports = ({ cwd, env }) => {
     ],
     plugins: [
       // expose environment to user
-      new webpack.DefinePlugin({ __DEV__ })
+      new webpack.DefinePlugin({ __DEV__ }),
+      new webpack.BannerPlugin({
+        banner: 'require("source-map-support").install();',
+        raw: true,
+        entryOnly: false
+      })
     ]
   }
 }

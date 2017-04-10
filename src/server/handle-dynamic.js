@@ -1,8 +1,8 @@
 import { match } from 'react-router'
 import { loadPropsOnServer } from 'async-props'
-import { has } from 'lodash'
+import has from 'lodash/has'
 
-import DefaultRoutes from '../shared/default-routes'
+import RouteWrapper from '../shared/route-wrapper'
 import { renderHtml } from './render'
 import { errorObject } from '../utilities/logger'
 import CacheManager from '../utilities/cache-manager'
@@ -18,7 +18,7 @@ export default ({ server, config, assets }) => {
     handler: (request, reply) => {
 
       match({
-        routes: DefaultRoutes(config),
+        routes: RouteWrapper(config),
         location: request.url.path
       }, (err, redirectLocation, renderProps) => {
 
