@@ -2,7 +2,6 @@ import { match } from 'react-router'
 import RouteWrapper from '../shared/route-wrapper'
 const purgePath = process.env.SECRET_PURGE_PATH || 'purge'
 
-
 export default ({ server, config }) => {
   const calculateApiRoute = (path, cb) => {
     match({
@@ -16,6 +15,7 @@ export default ({ server, config }) => {
       cb(endpoint)
     })
   }
+
   server.route({
     method: 'GET',
     path: `/${purgePath}/{path*}`,
