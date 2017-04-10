@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import { has } from 'lodash'
+import has from 'lodash/has'
 import './default-style'
 
 const defaultHtml = ({ markup, head, asyncProps, assets = {} }) => {
