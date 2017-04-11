@@ -11,6 +11,10 @@ export default ({ server, config, assets }) => {
 
   // Create a new cache
   const cache = CacheManager.createCache('html')
+ // Allow purge of individual URL
+  server.on('purge-html-cache-by-key', (key) => {
+    cache.del(key)
+  })
 
   server.route({
     method: 'GET',
