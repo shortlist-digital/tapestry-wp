@@ -7,6 +7,7 @@ import handleStatic from './handle-static'
 import handleApi from './handle-api'
 import handleDynamic from './handle-dynamic'
 import handleProxies from './handle-proxies'
+import handlePurge from './handle-purge'
 import handleRedirects from './handle-redirects'
 import CacheManager from '../utilities/cache-manager'
 
@@ -28,8 +29,13 @@ export default class Tapestry {
       reply.continue()
     })
 
-    // register reset-cache event
+    // Register server events
+    // ----------
+    // Register reset-cache event
     this.server.event('reset-cache')
+    // Register event for clearing caches by key
+    this.server.event('purge-html-cache-by-key')
+    this.server.event('purge-api-cache-by-key')
     // Clear all caches on reset-cache event
     this.server.on('reset-cache', CacheManager.clearAll)
 
@@ -41,8 +47,9 @@ export default class Tapestry {
     }
     handleRedirects(data)
     handleStatic(data)
-    handleProxies(data)
+    handlePurge(data)
     handleApi(data)
+    handleProxies(data)
     handleDynamic(data)
 
     // kick off server
