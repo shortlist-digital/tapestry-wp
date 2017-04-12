@@ -7,7 +7,7 @@
   "scripts": {
     "build:utils": "babel src/utilities --out-dir dist --presets=es2015,react",
     "lint": "eslint . --fix --cache",
-    "test": "mocha 'test/**/*.test.js' --require test/babel-register",
+    "test": "mocha 'test/**/*.test.js' --require test/babel-register --bail",
     "pre-commit-msg": "echo \"Performing pre-commit checks...\" && exit 0",
     "lint-staged": "lint-staged",
     "prepublish": "npm run build:utils",
