@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import AsyncProps from 'async-props'
 import has from 'lodash/has'
 import toArray from 'lodash/toArray'
