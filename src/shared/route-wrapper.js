@@ -41,6 +41,7 @@ const RouteWrapper = (config) => {
             <Route
               key={uid()}
               path={route.path}
+              config={config}
               {...component}
             />
           )

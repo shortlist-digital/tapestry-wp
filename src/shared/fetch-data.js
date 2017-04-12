@@ -6,6 +6,7 @@ import isEmpty from 'lodash/isEmpty'
 import { generate as uid } from 'shortid'
 import fetchRouteData from './fetch-route-data'
 import MissingView from './missing-view'
+import DefaultError from './default-error'
 
 const fetchData = (TopLevelComponent, endpoint) => {
 
@@ -26,9 +27,14 @@ const fetchData = (TopLevelComponent, endpoint) => {
     }
 
     render() {
+      const config = this.props.route.config
+      let ErrorView = __DEV__ ? MissingView : DefaultError
+      if (has(config, 'components.CustomError')) {
+        ErrorView = config.components.CustomError
+      }
       // check data exists and isnt a server errored response
       if (!this.props.data || isEmpty(this.props.data) || has(this.props.data, 'data.status'))  {
-        return <MissingView />
+        return <ErrorView />
       }
       const resp = this.props.data
       let data = ('0' in resp) || resp instanceof Array ? { posts: toArray(resp) } : resp
@@ -49,7 +55,8 @@ const fetchData = (TopLevelComponent, endpoint) => {
   AsyncPropsWrapper.endpoint = endpoint
 
   AsyncPropsWrapper.propTypes = {
-    data: PropTypes.any
+    data: PropTypes.any,
+    route: PropTypes.any
   }
 
   return AsyncPropsWrapper
