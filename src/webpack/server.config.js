@@ -3,6 +3,11 @@ const webpack = require('webpack')
 const nodeExternals = require('webpack-node-externals')
 const shared = require('./shared')
 
+// temp fix for webpack loader-utils deprecated message
+// waiting on babel-loader 7.0
+// https://github.com/webpack/loader-utils/issues/56
+process.noDeprecation = true
+
 // module.exports to enable CLI usage
 module.exports = ({ cwd, env }) => {
   // expose environment to user
