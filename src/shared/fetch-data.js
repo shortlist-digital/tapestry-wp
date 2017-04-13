@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import AsyncProps from 'async-props'
 import has from 'lodash/has'
-import toArray from 'lodash/toArray'
+import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import { generate as uid } from 'shortid'
 import fetchRouteData from './fetch-route-data'
@@ -27,19 +28,21 @@ const fetchData = (TopLevelComponent, endpoint) => {
     }
 
     render() {
+      // get error view to render if required
       const config = this.props.route.config
       let ErrorView = __DEV__ ? MissingView : DefaultError
       if (has(config, 'components.CustomError')) {
         ErrorView = config.components.CustomError
       }
-      // check data exists and isnt a server errored response
-      if (!this.props.data || isEmpty(this.props.data) || has(this.props.data, 'data.status'))  {
+      // to avoid React mangling the array to {'0':{},'1':{}}
+      // pass through as 'posts'
+      const response = this.props.data
+      const data = isArray(response) ?
+        { posts: response } :
+        response
+      // check data exists and isn't a server errored response
+      if (!response || isEmpty(response) || has(response, 'data.status'))  {
         return <ErrorView />
-      }
-      const resp = this.props.data
-      let data = ('0' in resp) || resp instanceof Array ? { posts: toArray(resp) } : resp
-      if (data.posts && data.posts.length == 1)  {
-        data = data.posts[0]
       }
       // otherwise return the actual component
       return (
