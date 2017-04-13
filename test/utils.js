@@ -6,12 +6,12 @@ const cwd = process.cwd()
 const env = 'test'
 const dataError = { data: { status: 404 } }
 
-export const bootServer = (config) => {
+export const bootServer = (config, options = {}) => {
   // mock webpack provided environment variable
-  global.__DEV__ = true
+  global.__DEV__ = options.__DEV__ || true
   // create and return a new Tapestry instance
   return new Server({
-    config,
+    config: { ...config, port: 5050 },
     cwd,
     env
   }, { silent: true })
