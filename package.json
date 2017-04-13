@@ -1,6 +1,6 @@
 {
   "name": "tapestry-wp",
-  "version": "2.0.0",
+  "version": "2.0.0-0",
   "description": "Wordpress API Universal React Renderer",
   "main": "./dist/index.js",
   "repository": "shortlist-digital/tapestry-wp",
@@ -65,6 +65,7 @@
     "lru-cache": "^4.0.2",
     "mitt": "^1.1.0",
     "pretty-bytes": "^4.0.2",
+    "prop-types": "^15.5.7",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-helmet": "^5.0.3",
