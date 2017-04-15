@@ -5,6 +5,7 @@ import MissingView from './missing-view'
 import defaultRoutes from './default-routes'
 import fetchData from './fetch-data'
 import ProgressIndicator from './progress-indicator'
+import RenderError from './render-error'
 
 const maybeWrapComponent = (component, route) => {
   return route.endpoint ?
@@ -47,6 +48,11 @@ const RouteWrapper = (config) => {
           )
         })
       }
+      <Route
+        path="*"
+        component={RenderError}
+        config={config}
+      />
     </Route>
   )
 }
