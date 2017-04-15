@@ -1,12 +1,22 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import ObjectInspector from 'react-object-inspector'
+import DefaultError from './default-error'
 
-const MissingView = (props) =>
-  <section>
-    <h1>Missing component</h1>
-    <ObjectInspector
-      data={props}
-      initialExpandedPaths={['root']} />
-  </section>
+const MissingView = (response) =>
+  <DefaultError
+    message="Missing Component"
+  >
+    {
+      response &&
+        <ObjectInspector
+          data={response}
+          initialExpandedPaths={['root']}
+        />
+    }
+  </DefaultError>
 
+MissingView.propTypes = {
+  response: PropTypes.object
+}
 export default MissingView

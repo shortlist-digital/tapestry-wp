@@ -33,12 +33,26 @@ const fetchData = (TopLevelComponent, endpoint) => {
       const data = isArray(response) ?
         { posts: response } :
         response
+      // console.log({ response })
       // check data exists and isn't a server errored response
+// <<<<<<< HEAD
       if (!response || isEmpty(response) || has(response, 'data.status'))  {
         return (
           <RenderError
+            response={response}
             config={this.props.route.config}
+            status="404"
           />
+// =======
+//       if (!TopLevelComponent || !response || isEmpty(response) || has(response, 'data.status'))  {
+//         return (
+//           __DEV__ ?
+//             <MissingView {...response} /> :
+//             <ErrorView
+//               status="404"
+//               message="Page not found"
+//             />
+// >>>>>>> improve-missing-view
         )
       }
       // otherwise return the actual component

@@ -65,7 +65,7 @@ describe('Error view', () => {
     tapestry.server.on('start', () => {
       request
         .get(tapestry.server.info.uri, (err, res, body) => {
-          expect(body).to.contain('Missing component')
+          expect(body).to.contain('Missing Component')
           done()
         })
     })
@@ -76,7 +76,7 @@ describe('Error view', () => {
     tapestry.server.on('start', () => {
       request
         .get(tapestry.server.info.uri, (err, res, body) => {
-          expect(body).to.contain('Missing component')
+          expect(body).to.contain('Page not found')
           done()
         })
     })
