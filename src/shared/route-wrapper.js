@@ -16,6 +16,7 @@ const maybeWrapComponent = (component, route) => {
 const RouteWrapper = (config) => {
   // if user routes have been defined, take those in preference to the defaults
   const routes = config.routes || defaultRoutes(config.components)
+  const ErrorComponent = () => RenderError({ config })
   // loops over routes and return react-router <Route /> components
   return (
     <Route component={ProgressIndicator}>
@@ -50,8 +51,7 @@ const RouteWrapper = (config) => {
       }
       <Route
         path="*"
-        component={RenderError}
-        config={config}
+        component={ErrorComponent}
       />
     </Route>
   )
