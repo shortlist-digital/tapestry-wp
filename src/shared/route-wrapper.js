@@ -32,12 +32,10 @@ const RouteWrapper = (config) => {
           // 'component' will read the component from the bundle
           const component = route.getComponent ?
           {
-            getComponent: (loc, cb) => route.getComponent()
-            .then(
-              module => cb(null, ComponentWrapper(module.default, route))
-            ).catch(
-              err => cb(err)
-            )
+            getComponent: (loc, cb) => route
+            .getComponent()
+            .then(module => cb(null, ComponentWrapper(module.default, route)))
+            .catch(err => cb(err))
           } : {
             component: ComponentWrapper(route.component, route)
           }
