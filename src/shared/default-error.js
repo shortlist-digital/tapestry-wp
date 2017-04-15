@@ -45,7 +45,7 @@ DefaultError.defaultProps = {
   message: 'Application Error'
 }
 DefaultError.propTypes = {
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string,
   status: PropTypes.string,
   children: PropTypes.node
 }

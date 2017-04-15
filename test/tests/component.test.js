@@ -71,17 +71,6 @@ describe('Error view', () => {
     })
   })
 
-  it('If Component/CustomError missing in PROD, render Default Error', (done) => {
-    tapestry = bootServer(config, { __DEV__: false })
-    tapestry.server.on('start', () => {
-      request
-        .get(tapestry.server.info.uri, (err, res, body) => {
-          expect(body).to.contain('Not found')
-          done()
-        })
-    })
-  })
-
   it('If Component missing and CustomError declared in DEV, render Missing View', (done) => {
     tapestry = bootServer({
       ...config,
@@ -91,6 +80,17 @@ describe('Error view', () => {
       request
         .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res, body) => {
           expect(body).to.contain('Missing Component')
+          done()
+        })
+    })
+  })
+
+  it('If Component/CustomError missing in PROD, render Default Error', (done) => {
+    tapestry = bootServer(config, { __DEV__: false })
+    tapestry.server.on('start', () => {
+      request
+        .get(tapestry.server.info.uri, (err, res, body) => {
+          expect(body).to.contain('Application Error')
           done()
         })
     })

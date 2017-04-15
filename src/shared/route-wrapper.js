@@ -1,13 +1,14 @@
 import React from 'react'
 import { Route } from 'react-router'
 import { generate as uid } from 'shortid'
-// import MissingView from './missing-view'
+
 import defaultRoutes from './default-routes'
 import fetchData from './fetch-data'
 import ProgressIndicator from './progress-indicator'
 import RenderError from './render-error'
 
-const maybeWrapComponent = (component, route) => {
+const ComponentWrapper = (component, route) => {
+  // return component with AsyncProps wrapper if endpoint declared
   return route.endpoint ?
     fetchData(component, route.endpoint) :
     component
@@ -31,12 +32,14 @@ const RouteWrapper = (config) => {
           // 'component' will read the component from the bundle
           const component = route.getComponent ?
           {
-            getComponent: (loc, cb) => route
-            .getComponent()
-            .then(module => cb(null, maybeWrapComponent(module.default, route)))
-            .catch(err => cb(err))
+            getComponent: (loc, cb) => route.getComponent()
+            .then(
+              module => cb(null, ComponentWrapper(module.default, route))
+            ).catch(
+              err => cb(err)
+            )
           } : {
-            component: maybeWrapComponent(route.component, route)
+            component: ComponentWrapper(route.component, route)
           }
           // return individual route
           return (

@@ -37,9 +37,8 @@ const fetchData = (TopLevelComponent, endpoint) => {
       if (!TopLevelComponent || !response || isEmpty(response) || has(response, 'data.status'))  {
         return (
           <RenderError
-            response={response}
+            data={response}
             config={this.props.route.config}
-            status="404"
           />
         )
       }
