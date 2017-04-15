@@ -33,26 +33,14 @@ const fetchData = (TopLevelComponent, endpoint) => {
       const data = isArray(response) ?
         { posts: response } :
         response
-      // console.log({ response })
-      // check data exists and isn't a server errored response
-// <<<<<<< HEAD
-      if (!response || isEmpty(response) || has(response, 'data.status'))  {
+      // check data/component exists and isn't a server errored response
+      if (!TopLevelComponent || !response || isEmpty(response) || has(response, 'data.status'))  {
         return (
           <RenderError
             response={response}
             config={this.props.route.config}
             status="404"
           />
-// =======
-//       if (!TopLevelComponent || !response || isEmpty(response) || has(response, 'data.status'))  {
-//         return (
-//           __DEV__ ?
-//             <MissingView {...response} /> :
-//             <ErrorView
-//               status="404"
-//               message="Page not found"
-//             />
-// >>>>>>> improve-missing-view
         )
       }
       // otherwise return the actual component
@@ -65,7 +53,7 @@ const fetchData = (TopLevelComponent, endpoint) => {
     }
   }
 
-  AsyncPropsWrapper.displayName = `wrappedForDataFetching(${TopLevelComponent.name})`
+  AsyncPropsWrapper.displayName = `wrappedForDataFetching(${TopLevelComponent ? TopLevelComponent.name : 'Error'})`
   AsyncPropsWrapper.endpoint = endpoint
 
   AsyncPropsWrapper.propTypes = {
