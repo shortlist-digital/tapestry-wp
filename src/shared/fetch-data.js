@@ -30,19 +30,26 @@ const fetchData = (TopLevelComponent, endpoint) => {
     render() {
       // get error view to render if required
       const config = this.props.route.config
-      let ErrorView = __DEV__ ? MissingView : DefaultError
-      if (has(config, 'components.CustomError')) {
-        ErrorView = config.components.CustomError
-      }
+      let ErrorView = has(config, 'components.CustomError') ?
+        config.components.CustomError :
+        DefaultError
       // to avoid React mangling the array to {'0':{},'1':{}}
       // pass through as 'posts'
       const response = this.props.data
       const data = isArray(response) ?
         { posts: response } :
         response
+      console.log({ response })
       // check data exists and isn't a server errored response
-      if (!response || isEmpty(response) || has(response, 'data.status'))  {
-        return <ErrorView />
+      if (!TopLevelComponent || !response || isEmpty(response) || has(response, 'data.status'))  {
+        return (
+          __DEV__ ?
+            <MissingView {...response} /> :
+            <ErrorView
+              status="404"
+              message="Page not found"
+            />
+        )
       }
       // otherwise return the actual component
       return (
@@ -54,7 +61,7 @@ const fetchData = (TopLevelComponent, endpoint) => {
     }
   }
 
-  AsyncPropsWrapper.displayName = `wrappedForDataFetching(${TopLevelComponent.name})`
+  AsyncPropsWrapper.displayName = `wrappedForDataFetching(${TopLevelComponent ? TopLevelComponent.name : 'Error'})`
   AsyncPropsWrapper.endpoint = endpoint
 
   AsyncPropsWrapper.propTypes = {

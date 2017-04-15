@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route } from 'react-router'
 import { generate as uid } from 'shortid'
-import MissingView from './missing-view'
+// import MissingView from './missing-view'
 import defaultRoutes from './default-routes'
 import fetchData from './fetch-data'
 import ProgressIndicator from './progress-indicator'
@@ -22,7 +22,7 @@ const RouteWrapper = (config) => {
         routes.map((route) => {
           // cancel if component not defined in user config, joi will validate user routes for component/path keys
           if (!route.component && !route.getComponent) {
-            route.component = MissingView
+            route.component = null
           }
           // on 'route' event:
           // 'getComponent' will fetch the component async
