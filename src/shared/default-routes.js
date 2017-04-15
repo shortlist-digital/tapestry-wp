@@ -1,9 +1,6 @@
-import MissingView from './missing-view'
-import DefaultError from './default-error'
-
 // array of routes supplied with Tapestry
 export default ({
-  FrontPage, Post, Page, Category, CustomError
+  FrontPage, Post, Page, Category
 }) => [{
   path: '/',
   component: FrontPage,
@@ -20,11 +17,4 @@ export default ({
   path: '/:year/:monthnum/:day/:postname',
   component: Post,
   endpoint: params => `posts?slug=${params.postname}&_embed`
-}, {
-  path: '*',
-  component: __DEV__ ?
-    MissingView :
-    CustomError ?
-      CustomError :
-      DefaultError
 }]
