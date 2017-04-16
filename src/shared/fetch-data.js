@@ -6,8 +6,7 @@ import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import { generate as uid } from 'shortid'
 import fetchRouteData from './fetch-route-data'
-import MissingView from './missing-view'
-import DefaultError from './default-error'
+import RenderError from './render-error'
 
 const fetchData = (TopLevelComponent, endpoint) => {
 
@@ -28,21 +27,20 @@ const fetchData = (TopLevelComponent, endpoint) => {
     }
 
     render() {
-      // get error view to render if required
-      const config = this.props.route.config
-      let ErrorView = __DEV__ ? MissingView : DefaultError
-      if (has(config, 'components.CustomError')) {
-        ErrorView = config.components.CustomError
-      }
       // to avoid React mangling the array to {'0':{},'1':{}}
       // pass through as 'posts'
       const response = this.props.data
       const data = isArray(response) ?
         { posts: response } :
         response
-      // check data exists and isn't a server errored response
-      if (!response || isEmpty(response) || has(response, 'data.status'))  {
-        return <ErrorView />
+      // check data/component exists and isn't a server errored response
+      if (!TopLevelComponent || !response || isEmpty(response) || has(response, 'data.status'))  {
+        return (
+          <RenderError
+            data={response}
+            config={this.props.route.config}
+          />
+        )
       }
       // otherwise return the actual component
       return (
@@ -54,7 +52,7 @@ const fetchData = (TopLevelComponent, endpoint) => {
     }
   }
 
-  AsyncPropsWrapper.displayName = `wrappedForDataFetching(${TopLevelComponent.name})`
+  AsyncPropsWrapper.displayName = `wrappedForDataFetching(${TopLevelComponent ? TopLevelComponent.name : 'Error'})`
   AsyncPropsWrapper.endpoint = endpoint
 
   AsyncPropsWrapper.propTypes = {

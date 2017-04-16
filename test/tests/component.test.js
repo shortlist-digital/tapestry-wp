@@ -65,7 +65,21 @@ describe('Error view', () => {
     tapestry.server.on('start', () => {
       request
         .get(tapestry.server.info.uri, (err, res, body) => {
-          expect(body).to.contain('Missing component')
+          expect(body).to.contain('Missing Component')
+          done()
+        })
+    })
+  })
+
+  it('If Component missing and CustomError declared in DEV, render Missing View', (done) => {
+    tapestry = bootServer({
+      ...config,
+      components: { CustomError }
+    })
+    tapestry.server.on('start', () => {
+      request
+        .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res, body) => {
+          expect(body).to.contain('Missing Component')
           done()
         })
     })
@@ -76,21 +90,7 @@ describe('Error view', () => {
     tapestry.server.on('start', () => {
       request
         .get(tapestry.server.info.uri, (err, res, body) => {
-          expect(body).to.contain('Missing component')
-          done()
-        })
-    })
-  })
-
-  it('If Component missing and CustomError declared in DEV, render CustomError', (done) => {
-    tapestry = bootServer({
-      ...config,
-      components: { CustomError }
-    })
-    tapestry.server.on('start', () => {
-      request
-        .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res, body) => {
-          expect(body).to.contain('This is an error page')
+          expect(body).to.contain('Application Error')
           done()
         })
     })
