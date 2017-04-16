@@ -13,19 +13,14 @@ const options = {
 
 // define valid config schema
 const schema = joi.object({
-  // DEPRECATED optional number for page id or string for page name
+  // DEPRECATED
   frontPage: joi.any().forbidden(),
-  // DEPRECATED optional loaders exporting a fetch request
   loaders: joi.any().forbidden(),
   // required url
   siteUrl: joi.string().uri().required(),
-  // optional string e.g. 'localhost', '0.0.0.0'
-  host: joi.string(),
-  // optional number e.g. 3030
-  port: joi.number(),
   // optional object containing React components
   components: joi.object().keys({
-    Error: joi.any().forbidden(), // DEPRECATED component
+    Error: joi.any().forbidden(), // DEPRECATED
     Category: joi.func(),
     CustomError: joi.func(),
     FrontPage: joi.func(),
@@ -37,17 +32,25 @@ const schema = joi.object({
     // object containing a string path and React component
     joi.object({
       component: joi.func(),
+      endpoint: joi.alternatives().try(joi.string(), joi.func()),
       getComponent: joi.func(),
-      path: joi.string(),
-      endpoint: joi.alternatives().try(joi.string(), joi.func())
+      path: joi.string()
     })
   ),
-  // optional array of proxy paths
-  proxyPaths: joi.array().items(joi.string()),
-  // optional object of redirects
-  redirectPaths: joi.object(),
-  // optional function run when routing on the client
-  onPageUpdate: joi.func()
+  options: joi.object().keys({
+    // string e.g. 'localhost', '0.0.0.0'
+    host: joi.string(),
+    // number e.g. 3030
+    port: joi.number(),
+    // array of proxy paths e.g. ['path', 'another/path']
+    proxyPaths: joi.array().items(joi.string()),
+    // object of redirects e.g. { 'path': 'to-redirect' }
+    redirectPaths: joi.object().pattern(/.*/, joi.string()),
+    // function run when routing on the client
+    onPageUpdate: joi.func(),
+    // theme color for progress bar
+    themeColor: joi.string().hex()
+  })
 })
 
 
