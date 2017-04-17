@@ -37,17 +37,18 @@ const schema = joi.object({
       path: joi.string()
     })
   ),
+  // optional array of proxy paths e.g. ['path', 'another/path']
+  proxyPaths: joi.array().items(joi.string()),
+  // optional object of redirects e.g. { 'path': 'to-redirect' }
+  redirectPaths: joi.object().pattern(/.*/, joi.string()),
+  // optional function run when routing on the client
+  onPageUpdate: joi.func(),
+  // misc options
   options: joi.object().keys({
     // string e.g. 'localhost', '0.0.0.0'
     host: joi.string(),
     // number e.g. 3030
     port: joi.number(),
-    // array of proxy paths e.g. ['path', 'another/path']
-    proxyPaths: joi.array().items(joi.string()),
-    // object of redirects e.g. { 'path': 'to-redirect' }
-    redirectPaths: joi.object().pattern(/.*/, joi.string()),
-    // function run when routing on the client
-    onPageUpdate: joi.func(),
     // theme color for progress bar
     themeColor: joi.string().hex()
   })

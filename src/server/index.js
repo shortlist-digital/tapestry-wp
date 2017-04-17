@@ -61,8 +61,8 @@ export default class Tapestry {
     const server = new Server()
     server.register([h2o2, Inert])
     server.connection({
-      host: this.config.host || '0.0.0.0',
-      port: this.config.port || process.env.PORT || 3030
+      host: this.config.options ? this.config.options.host : '0.0.0.0',
+      port: this.config.options ? this.config.options.port : (process.env.PORT || 3030)
     })
     this.config.serverUri = server.info.uri
     return server
