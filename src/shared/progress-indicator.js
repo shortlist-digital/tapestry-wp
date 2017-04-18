@@ -1,15 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { css } from 'glamor'
-
-const style = css({
-  backgroundColor: 'red',
-  height: '2px',
-  left: 0,
-  position: 'fixed',
-  top: 0,
-  zIndex: 10000
-})
+import has from 'lodash/has'
 
 class ProgressIndicator extends Component {
 
@@ -19,6 +10,14 @@ class ProgressIndicator extends Component {
       percent: 0,
       complete: true
     }
+    this.style = config => ({
+      backgroundColor: has(config, 'option.themeColor') ? `#${config.options.themeColor}` : '#50e3c2',
+      height: '2px',
+      left: 0,
+      position: 'fixed',
+      top: 0,
+      zIndex: 10000
+    })
     this.interval = null
     this.initialPercentage = 15
     this.percentageIncrease = 5
@@ -62,8 +61,8 @@ class ProgressIndicator extends Component {
     return (
       <div>
         <div
-          className={style}
           style={{
+            ...this.style(this.props.route.config),
             opacity: complete ? 0 : 1,
             transition: complete ?
               `visibility 150ms linear 100ms,
@@ -86,7 +85,10 @@ ProgressIndicator.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
-  ])
+  ]),
+  route: PropTypes.shape({
+    config: PropTypes.object
+  })
 }
 
 export default ProgressIndicator

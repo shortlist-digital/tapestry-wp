@@ -1,6 +1,7 @@
 import { Server } from 'hapi'
 import h2o2 from 'h2o2'
 import Inert from 'inert'
+import has from 'lodash/has'
 
 import { success, errorObject } from '../utilities/logger'
 import handleStatic from './handle-static'
@@ -61,8 +62,8 @@ export default class Tapestry {
     const server = new Server()
     server.register([h2o2, Inert])
     server.connection({
-      host: this.config.options ? this.config.options.host : '0.0.0.0',
-      port: this.config.options ? this.config.options.port : (process.env.PORT || 3030)
+      host: has(this.config, 'options.host') ? this.config.options.host : '0.0.0.0',
+      port: has(this.config, 'options.port') ? this.config.options.port : (process.env.PORT || 3030)
     })
     this.config.serverUri = server.info.uri
     return server
