@@ -11,7 +11,7 @@ class ProgressIndicator extends Component {
       complete: true
     }
     this.style = config => ({
-      backgroundColor: has(config, 'option.themeColor') ? `#${config.options.themeColor}` : '#50e3c2',
+      backgroundColor: has(config, 'option.progressBarColor') ? `#${config.options.progressBarColor}` : '#50e3c2',
       height: '2px',
       left: 0,
       position: 'fixed',
