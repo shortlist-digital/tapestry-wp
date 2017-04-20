@@ -30,11 +30,17 @@ const fetchData = (TopLevelComponent, endpoint) => {
       // to avoid React mangling the array to {'0':{},'1':{}}
       // pass through as 'posts'
       const response = this.props.data
-      const data = isArray(response) ?
+      const arrayResponse = isArray(response)
+      const data = arrayResponse ?
         { posts: response } :
         response
       // check data/component exists and isn't a server errored response
-      if (!TopLevelComponent || !response || isEmpty(response) || has(response, 'data.status'))  {
+      if (
+        !TopLevelComponent ||
+        !response ||
+        (!arrayResponse && isEmpty(response)) ||
+        has(response, 'data.status')
+      )  {
         return (
           <RenderError
             data={response}

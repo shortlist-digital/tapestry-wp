@@ -19,7 +19,7 @@ const RenderError = ({ config, data }) => {
 
 RenderError.propTypes = {
   config: PropTypes.object,
-  data: PropTypes.object
+  data: PropTypes.any
 }
 
 export default RenderError
