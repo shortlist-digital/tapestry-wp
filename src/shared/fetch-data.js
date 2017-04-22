@@ -1,11 +1,12 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import AsyncProps from 'async-props'
 import has from 'lodash/has'
-import toArray from 'lodash/toArray'
+import isArray from 'lodash/isArray'
 import isEmpty from 'lodash/isEmpty'
 import { generate as uid } from 'shortid'
 import fetchRouteData from './fetch-route-data'
-import MissingView from './missing-view'
+import RenderError from './render-error'
 
 const fetchData = (TopLevelComponent, endpoint) => {
 
@@ -26,14 +27,26 @@ const fetchData = (TopLevelComponent, endpoint) => {
     }
 
     render() {
-      // check data exists and isnt a server errored response
-      if (!this.props.data || isEmpty(this.props.data) || has(this.props.data, 'data.status'))  {
-        return <MissingView />
-      }
-      const resp = this.props.data
-      let data = ('0' in resp) || resp instanceof Array ? { posts: toArray(resp) } : resp
-      if (data.posts && data.posts.length == 1)  {
-        data = data.posts[0]
+      // to avoid React mangling the array to {'0':{},'1':{}}
+      // pass through as 'posts'
+      const response = this.props.data
+      const arrayResponse = isArray(response)
+      const data = arrayResponse ?
+        { posts: response } :
+        response
+      // check data/component exists and isn't a server errored response
+      if (
+        !TopLevelComponent ||
+        !response ||
+        (!arrayResponse && isEmpty(response)) ||
+        has(response, 'data.status')
+      )  {
+        return (
+          <RenderError
+            data={response}
+            config={this.props.route.config}
+          />
+        )
       }
       // otherwise return the actual component
       return (
@@ -45,11 +58,12 @@ const fetchData = (TopLevelComponent, endpoint) => {
     }
   }
 
-  AsyncPropsWrapper.displayName = `wrappedForDataFetching(${TopLevelComponent.name})`
+  AsyncPropsWrapper.displayName = `wrappedForDataFetching(${TopLevelComponent ? TopLevelComponent.name : 'Error'})`
   AsyncPropsWrapper.endpoint = endpoint
 
   AsyncPropsWrapper.propTypes = {
-    data: PropTypes.any
+    data: PropTypes.any,
+    route: PropTypes.any
   }
 
   return AsyncPropsWrapper

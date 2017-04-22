@@ -14,8 +14,7 @@ describe('Components', () => {
   let config = {
     components: {
       Post,
-      FrontPage,
-      CustomError
+      FrontPage
     },
     siteUrl: 'http://dummy.api'
   }
@@ -36,19 +35,78 @@ describe('Components', () => {
       })
   })
 
-  it('CustomError will be rendered if declared', (done) => {
-    request
-      .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res, body) => {
-        expect(body).to.contain('This is an error page')
-        done()
-      })
-  })
-
   it('Helmet <head> is rendered', (done) => {
     request
       .get(`${tapestry.server.info.uri}/2017/12/01/hi`, (err, res, body) => {
         expect(body).to.contain('Content in title tag')
         done()
       })
+  })
+})
+
+
+describe('Error view', () => {
+
+  let tapestry = null
+  let config = {
+    components: {},
+    siteUrl: 'http://dummy.api'
+  }
+
+  before(done => {
+    mockApi()
+    done()
+  })
+
+  afterEach(() => tapestry.server.stop())
+
+  it('If Component/CustomError missing in DEV, render Missing View', (done) => {
+    tapestry = bootServer(config)
+    tapestry.server.on('start', () => {
+      request
+        .get(tapestry.server.info.uri, (err, res, body) => {
+          expect(body).to.contain('Missing Component')
+          done()
+        })
+    })
+  })
+
+  it('If Component missing and CustomError declared in DEV, render Missing View', (done) => {
+    tapestry = bootServer({
+      ...config,
+      components: { CustomError }
+    })
+    tapestry.server.on('start', () => {
+      request
+        .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res, body) => {
+          expect(body).to.contain('Missing Component')
+          done()
+        })
+    })
+  })
+
+  it('If Component/CustomError missing in PROD, render Default Error', (done) => {
+    tapestry = bootServer(config, { __DEV__: false })
+    tapestry.server.on('start', () => {
+      request
+        .get(tapestry.server.info.uri, (err, res, body) => {
+          expect(body).to.contain('Application Error')
+          done()
+        })
+    })
+  })
+
+  it('If Component missing and CustomError declared in PROD, render CustomError', (done) => {
+    tapestry = bootServer({
+      ...config,
+      components: { CustomError }
+    }, { __DEV__: false })
+    tapestry.server.on('start', () => {
+      request
+        .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res, body) => {
+          expect(body).to.contain('This is an error page')
+          done()
+        })
+    })
   })
 })

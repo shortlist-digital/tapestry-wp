@@ -1,12 +1,14 @@
 import React from 'react'
 import { Route } from 'react-router'
 import { generate as uid } from 'shortid'
-import MissingView from './missing-view'
+
 import defaultRoutes from './default-routes'
 import fetchData from './fetch-data'
 import ProgressIndicator from './progress-indicator'
+import RenderError from './render-error'
 
-const maybeWrapComponent = (component, route) => {
+const ComponentWrapper = (component, route) => {
+  // return component with AsyncProps wrapper if endpoint declared
   return route.endpoint ?
     fetchData(component, route.endpoint) :
     component
@@ -15,14 +17,15 @@ const maybeWrapComponent = (component, route) => {
 const RouteWrapper = (config) => {
   // if user routes have been defined, take those in preference to the defaults
   const routes = config.routes || defaultRoutes(config.components)
+  const ErrorComponent = () => RenderError({ config })
   // loops over routes and return react-router <Route /> components
   return (
     <Route component={ProgressIndicator}>
       {
         routes.map((route) => {
           // cancel if component not defined in user config, joi will validate user routes for component/path keys
-          if (!route.component) {
-            route.component = MissingView
+          if (!route.component && !route.getComponent) {
+            route.component = null
           }
           // on 'route' event:
           // 'getComponent' will fetch the component async
@@ -31,21 +34,26 @@ const RouteWrapper = (config) => {
           {
             getComponent: (loc, cb) => route
             .getComponent()
-            .then(module => cb(null, maybeWrapComponent(module.default, route)))
+            .then(module => cb(null, ComponentWrapper(module.default, route)))
             .catch(err => cb(err))
           } : {
-            component: maybeWrapComponent(route.component, route)
+            component: ComponentWrapper(route.component, route)
           }
           // return individual route
           return (
             <Route
               key={uid()}
               path={route.path}
+              config={config}
               {...component}
             />
           )
         })
       }
+      <Route
+        path="*"
+        component={ErrorComponent}
+      />
     </Route>
   )
 }
