@@ -8,7 +8,10 @@ export default ({
 }, {
   path: ':page(/:subpage)',
   component: Page,
-  endpoint: params => `pages?slug=${params.subpage || params.page}&_embed`
+  endpoint: params => `pages?slug=${params.subpage || params.page}&_embed`,
+  options: {
+    failOnEmpty: true
+  }
 }, {
   path: '/category/:category(/:subcategory)',
   component: Category,

@@ -10,7 +10,7 @@ import RenderError from './render-error'
 const ComponentWrapper = (component, route) => {
   // return component with AsyncProps wrapper if endpoint declared
   return route.endpoint ?
-    fetchData(component, route.endpoint) :
+    fetchData(component, route) :
     component
 }
 
