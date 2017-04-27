@@ -25,6 +25,13 @@ const fetchData = (TopLevelComponent, endpoint) => {
     componentWillReceiveProps() {
       this.forceUpdate()
     }
+    componentDidMount() {
+      // reset scroll position
+      window.scrollTo(0, 0)
+      // run project callback
+      if (typeof this.props.route.config.onPageUpdate === 'function')
+        this.props.route.config.onPageUpdate()
+    }
 
     render() {
       // to avoid React mangling the array to {'0':{},'1':{}}
