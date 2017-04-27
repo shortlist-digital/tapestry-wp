@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import has from 'lodash/has'
-import './default-style'
 
 const defaultHtml = ({ markup, head, asyncProps, assets = {} }) => {
   const attr = head.htmlAttributes.toComponent()

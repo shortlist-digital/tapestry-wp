@@ -35,8 +35,5 @@ export const renderHtml = ({
   }
 
   // render html with data
-  return `
-    <!doctype html>
-    ${renderToStaticMarkup(<DefaultHTML {...data} />)}
-  `
+  return `<!doctype html>${renderToStaticMarkup(<DefaultHTML {...data} />)}`
 }
