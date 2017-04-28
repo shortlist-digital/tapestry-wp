@@ -26,11 +26,15 @@ const fetchData = (TopLevelComponent, endpoint) => {
       this.forceUpdate()
     }
     componentDidMount() {
-      // reset scroll position
-      window.scrollTo(0, 0)
-      // run project callback
-      if (typeof this.props.route.config.onPageUpdate === 'function')
-        this.props.route.config.onPageUpdate()
+      // check if rendering in client
+      if (typeof window !== 'undefined') {
+        // reset scroll position
+        window.scrollTo(0, 0)
+        // run project callback
+        // wrapped in setTimeout to clear call stack (blocks progress indicator)
+        if (typeof this.props.route.config.onPageUpdate === 'function')
+          setTimeout(this.props.route.config.onPageUpdate, 0)
+      }
     }
 
     render() {
