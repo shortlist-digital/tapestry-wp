@@ -39,12 +39,22 @@ const RouteWrapper = (config) => {
           } : {
             component: ComponentWrapper(route.component, route)
           }
+          const onEnter = () => {
+            if (
+              !route.endpoint &&
+              typeof window !== 'undefined' &&
+              typeof config.onPageUpdate === 'function'
+            ) {
+              config.onPageUpdate()
+            }
+          }
           // return individual route
           return (
             <Route
               key={uid()}
               path={route.path}
               config={config}
+              onEnter={onEnter}
               {...component}
             />
           )
