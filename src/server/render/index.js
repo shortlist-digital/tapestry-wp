@@ -3,7 +3,6 @@ import { renderToStaticMarkup, renderToString } from 'react-dom/server'
 import Helmet from 'react-helmet'
 import AsyncProps from 'async-props'
 import { renderStaticOptimized } from 'glamor/server'
-import { minify } from 'html-minifier'
 import DefaultHTML from './default-html'
 import RenderError from '../../shared/render-error'
 
@@ -36,8 +35,5 @@ export const renderHtml = ({
   }
 
   // render html with data
-  return `
-    <!doctype html>
-    ${minify(renderToStaticMarkup(<DefaultHTML {...data} />))}
-  `
+  return `<!doctype html>${renderToStaticMarkup(<DefaultHTML {...data} />)}`
 }
