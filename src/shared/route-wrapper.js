@@ -40,12 +40,14 @@ const RouteWrapper = (config) => {
             component: ComponentWrapper(route.component, route)
           }
           const onEnter = () => {
-            if (
-              !route.endpoint &&
-              typeof window !== 'undefined' &&
-              typeof config.onPageUpdate === 'function'
-            ) {
-              config.onPageUpdate()
+            // if we're not delaying load with AsyncProps and we're in the client
+            if (!route.endpoint && typeof window !== 'undefined' ) {
+              // reset scroll position
+              window.scrollTo(0, 0)
+              // run project callback
+              if (typeof config.onPageUpdate === 'function') {
+                config.onPageUpdate()
+              }
             }
           }
           // return individual route
