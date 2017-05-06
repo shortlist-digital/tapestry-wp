@@ -35,6 +35,7 @@ export default class Client {
     // log complete
     this.complete(stats)
   }
+
   watch (err, stats) {
     // handle error
     if (err) errorObject(err)
@@ -44,6 +45,7 @@ export default class Client {
       this.devNotified = true
     }
   }
+
   complete (stats) {
     // got some assets? cool, log em out
     const jsonStats = stats.toJson()

@@ -3,5 +3,5 @@
 
 require('babel-register')({
   presets: ['es2015', 'react'],
-  plugins: ['lodash', 'transform-object-rest-spread']
+  plugins: ['transform-object-rest-spread']
 })
