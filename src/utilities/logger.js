@@ -1,9 +1,9 @@
 import chalk from 'chalk'
 
 // log message to console and optionally cancel current process
-const log = (message, quit) => {
+const log = (message) => {
   console.log(message) // eslint-disable-line
-  if (quit) process.exit(0)
+  // if (quit) process.exit(0)
 }
 
 // wrappers to visually change message

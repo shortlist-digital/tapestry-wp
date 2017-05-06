@@ -15,7 +15,7 @@ const configCustomPath = path.resolve(cwd, 'webpack.config.js')
 // transpile any following imports
 require('babel-register')({
   presets: ['es2015', 'react'],
-  plugins: ['lodash', 'transform-object-rest-spread']
+  plugins: ['transform-object-rest-spread']
 })
 
 // fetch user webpack config
@@ -33,7 +33,7 @@ const webpackConfig = mergeConfigs({
 })
 // kick off webpack compilation
 const compiler = webpack(webpackConfig)
-compiler.run((err, stats) => {
+compiler.run((err) => {
   // handle error
   if (err) logger.error(err)
   // server path relative to root

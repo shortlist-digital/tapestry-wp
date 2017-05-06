@@ -1,8 +1,8 @@
 import { match } from 'react-router'
 import { loadPropsOnServer } from 'async-props'
-import { has } from 'lodash'
+import has from 'lodash/has'
 
-import DefaultRoutes from '../shared/default-routes'
+import RouteWrapper from '../shared/route-wrapper'
 import { renderHtml } from './render'
 import { errorObject } from '../utilities/logger'
 import CacheManager from '../utilities/cache-manager'
@@ -11,6 +11,10 @@ export default ({ server, config, assets }) => {
 
   // Create a new cache
   const cache = CacheManager.createCache('html')
+ // Allow purge of individual URL
+  server.on('purge-html-cache-by-key', (key) => {
+    cache.del(key)
+  })
 
   server.route({
     method: 'GET',
@@ -18,7 +22,7 @@ export default ({ server, config, assets }) => {
     handler: (request, reply) => {
 
       match({
-        routes: DefaultRoutes(config),
+        routes: RouteWrapper(config),
         location: request.url.path
       }, (err, redirectLocation, renderProps) => {
 
