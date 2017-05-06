@@ -51,7 +51,7 @@
     "clean-webpack-plugin": "^0.1.16",
     "commander": "^2.9.0",
     "es6-promise": "^4.1.0",
-    "fs-extra": "^2.1.2",
+    "fs-extra": "^3.0.1",
     "glamor": "^2.20.24",
     "glob-fs": "^0.1.6",
     "h2o2": "5.4.0",
