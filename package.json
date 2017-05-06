@@ -82,7 +82,7 @@
     "editorconfig-tools": "^0.1.1",
     "eslint": "^3.19.0",
     "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-jsx-a11y": "^5.0.0",
     "eslint-plugin-react": "^6.10.3",
     "gitbook-cli": "^2.3.0",
     "icon-gen": "^1.0.7",
