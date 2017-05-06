@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 import request from 'request'
 import { bootServer, mockProxy, mockApi } from '../utils'
+import Page from '../components/page'
 
 describe('Handling redirects', () => {
 
@@ -9,7 +10,10 @@ describe('Handling redirects', () => {
     redirectPaths: {
       '/redirect/from/this-path': '/about/home'
     },
-    siteUrl: 'http://dummy.api'
+    siteUrl: 'http://dummy.api',
+    components: {
+      Page
+    }
   }
 
   before(done => {
@@ -17,6 +21,7 @@ describe('Handling redirects', () => {
     tapestry = bootServer(config)
     tapestry.server.on('start', done)
   })
+
   after(() => tapestry.server.stop())
 
   // http://stackoverflow.com/questions/42136829/whats-difference-between-http-301-and-308-status-codes
