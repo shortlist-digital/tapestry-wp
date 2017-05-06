@@ -83,7 +83,7 @@
     "eslint": "^3.19.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^5.0.0",
-    "eslint-plugin-react": "^6.10.3",
+    "eslint-plugin-react": "^7.0.0",
     "gitbook-cli": "^2.3.0",
     "icon-gen": "^1.0.7",
     "lint-staged": "^3.4.0",
