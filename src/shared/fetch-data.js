@@ -48,13 +48,12 @@ const fetchData = (TopLevelComponent, route) => {
         response
       // should fail if an empty response?
       // TODO - BLEAURGH, improve this.
-      const failOnEmpty = (
+      const failIfEmpty = (
         !arrayResponse ||
         (
           arrayResponse &&
-          (
-            has(route, 'options.failOnEmpty') &&
-            route.options.failOnEmpty
+          !(
+            has(route, 'options.allowEmptyResponse') && route.options.allowEmptyResponse
           )
         )
       )
@@ -62,7 +61,7 @@ const fetchData = (TopLevelComponent, route) => {
       if (
         !TopLevelComponent ||
         !response ||
-        (isEmpty(response) && failOnEmpty) ||
+        (isEmpty(response) && failIfEmpty) ||
         has(response, 'data.status')
       )  {
         return (

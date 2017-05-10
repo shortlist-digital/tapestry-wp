@@ -41,7 +41,7 @@ const schema = joi.object({
       path: joi.string(),
       endpoint: joi.alternatives().try(joi.string(), joi.func()),
       options: joi.object().keys({
-        failOnEmpty: joi.boolean()
+        allowEmptyResponse: joi.boolean()
       })
     })
   ),
