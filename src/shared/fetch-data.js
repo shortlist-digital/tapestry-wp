@@ -8,7 +8,7 @@ import { generate as uid } from 'shortid'
 import fetchRouteData from './fetch-route-data'
 import RenderError from './render-error'
 
-const fetchData = (TopLevelComponent, endpoint) => {
+const fetchData = (TopLevelComponent, route) => {
 
   class AsyncPropsWrapper extends Component {
 
@@ -16,7 +16,7 @@ const fetchData = (TopLevelComponent, endpoint) => {
       let loadFrom = this.endpoint
       // get endpoint, either as a string or function
       if (typeof this.endpoint === 'function') {
-        loadFrom = endpoint(params)
+        loadFrom = this.endpoint(params)
       }
       // go get all that data
       return fetchRouteData({ loadFrom, loadContext, cb })
@@ -38,18 +38,28 @@ const fetchData = (TopLevelComponent, endpoint) => {
     }
 
     render() {
-      // to avoid React mangling the array to {'0':{},'1':{}}
-      // pass through as 'posts'
       const response = this.props.data
       const arrayResponse = isArray(response)
+      // to avoid React mangling the array to {'0':{},'1':{}}
+      // pass through as 'posts'.
+      // TODO - update posts key to something more generic
       const data = arrayResponse ?
         { posts: response } :
         response
+      // should fail if an empty response?
+      // TODO - BLEAURGH, improve this.
+      const failIfEmpty = (
+        !arrayResponse ||
+        (
+          arrayResponse &&
+          !(has(route, 'options.allowEmptyResponse') && !route.options.allowEmptyResponse)
+        )
+      )
       // check data/component exists and isn't a server errored response
       if (
         !TopLevelComponent ||
         !response ||
-        (!arrayResponse && isEmpty(response)) ||
+        (isEmpty(response) && failIfEmpty) ||
         has(response, 'data.status')
       )  {
         return (
@@ -70,7 +80,8 @@ const fetchData = (TopLevelComponent, endpoint) => {
   }
 
   AsyncPropsWrapper.displayName = `wrappedForDataFetching(${TopLevelComponent ? TopLevelComponent.name : 'Error'})`
-  AsyncPropsWrapper.endpoint = endpoint
+  AsyncPropsWrapper.endpoint = route.endpoint
+  AsyncPropsWrapper.options = route.options
 
   AsyncPropsWrapper.propTypes = {
     data: PropTypes.any,
