@@ -52,9 +52,7 @@ const fetchData = (TopLevelComponent, route) => {
         !arrayResponse ||
         (
           arrayResponse &&
-          !(
-            has(route, 'options.allowEmptyResponse') && route.options.allowEmptyResponse
-          )
+          !(has(route, 'options.allowEmptyResponse') && !route.options.allowEmptyResponse)
         )
       )
       // check data/component exists and isn't a server errored response
