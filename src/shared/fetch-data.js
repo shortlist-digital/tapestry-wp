@@ -22,18 +22,25 @@ const fetchData = (TopLevelComponent, route) => {
       return fetchRouteData({ loadFrom, loadContext, cb })
     }
 
-    componentWillReceiveProps() {
-      this.forceUpdate()
+    shouldComponentUpdate(nextProps) {
+      return this.props.data !== nextProps.data
     }
+
+    componentDidUpdate() {
+      this.handleViewUpdate()
+    }
+
     componentDidMount() {
-      // check if rendering in client
-      if (typeof window !== 'undefined') {
-        // reset scroll position
-        window.scrollTo(0, 0)
-        // run project callback
-        // wrapped in setTimeout to clear call stack (blocks progress indicator)
-        if (typeof this.props.route.config.onPageUpdate === 'function')
-          setTimeout(this.props.route.config.onPageUpdate, 0)
+      this.handleViewUpdate()
+    }
+
+    handleViewUpdate() {
+      const { onPageUpdate } = this.props.route.config
+      // reset scroll position
+      window.scrollTo(0, 0)
+      // wrapped in setTimeout to clear call stack (blocks progress indicator)
+      if (typeof onPageUpdate === 'function') {
+        setTimeout(onPageUpdate, 0)
       }
     }
 
