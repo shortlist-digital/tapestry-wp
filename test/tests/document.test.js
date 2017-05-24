@@ -27,10 +27,15 @@ describe('HTML document', () => {
     tapestry.server.stop()
   })
 
-  it('Data is correctly loaded on page', (done) => {
+  it('Data is correctly loaded on page, escapes <script> tags', (done) => {
     request
       .get(`${tapestry.server.info.uri}/sample-page`, (err, res, body) => {
-        expect(body).to.contain(`window.__ASYNC_PROPS__ = [{"data":${JSON.stringify(pageData)}}]`)
+        expect(body).to.contain(`window.__ASYNC_PROPS__ = [{"data":${
+          JSON.stringify(pageData)
+            .replace(/\//g, '\\/')
+            .replace(/\u2028/g, "\\u2028")
+            .replace(/\u2029/g, "\\u2029")
+        }}]`)
         done()
       })
   })

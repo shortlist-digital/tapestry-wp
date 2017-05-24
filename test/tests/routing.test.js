@@ -62,7 +62,12 @@ describe('Custom routes', () => {
   it('Dynamic route matches, queries custom endpoint', (done) => {
     request
       .get(`${tapestry.server.info.uri}/custom-endpoint/hi`, (err, res, body) => {
-        expect(body).to.contain(`window.__ASYNC_PROPS__ = [{"data":${JSON.stringify(pageData)}}]`)
+        expect(body).to.contain(`window.__ASYNC_PROPS__ = [{"data":${
+          JSON.stringify(pageData)
+            .replace(/\//g, '\\/')
+            .replace(/\u2028/g, "\\u2028")
+            .replace(/\u2029/g, "\\u2029")
+        }}]`)
         done()
       })
   })

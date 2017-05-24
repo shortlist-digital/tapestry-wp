@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import has from 'lodash/has'
+import idx from 'idx'
 
 class ProgressIndicator extends Component {
 
@@ -8,20 +8,23 @@ class ProgressIndicator extends Component {
     super()
     this.state = {
       percent: 0,
-      complete: true
+      visible: false
     }
-    this.style = config => ({
-      backgroundColor: has(config, 'option.progressBarColor') ? `#${config.options.progressBarColor}` : '#50e3c2',
+    this.defaultStyle = {
+      backgroundColor: '#00ffcb',
       height: '2px',
       left: 0,
       position: 'fixed',
       top: 0,
       zIndex: 10000
+    }
+    this.customStyle = config => ({
+      backgroundColor: idx(config, _ => _.options.progressBarColor)
     })
     this.interval = null
     this.initialPercentage = 15
-    this.percentageIncrease = 5
-    this.increaseInterval = 500
+    this.percentageIncrease = 3
+    this.increaseInterval = 400
   }
 
   componentDidMount() {
@@ -34,7 +37,7 @@ class ProgressIndicator extends Component {
   handleDataStart() {
     this.setState({
       percent: this.initialPercentage,
-      complete: false
+      visible: true
     })
     this.interval = setInterval(() => {
       this.setState({
@@ -47,32 +50,30 @@ class ProgressIndicator extends Component {
     clearInterval(this.interval)
     this.setState({
       percent: 100,
-      complete: true
+      visible: false
     })
     setTimeout(() => {
       this.setState({
         percent: 0
       })
-    }, this.increaseInterval)
+    }, 600)
   }
 
   render() {
-    const { complete, percent } = this.state
+    const { visible, percent } = this.state
     return (
       <div>
         <div
           style={{
-            ...this.style(this.props.route.config),
-            opacity: complete ? 0 : 1,
-            transition: complete ?
-              `visibility 150ms linear 100ms,
-              opacity 150ms ease-out 100ms,
-              width 200ms ease-in-out` :
-              `visibility 150ms,
-              opacity 150ms ease-out,
-              width 150ms ease-in-out`,
-            width: `${percent}%`,
-            visibility: complete ? 'hidden' : 'visible'
+            ...this.defaultStyle,
+            ...this.customStyle(this.props.route.config),
+            opacity: visible ? 1 : 0,
+            transition: visible ?
+             `opacity 0ms linear 0ms,
+              width 400ms ease` :
+             `opacity 300ms ease 300ms,
+              width 300ms ease`,
+            width: `${percent}%`
           }}
         />
         {this.props.children}

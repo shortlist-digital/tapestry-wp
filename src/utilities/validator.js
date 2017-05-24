@@ -34,7 +34,10 @@ const schema = joi.object({
       component: joi.func(),
       endpoint: joi.alternatives().try(joi.string(), joi.func()),
       getComponent: joi.func(),
-      path: joi.string()
+      options: joi.object().keys({
+        allowEmptyResponse: joi.boolean()
+      }),
+      path: joi.string().required()
     })
   ),
   // optional array of proxy paths e.g. ['path', 'another/path']
