@@ -15,7 +15,7 @@ const configCustomPath = path.resolve(cwd, 'webpack.config.js')
 // transpile any following imports
 require('babel-register')({
   presets: ['es2015', 'react'],
-  plugins: ['transform-object-rest-spread']
+  plugins: ['transform-object-rest-spread', 'idx']
 })
 
 // fetch user webpack config

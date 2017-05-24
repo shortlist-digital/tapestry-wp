@@ -13,8 +13,6 @@ if (window !== 'undefined') {
 }
 
 // methods in use on the <Router />
-const onUpdate = () =>
-  typeof config.onPageUpdate === 'function' && config.onPageUpdate()
 const renderAsyncProps = props =>
   <AsyncProps loadContext={config} {...props} />
 
@@ -27,7 +25,6 @@ const targetNode = document.getElementById('root')
 match({ routes, history }, (error, redirectLocation, renderProps) =>
   render(
     <Router
-      onUpdate={onUpdate}
       render={renderAsyncProps}
       routes={routes}
       {...renderProps}

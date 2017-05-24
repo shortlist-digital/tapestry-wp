@@ -10,7 +10,7 @@ import RenderError from './render-error'
 const ComponentWrapper = (component, route) => {
   // return component with AsyncProps wrapper if endpoint declared
   return route.endpoint ?
-    fetchData(component, route.endpoint) :
+    fetchData(component, route) :
     component
 }
 
@@ -39,12 +39,24 @@ const RouteWrapper = (config) => {
           } : {
             component: ComponentWrapper(route.component, route)
           }
+          const onEnter = () => {
+            // if we're not delaying load with AsyncProps and we're in the client
+            if (!route.endpoint && typeof window !== 'undefined' ) {
+              // reset scroll position
+              window.scrollTo(0, 0)
+              // run project callback
+              if (typeof config.onPageUpdate === 'function') {
+                config.onPageUpdate()
+              }
+            }
+          }
           // return individual route
           return (
             <Route
               key={uid()}
               path={route.path}
               config={config}
+              onEnter={onEnter}
               {...component}
             />
           )
