@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import idx from 'idx'
 
 class ProgressIndicator extends Component {
 
@@ -17,6 +18,9 @@ class ProgressIndicator extends Component {
       top: 0,
       zIndex: 10000
     }
+    this.customStyle = config => ({
+      backgroundColor: idx(config, _ => _.options.progressBarColor)
+    })
     this.interval = null
     this.initialPercentage = 15
     this.percentageIncrease = 3
@@ -62,6 +66,7 @@ class ProgressIndicator extends Component {
         <div
           style={{
             ...this.defaultStyle,
+            ...this.customStyle(this.props.route.config),
             opacity: visible ? 1 : 0,
             transition: visible ?
              `opacity 0ms linear 0ms,
@@ -81,7 +86,10 @@ ProgressIndicator.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
-  ])
+  ]),
+  route: PropTypes.shape({
+    config: PropTypes.object
+  })
 }
 
 export default ProgressIndicator

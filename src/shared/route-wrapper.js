@@ -20,7 +20,10 @@ const RouteWrapper = (config) => {
   const ErrorComponent = () => RenderError({ config })
   // loops over routes and return react-router <Route /> components
   return (
-    <Route component={ProgressIndicator}>
+    <Route
+      component={ProgressIndicator}
+      config={config}
+    >
       {
         routes.map((route) => {
           // cancel if component not defined in user config, joi will validate user routes for component/path keys
