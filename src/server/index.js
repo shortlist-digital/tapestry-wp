@@ -2,6 +2,8 @@ import { Server } from 'hapi'
 import h2o2 from 'h2o2'
 import Inert from 'inert'
 import idx from 'idx'
+
+// Configure Logging
 import winston from 'winston'
 winston.level = process.env.LOG_LEVEL || 'info'
 winston.cli()
