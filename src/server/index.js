@@ -3,7 +3,7 @@ import h2o2 from 'h2o2'
 import Inert from 'inert'
 import idx from 'idx'
 import winston from 'winston'
-winston.level = process.env.LOG_LEVEL
+winston.level = process.env.LOG_LEVEL || 'info'
 
 import { success, errorObject } from '../utilities/logger'
 import handleStatic from './handle-static'
