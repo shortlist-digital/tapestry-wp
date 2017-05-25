@@ -1,6 +1,12 @@
 import { Server } from 'hapi'
 import h2o2 from 'h2o2'
 import Inert from 'inert'
+import idx from 'idx'
+
+// Configure Logging
+import winston from 'winston'
+winston.level = process.env.LOG_LEVEL || 'info'
+winston.cli()
 
 import { success, errorObject } from '../utilities/logger'
 import handleStatic from './handle-static'
@@ -57,12 +63,14 @@ export default class Tapestry {
   }
 
   bootServer () {
+    const host = idx(this.config, _ => _.config.options.host)
+    const port = idx(this.config, _ => _.config.options.port)
     // create new Hapi server and register required plugins
     const server = new Server()
     server.register([h2o2, Inert])
     server.connection({
-      host: this.config.host || '0.0.0.0',
-      port: process.env.PORT || this.config.port || 3030
+      host: host || '0.0.0.0',
+      port: process.env.PORT || port || 3030
     })
     this.config.serverUri = server.info.uri
     return server
