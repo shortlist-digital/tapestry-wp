@@ -14,7 +14,7 @@ export default ({ server, config, assets }) => {
   const cache = CacheManager.createCache('html')
  // Allow purge of individual URL
   server.on('purge-html-cache-by-key', (key) => {
-    winston.loggers('debug', `Server will purge html cache by key: ${key}`)
+    winston.log('debug', `Server will purge html cache by key: ${key}`)
     cache.del(key)
   })
 

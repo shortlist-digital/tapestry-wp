@@ -2,6 +2,8 @@ import fetch from 'isomorphic-fetch'
 import CacheManager from '../utilities/cache-manager'
 import { errorObject } from '../utilities/logger'
 
+import winston from 'winston'
+
 export default ({ server, config }) => {
 
   // Create a new cache | 100 requests only, expire after 2 minutes
@@ -9,6 +11,7 @@ export default ({ server, config }) => {
 
   // Allow purge of individual URL
   server.on('purge-api-cache-by-key', (key) => {
+    winston.log('debug', `Server will purge api cache by key: ${key}`)
     cache.del(key)
   })
 
@@ -21,6 +24,7 @@ export default ({ server, config }) => {
       const cacheRecord = cache.get(remote)
       // If we find a response in the cache send it back
       if (cacheRecord) {
+        winston.log('debug', `Server loading API response from cache for ${remote}`)
         reply(cacheRecord.response)
       } else {
         fetch(remote)
@@ -36,6 +40,7 @@ export default ({ server, config }) => {
             cache.set(remote, {
               response: resp
             })
+            winston.log('debug', `Server returned a fresh API response over HTTP for ${remote}`)
             reply(resp)
           })
           .catch(error => errorObject(error))
