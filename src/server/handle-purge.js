@@ -29,7 +29,7 @@ export default ({ server, config }) => {
         const remote = `${config.siteUrl}/wp-json/wp/v2/${apiRoute}`
 
         winston.log('debug', `Emitting purge-html-cache-by-key for ${request.params.path}`)
-        server.emit('purge-html-cache-by-key', `/${request.params.path}`)
+        server.emit('purge-html-cache-by-key', `${request.params.path}`)
 
         winston.log('debug', `Emitting purge-api-cache-by-key for ${remote}`)
         server.emit('purge-api-cache-by-key', `${remote}`)

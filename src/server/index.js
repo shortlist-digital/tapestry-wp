@@ -12,6 +12,10 @@ import handlePurge from './handle-purge'
 import handleRedirects from './handle-redirects'
 import CacheManager from '../utilities/cache-manager'
 
+import winston from 'winston'
+
+winston.level = process.env.LOG_LEVEL
+
 export default class Tapestry {
 
   constructor ({ config, assets = {} }, { silent } = {}) {
