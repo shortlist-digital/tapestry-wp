@@ -6,13 +6,11 @@ class ProgressIndicator extends Component {
 
   constructor() {
     super()
-    this.defaultColor = '#00ffcb'
     this.state = {
       percent: 0,
       visible: false
     }
     this.defaultStyle = {
-      backgroundColor: this.defaultColor,
       height: '2px',
       left: 0,
       position: 'fixed',
@@ -20,7 +18,7 @@ class ProgressIndicator extends Component {
       zIndex: 10000
     }
     this.customStyle = config => ({
-      backgroundColor: idx(config, _ => _.options.progressBarColor) || this.defaultColor
+      backgroundColor: idx(config, _ => _.options.progressBarColor) || '#00ffcb'
     })
     this.interval = null
     this.initialPercentage = 15
