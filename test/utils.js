@@ -11,7 +11,7 @@ export const bootServer = (config, options = {}) => {
   global.__DEV__ = options.__DEV__ === false ? false : true
   // create and return a new Tapestry instance
   return new Server({
-    config: { ...config, port: 5050 },
+    config: { ...config, options: { port: 5050 } },
     cwd,
     env
   }, { silent: true })
