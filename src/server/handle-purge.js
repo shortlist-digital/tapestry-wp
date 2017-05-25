@@ -1,4 +1,4 @@
-import { winston } from 'winston'
+import winston from 'winston'
 import { match } from 'react-router'
 import RouteWrapper from '../shared/route-wrapper'
 const purgePath = process.env.SECRET_PURGE_PATH || 'purge'
