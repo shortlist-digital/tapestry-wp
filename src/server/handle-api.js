@@ -1,7 +1,6 @@
 import fetch from 'isomorphic-fetch'
 import CacheManager from '../utilities/cache-manager'
 import { errorObject } from '../utilities/logger'
-
 import winston from 'winston'
 
 export default ({ server, config }) => {

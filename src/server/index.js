@@ -2,6 +2,8 @@ import { Server } from 'hapi'
 import h2o2 from 'h2o2'
 import Inert from 'inert'
 import idx from 'idx'
+import winston from 'winston'
+winston.level = process.env.LOG_LEVEL
 
 import { success, errorObject } from '../utilities/logger'
 import handleStatic from './handle-static'
@@ -11,10 +13,6 @@ import handleProxies from './handle-proxies'
 import handlePurge from './handle-purge'
 import handleRedirects from './handle-redirects'
 import CacheManager from '../utilities/cache-manager'
-
-import winston from 'winston'
-
-winston.level = process.env.LOG_LEVEL
 
 export default class Tapestry {
 
