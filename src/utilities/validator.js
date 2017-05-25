@@ -53,7 +53,7 @@ const schema = joi.object({
     // number e.g. 3030
     port: joi.number(),
     // theme color for progress bar
-    progressBarColor: joi.string().hex()
+    progressBarColor: joi.string()
   })
 })
 
