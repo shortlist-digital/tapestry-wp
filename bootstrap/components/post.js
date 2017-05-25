@@ -1,11 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styles from '../styles'
+import { Link } from 'react-router'
 
 const Post = props => {
   const data = props.posts[0]
   return (
     <main className={styles.wrapper}>
+      <Link to='/'>
+        <h1 className={styles.heading}>Home</h1>
+      </Link>
       <h1 className={styles.heading}>
         {decodeURIComponent(data.title.rendered)}
       </h1>
