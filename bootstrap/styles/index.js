@@ -1,3 +1,4 @@
+import 'glamor/reset'
 import { css } from 'glamor'
 
 const wrapper = css({
@@ -18,33 +19,21 @@ const date = css({
 })
 
 const content = css({
+  color: '#333',
+  fontFamily: 'Georgia, serif',
+  fontSize: '18px',
+  lineHeight: '1.5',
+  marginBottom: '20px',
   '& h3': {
-    fontSize: '24px',
+    fontSize: '22px',
+    fontFamily: 'Helvetica, sans-serif',
     lineHeight: '1.5',
     fontWeight: 600,
     marginTop: '24px',
     marginBottom: '8px'
   },
-  '& p': {
-    color: '#333',
-    fontFamily: 'Georgia, sans-serif',
-    fontSize: '18px',
-    lineHeight: '1.5',
-    marginBottom: '20px'
-  },
   '& a': {
     color: '#009688'
-  },
-  '& figure': {
-    borderBottom: '1px solid #e5e5e5',
-    marginBottom: '24px',
-    paddingBottom: '16px'
-  },
-  '& figcaption': {
-    color: '#333',
-    fontSize: '13px',
-    lineHeight: '1.5',
-    marginTop: '16px'
   }
 })
 

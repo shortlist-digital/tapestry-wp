@@ -10,7 +10,7 @@ const getRelativeUrl = url =>
 const FrontPage = ({ posts }) =>
   <main className={styles.wrapper}>
     <h1 className={styles.heading}>
-      Posts
+      Wordpress News
     </h1>
     <ul>
       {

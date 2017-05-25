@@ -3,5 +3,5 @@ import Post from './components/post'
 
 export default {
   components: { Post, FrontPage },
-  siteUrl: 'http://www.gsd.harvard.edu'
+  siteUrl: 'https://wordpress.org/news'
 }
