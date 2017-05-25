@@ -4,6 +4,7 @@ import Inert from 'inert'
 import idx from 'idx'
 import winston from 'winston'
 winston.level = process.env.LOG_LEVEL || 'info'
+winston.cli()
 
 import { success, errorObject } from '../utilities/logger'
 import handleStatic from './handle-static'
