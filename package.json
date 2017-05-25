@@ -76,8 +76,9 @@
     "source-map-support": "^0.4.14",
     "stats-webpack-plugin": "^0.6.0",
     "validator.js": "^2.0.3",
-    "webpack": "^2.3.3",
-    "webpack-node-externals": "^1.5.4"
+    "webpack": "^2.2.1",
+    "webpack-node-externals": "^1.5.4",
+    "winston": "^2.3.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
