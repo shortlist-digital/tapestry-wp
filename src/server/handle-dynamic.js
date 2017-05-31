@@ -7,11 +7,11 @@ import RouteWrapper from '../shared/route-wrapper'
 import { renderHtml } from './render'
 import { errorObject } from '../utilities/logger'
 import CacheManager from '../utilities/cache-manager'
+let cacheManager = new CacheManager()
 
 export default ({ server, config, assets }) => {
 
   // Create a new cache
-  const cacheManager = new CacheManager()
   const cache = cacheManager.createCache('html')
 
   server.route({

@@ -3,10 +3,11 @@ import CacheManager from '../utilities/cache-manager'
 import { errorObject } from '../utilities/logger'
 import winston from 'winston'
 
+let cacheManager = new CacheManager()
+
 export default ({ server, config }) => {
 
   // Create a new cache | 100 requests only, expire after 2 minutes
-  const cacheManager = new CacheManager()
   const cache = cacheManager.createCache('api')
 
   server.route({
