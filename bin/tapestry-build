@@ -1,0 +1,53 @@
+#!/usr/bin/env node
+
+const path = require('path')
+const fs = require('fs')
+const webpack = require('webpack')
+
+const logger = require('../dist/logger')
+const mergeConfigs = require('../dist/merge-config').default
+const configClientDefault = require('../src/webpack/client.config')
+const configServerDefault = require('../src/webpack/server.config')
+
+const cwd = process.cwd()
+const env = 'production'
+const configCustomPath = path.resolve(cwd, 'webpack.config.js')
+
+logger.info(`Building Tapestry… \n`)
+
+// fetch user webpack config
+let configCustom = null
+if (fs.existsSync(configCustomPath)) {
+  const module = require(configCustomPath)
+  configCustom = module.default || module
+}
+
+const createCompiler = (configDefault) => {
+  // combine default/user webpack config
+  const webpackConfig = mergeConfigs({
+    configCustom,
+    configDefault,
+    options: { cwd, env },
+    webpack
+  })
+  // kick off webpack compilation
+  return webpack(webpackConfig)
+}
+
+const serverCompiler = createCompiler(configServerDefault)
+const clientCompiler = createCompiler(configClientDefault)
+
+serverCompiler.run(err => {
+  // handle error
+  if (err) {
+    logger.error(err)
+  }
+  logger.success(`Server scripts built…`)
+  clientCompiler.run(err => {
+    // handle error
+    if (err) {
+      logger.error(err)
+    }
+    logger.success(`Client scripts built… \n`)
+  })
+})

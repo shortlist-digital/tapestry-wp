@@ -1,12 +1,12 @@
-import path from 'path'
-import webpack from 'webpack'
-import CleanPlugin from 'clean-webpack-plugin'
-import AssetsPlugin from 'assets-webpack-plugin'
-import StatsPlugin from 'stats-webpack-plugin'
-import { module } from './shared'
+const path = require('path')
+const webpack = require('webpack')
+const CleanPlugin = require('clean-webpack-plugin')
+const AssetsPlugin = require('assets-webpack-plugin')
+const StatsPlugin = require('stats-webpack-plugin')
+const shared = require('./shared')
 
 // exporting function to allow process.cwd() and environment to get passed through
-export default ({ cwd, env }) => {
+module.exports = ({ cwd, env }) => {
   // expose environment to user
   const __DEV__ = env === 'development'
   const config = {
@@ -31,7 +31,7 @@ export default ({ cwd, env }) => {
       }
     },
     // share module rules with server config
-    module: module,
+    module: shared.module,
     plugins: [
       // expose environment to user
       new webpack.DefinePlugin({ __DEV__ }),

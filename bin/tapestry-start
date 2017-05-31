@@ -29,7 +29,7 @@ const webpackConfig = mergeConfigs({
 })
 // kick off webpack compilation
 const compiler = webpack(webpackConfig)
-compiler.run((err, stats) => {
+compiler.run((err) => {
   // handle error
   if (err) logger.error(err)
   // server path relative to root

@@ -10,6 +10,7 @@ program
   .command('dev', 'Run a Tapestry site in development mode', {
     isDefault: true
   })
+  .command('build', 'Build the scripts for a Tapestry site')
   .command('start', 'Run a Tapestry site in production mode')
   .command('init', 'Bootstrap a Tapestry project')
 
