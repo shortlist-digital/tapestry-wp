@@ -6,13 +6,8 @@ import winston from 'winston'
 export default ({ server, config }) => {
 
   // Create a new cache | 100 requests only, expire after 2 minutes
-  const cache = CacheManager.createCache('api')
-
-  // Allow purge of individual URL
-  server.on('purge-api-cache-by-key', (key) => {
-    winston.log('debug', `Server will purge api cache by key: ${key}`)
-    cache.del(key)
-  })
+  const cacheManager = new CacheManager()
+  const cache = cacheManager.createCache('api')
 
   server.route({
     method: 'GET',

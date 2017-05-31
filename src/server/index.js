@@ -17,6 +17,8 @@ import handlePurge from './handle-purge'
 import handleRedirects from './handle-redirects'
 import CacheManager from '../utilities/cache-manager'
 
+const cacheManager = new CacheManager
+
 export default class Tapestry {
 
   constructor ({ config, assets = {} }, { silent } = {}) {
@@ -39,11 +41,7 @@ export default class Tapestry {
     // ----------
     // Register reset-cache event
     this.server.event('reset-cache')
-    // Register event for clearing caches by key
-    this.server.event('purge-html-cache-by-key')
-    this.server.event('purge-api-cache-by-key')
     // Clear all caches on reset-cache event
-    this.server.on('reset-cache', CacheManager.clearAll)
 
     // handle server routing
     const data = {
@@ -57,6 +55,8 @@ export default class Tapestry {
     handleApi(data)
     handleProxies(data)
     handleDynamic(data)
+
+    this.server.on('reset-cache', cacheManager.clearAll)
 
     // kick off server
     this.startServer()

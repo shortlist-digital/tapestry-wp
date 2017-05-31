@@ -11,12 +11,8 @@ import CacheManager from '../utilities/cache-manager'
 export default ({ server, config, assets }) => {
 
   // Create a new cache
-  const cache = CacheManager.createCache('html')
- // Allow purge of individual URL
-  server.on('purge-html-cache-by-key', (key) => {
-    winston.log('debug', `Server will purge html cache by key: ${key}`)
-    cache.del(key)
-  })
+  const cacheManager = new CacheManager()
+  const cache = cacheManager.createCache('html')
 
   server.route({
     method: 'GET',
