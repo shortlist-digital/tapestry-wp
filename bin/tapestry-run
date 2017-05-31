@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-// const fs = require('fs-extra')
+const fs = require('fs-extra')
 const path = require('path')
+const logger = require('../dist/logger')
 
 // const Server = require('../src/server')
 // const validator = require('../src/utilities/validator')
@@ -12,7 +13,12 @@ const env = 'production'
 // const configPath = path.resolve(cwd, 'tapestry.config.js')
 // const config = require(configPath)
 
+
 const serverPath = path.resolve(cwd, '.tapestry/server.bundle.js')
+if (!fs.existsSync(serverPath)) {
+  logger.errorMessage('Run tapestry build first')
+  process.exit(0)
+}
 // require server and boot
 const server = require(serverPath).default
 server({ cwd, env })

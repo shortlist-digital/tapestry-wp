@@ -40,11 +40,17 @@ const clientCompiler = createCompiler(configClientDefault)
 let serverBooted = false
 
 serverCompiler.run(err => {
-  if (err) logger.error(err)
+  if (err) {
+    logger.errorObject(err)
+    process.exit(0)
+  }
   logger.success(`Server scripts built…`)
 
   clientCompiler.watch({}, err => {
-    if (err) logger.error(err)
+    if (err) {
+      logger.errorObject(err)
+      process.exit(0)
+    }
     logger.success(`Client scripts built… \n`)
     if (!serverBooted) {
       // server path relative to root

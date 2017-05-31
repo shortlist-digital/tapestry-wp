@@ -38,10 +38,16 @@ const serverCompiler = createCompiler(configServerDefault)
 const clientCompiler = createCompiler(configClientDefault)
 
 serverCompiler.run(err => {
-  if (err) logger.error(err)
+  if (err) {
+    logger.errorObject(err)
+    process.exit(0)
+  }
   logger.success(`Server scripts built…`)
   clientCompiler.run(err => {
-    if (err) logger.error(err)
+    if (err) {
+      logger.errorObject(err)
+      process.exit(0)
+    }
     logger.success(`Client scripts built… \n`)
   })
 })
