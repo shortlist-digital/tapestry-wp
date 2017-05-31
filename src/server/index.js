@@ -1,12 +1,19 @@
 import { Server } from 'hapi'
 import h2o2 from 'h2o2'
 import Inert from 'inert'
+import idx from 'idx'
+
+// Configure Logging
+import winston from 'winston'
+winston.level = process.env.LOG_LEVEL || 'info'
+winston.cli()
 
 import { success, errorObject } from '../utilities/logger'
 import handleStatic from './handle-static'
 import handleApi from './handle-api'
 import handleDynamic from './handle-dynamic'
 import handleProxies from './handle-proxies'
+import handlePurge from './handle-purge'
 import handleRedirects from './handle-redirects'
 import CacheManager from '../utilities/cache-manager'
 
@@ -28,8 +35,13 @@ export default class Tapestry {
       reply.continue()
     })
 
-    // register reset-cache event
+    // Register server events
+    // ----------
+    // Register reset-cache event
     this.server.event('reset-cache')
+    // Register event for clearing caches by key
+    this.server.event('purge-html-cache-by-key')
+    this.server.event('purge-api-cache-by-key')
     // Clear all caches on reset-cache event
     this.server.on('reset-cache', CacheManager.clearAll)
 
@@ -41,8 +53,9 @@ export default class Tapestry {
     }
     handleRedirects(data)
     handleStatic(data)
-    handleProxies(data)
+    handlePurge(data)
     handleApi(data)
+    handleProxies(data)
     handleDynamic(data)
 
     // kick off server
@@ -50,12 +63,14 @@ export default class Tapestry {
   }
 
   bootServer () {
+    const host = idx(this.config, _ => _.options.host)
+    const port = idx(this.config, _ => _.options.port)
     // create new Hapi server and register required plugins
     const server = new Server()
     server.register([h2o2, Inert])
     server.connection({
-      host: this.config.host || '0.0.0.0',
-      port: this.config.port || process.env.PORT || 3030
+      host: host || '0.0.0.0',
+      port: process.env.PORT || port || 3030
     })
     this.config.serverUri = server.info.uri
     return server

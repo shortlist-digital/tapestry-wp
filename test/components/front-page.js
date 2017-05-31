@@ -1,6 +1,8 @@
 import React from 'react'
 
-export default props =>
+const FrontPage = props =>
   <div>
     <h1>{props.title.rendered}</h1>
   </div>
+
+export default FrontPage

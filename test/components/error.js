@@ -1,6 +1,8 @@
 import React from 'react'
 
-export default props =>
+const CustomError = props =>
   <div>
     <h1>This is an error page</h1>
   </div>
+
+export default CustomError

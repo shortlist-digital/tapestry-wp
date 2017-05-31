@@ -1,7 +1,7 @@
-import Page from './components/page'
+import FrontPage from './components/front-page'
 import Post from './components/post'
 
 export default {
-  components: { Page, Post },
-  siteUrl: 'http://yourwordpress.site'
+  components: { Post, FrontPage },
+  siteUrl: 'https://wordpress.org/news'
 }

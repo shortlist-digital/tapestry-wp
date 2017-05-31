@@ -1,8 +1,9 @@
 import { match } from 'react-router'
 import { loadPropsOnServer } from 'async-props'
-import { has } from 'lodash'
+import has from 'lodash/has'
+import winston from 'winston'
 
-import DefaultRoutes from '../shared/default-routes'
+import RouteWrapper from '../shared/route-wrapper'
 import { renderHtml } from './render'
 import { errorObject } from '../utilities/logger'
 import CacheManager from '../utilities/cache-manager'
@@ -11,6 +12,11 @@ export default ({ server, config, assets }) => {
 
   // Create a new cache
   const cache = CacheManager.createCache('html')
+ // Allow purge of individual URL
+  server.on('purge-html-cache-by-key', (key) => {
+    winston.log('debug', `Server will purge html cache by key: ${key}`)
+    cache.del(key)
+  })
 
   server.route({
     method: 'GET',
@@ -18,7 +24,7 @@ export default ({ server, config, assets }) => {
     handler: (request, reply) => {
 
       match({
-        routes: DefaultRoutes(config),
+        routes: RouteWrapper(config),
         location: request.url.path
       }, (err, redirectLocation, renderProps) => {
 
@@ -66,6 +72,7 @@ export default ({ server, config, assets }) => {
 
           // respond with HTML from cache if not undefined
           if (cachedHTML) {
+            winston.log('debug', `Server loading HTML from cache for ${request.url.path}`)
             reply(cachedHTML).code(status)
           } else {
             // No HTML found for this path, or cache expired
@@ -81,6 +88,7 @@ export default ({ server, config, assets }) => {
             // We can only get here if there's nothing cached for this URL path
             // Bung the HTML into the cache
             cache.set(request.url.path, html)
+            winston.log('debug', `Server rendered HTML from scratch for ${request.url.path}`)
             reply(html).code(status)
           }
         })
