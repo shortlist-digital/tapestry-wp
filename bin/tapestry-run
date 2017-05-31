@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+// const fs = require('fs-extra')
+const path = require('path')
+
+// const Server = require('../src/server')
+// const validator = require('../src/utilities/validator')
+
+const cwd = process.cwd()
+const env = 'production'
+
+// parent project tapestry config, aliased through webpack/client.config.js
+// const configPath = path.resolve(cwd, 'tapestry.config.js')
+// const config = require(configPath)
+
+const serverPath = path.resolve(cwd, '.tapestry/server.bundle.js')
+// require server and boot
+const server = require(serverPath).default
+server({ cwd, env })
+
+// create client bundle and boot server on callback, avoids the server booting without the client ready.
+// validator(config, (sanitizedConfig) => {
+//   // collect bundle asset info and boot server
+//   const assetsPath = path.resolve(cwd, '.tapestry', 'assets.json')
+//   const assets = fs.readJsonSync(assetsPath)
+//   return new Server({
+//     cwd,
+//     env,
+//     assets,
+//     ...{ config: sanitizedConfig }
+//   })
+// })

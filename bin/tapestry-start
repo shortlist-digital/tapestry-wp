@@ -6,13 +6,14 @@ const webpack = require('webpack')
 
 const logger = require('../dist/logger')
 const mergeConfigs = require('../dist/merge-config').default
-const configDefault = require('../src/webpack/server.config')
+const configClientDefault = require('../src/webpack/client.config')
+const configServerDefault = require('../src/webpack/server.config')
 
 const cwd = process.cwd()
 const env = 'production'
 const configCustomPath = path.resolve(cwd, 'webpack.config.js')
 
-logger.info(`Booting Tapestry… \n`)
+logger.info(`Building Tapestry… \n`)
 
 // fetch user webpack config
 let configCustom = null
@@ -20,21 +21,33 @@ if (fs.existsSync(configCustomPath)) {
   const module = require(configCustomPath)
   configCustom = module.default || module
 }
-// combine default/user webpack config
-const webpackConfig = mergeConfigs({
-  configCustom,
-  configDefault,
-  options: { cwd, env },
-  webpack
-})
-// kick off webpack compilation
-const compiler = webpack(webpackConfig)
-compiler.run((err) => {
-  // handle error
+
+const createCompiler = (configDefault) => {
+  // combine default/user webpack config
+  const webpackConfig = mergeConfigs({
+    configCustom,
+    configDefault,
+    options: { cwd, env },
+    webpack
+  })
+  // kick off webpack compilation
+  return webpack(webpackConfig)
+}
+
+const serverCompiler = createCompiler(configServerDefault)
+const clientCompiler = createCompiler(configClientDefault)
+
+serverCompiler.run(err => {
   if (err) logger.error(err)
-  // server path relative to root
-  const serverPath = path.resolve(cwd, '.tapestry/server.bundle.js')
-  // require server and boot
-  const server = require(serverPath).default
-  server({ cwd, env, configCustom })
+  logger.success(`Server scripts built…`)
+  clientCompiler.run(err => {
+    if (err) logger.error(err)
+    logger.success(`Client scripts built… \n`)
+    // server path relative to root
+    const serverPath = path.resolve(cwd, '.tapestry/server.bundle.js')
+    // require server and boot
+    const server = require(serverPath).default
+    server({ cwd, env })
+  })
+
 })
