@@ -36,9 +36,9 @@ export default () => {
     }
 
     clearCache(cacheName, keyName) {
-      winston.debug('clearing ', cacheName, keyName)
+      winston.debug(`purging ${keyName} from cache: ${cacheName}`)
       winston.silly(JSON.stringify(internalCaches, null, 2))
-      return internalCaches[cacheName].del(keyName)
+      winston.debug(`Clear status for \`${keyName}\`:`, internalCaches[cacheName].del(keyName) || 'not found')
     }
   }
 
