@@ -17,7 +17,7 @@ export default ({
     allowEmptyResponse: true
   }
 }, {
-  path: '/:year/:monthnum/:day/:postname',
+  path: '/:category/:year/:monthnum/:postname',
   component: Post,
   endpoint: params => `posts?slug=${params.postname}&_embed`
 }]
