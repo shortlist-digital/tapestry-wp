@@ -2,9 +2,9 @@ const path = require('path')
 const fs = require('fs-extra')
 const webpack = require('webpack')
 
-const mergeConfigs = require('./merge-config')
-const configClientDefault = require('../webpack/client.config')
-const configServerDefault = require('../webpack/server.config')
+const mergeConfigs = require('./merge-config').default
+const configClientDefault = require('../src/webpack/client.config')
+const configServerDefault = require('../src/webpack/server.config')
 
 module.exports = ({ cwd, env }) => {
 
