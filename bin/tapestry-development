@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
+const path = require('path')
 const createCompilers = require('../dist/create-compilers')
 const logger = require('../dist/logger')
 
 // define
 const cwd = process.cwd()
-const env = 'production'
+const env = 'development'
 
 logger.info(`Building Tapestry… \n`)
 
@@ -14,17 +15,28 @@ const {
   clientCompiler
 } = createCompilers({ cwd, env })
 
+let serverBooted = false
+
 serverCompiler.run(err => {
   if (err) {
     logger.errorObject(err)
     process.exit(0)
   }
   logger.success(`Server scripts built…`)
-  clientCompiler.run(err => {
+
+  clientCompiler.watch({}, err => {
     if (err) {
       logger.errorObject(err)
       process.exit(0)
     }
     logger.success(`Client scripts built… \n`)
+    if (!serverBooted) {
+      // server path relative to root
+      const serverPath = path.resolve(cwd, '.tapestry/server.bundle.js')
+      // require server and boot
+      const server = require(serverPath).default
+      server({ cwd, env })
+      serverBooted = true
+    }
   })
 })
