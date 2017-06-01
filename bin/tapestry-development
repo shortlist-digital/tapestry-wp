@@ -3,33 +3,33 @@
 const path = require('path')
 const createCompilers = require('../dist/create-compilers')
 const logger = require('../dist/logger')
-
-// define
 const cwd = process.cwd()
 const env = 'development'
 
-logger.info(`Building Tapestry… \n`)
+logger.info(`Preparing Tapestry… \n`)
 
+// create webpack node compilers
 const {
   serverCompiler,
   clientCompiler
 } = createCompilers({ cwd, env })
 
+// set flag to track server status
 let serverBooted = false
 
+// run server webpack build
 serverCompiler.run(err => {
   if (err) {
     logger.errorObject(err)
     process.exit(0)
   }
-  logger.success(`Server scripts built…`)
-
+  // run client webpack build when complete as a watch command
   clientCompiler.watch({}, err => {
     if (err) {
       logger.errorObject(err)
       process.exit(0)
     }
-    logger.success(`Client scripts built… \n`)
+    // boot server if not already running
     if (!serverBooted) {
       // server path relative to root
       const serverPath = path.resolve(cwd, '.tapestry/server.bundle.js')

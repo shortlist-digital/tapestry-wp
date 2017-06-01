@@ -2,29 +2,29 @@
 
 const createCompilers = require('../dist/create-compilers')
 const logger = require('../dist/logger')
-
-// define
 const cwd = process.cwd()
 const env = 'production'
 
 logger.info(`Building Tapestry… \n`)
 
+// create webpack node compilers
 const {
   serverCompiler,
   clientCompiler
 } = createCompilers({ cwd, env })
 
+// run server webpack build
 serverCompiler.run(err => {
   if (err) {
     logger.errorObject(err)
     process.exit(0)
   }
-  logger.success(`Server scripts built…`)
+  // run client webpack build
   clientCompiler.run(err => {
     if (err) {
       logger.errorObject(err)
       process.exit(0)
     }
-    logger.success(`Client scripts built… \n`)
+    logger.success(`Tapestry scripts built\n`)
   })
 })

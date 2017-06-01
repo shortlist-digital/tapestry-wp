@@ -3,13 +3,13 @@
 const fs = require('fs-extra')
 const path = require('path')
 const logger = require('../dist/logger')
-
 const cwd = process.cwd()
 const env = 'production'
 
 const serverPath = path.resolve(cwd, '.tapestry/server.bundle.js')
+// detect scripts have been created before running server
 if (!fs.existsSync(serverPath)) {
-  logger.errorMessage('Run tapestry build first')
+  logger.errorMessage('Tapestry scripts missing, make sure to run tapestry build before running')
   process.exit(0)
 }
 // require server and boot
