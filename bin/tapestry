@@ -7,10 +7,11 @@ program
   .version(pkg.version)
   .description(pkg.description)
   .usage('[options]')
-  .command('dev', 'Run a Tapestry site in development mode', {
+  .command('development', 'Run a Tapestry website in development mode', {
     isDefault: true
   })
-  .command('start', 'Run a Tapestry site in production mode')
-  .command('init', 'Bootstrap a Tapestry project')
+  .command('init', 'Add some useful defaults to your Tapestry website')
+  .command('build', 'Build server and client scripts in production mode')
+  .command('start', 'Run a Tapestry website in production mode')
 
 program.parse(process.argv)

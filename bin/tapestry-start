@@ -1,40 +1,17 @@
 #!/usr/bin/env node
 
+const fs = require('fs-extra')
 const path = require('path')
-const fs = require('fs')
-const webpack = require('webpack')
-
 const logger = require('../dist/logger')
-const mergeConfigs = require('../dist/merge-config').default
-const configDefault = require('../src/webpack/server.config')
-
 const cwd = process.cwd()
 const env = 'production'
-const configCustomPath = path.resolve(cwd, 'webpack.config.js')
 
-logger.info(`Booting Tapestry… \n`)
-
-// fetch user webpack config
-let configCustom = null
-if (fs.existsSync(configCustomPath)) {
-  const module = require(configCustomPath)
-  configCustom = module.default || module
+const serverPath = path.resolve(cwd, '.tapestry/server.bundle.js')
+// detect scripts have been created before running server
+if (!fs.existsSync(serverPath)) {
+  logger.errorMessage('Tapestry scripts missing, make sure to run tapestry build before running')
+  process.exit(0)
 }
-// combine default/user webpack config
-const webpackConfig = mergeConfigs({
-  configCustom,
-  configDefault,
-  options: { cwd, env },
-  webpack
-})
-// kick off webpack compilation
-const compiler = webpack(webpackConfig)
-compiler.run((err, stats) => {
-  // handle error
-  if (err) logger.error(err)
-  // server path relative to root
-  const serverPath = path.resolve(cwd, '.tapestry/server.bundle.js')
-  // require server and boot
-  const server = require(serverPath).default
-  server({ cwd, env, configCustom })
-})
+// require server and boot
+const server = require(serverPath).default
+server({ cwd, env })
