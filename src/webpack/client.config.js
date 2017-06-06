@@ -3,10 +3,10 @@ const webpack = require('webpack')
 const CleanPlugin = require('clean-webpack-plugin')
 const AssetsPlugin = require('assets-webpack-plugin')
 const StatsPlugin = require('stats-webpack-plugin')
-const shared = require('./shared')
+const sharedModules = require('./shared')
 
 // exporting function to allow process.cwd() and environment to get passed through
-module.exports = ({ cwd, env }) => {
+module.exports = ({ cwd, env, babelrc }) => {
   // expose environment to user
   const __DEV__ = env === 'development'
   const config = {
@@ -31,7 +31,7 @@ module.exports = ({ cwd, env }) => {
       }
     },
     // share module rules with server config
-    module: shared.module,
+    module: sharedModules(babelrc),
     plugins: [
       // expose environment to user
       new webpack.DefinePlugin({ __DEV__ }),
