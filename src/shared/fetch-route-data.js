@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch'
 import mitt from 'mitt'
+import isArray from 'lodash/isArray'
 import { errorObject } from '../utilities/logger'
 
 mitt()
@@ -13,24 +14,42 @@ export default ({ loadFrom, loadContext, cb }) => {
   if (typeof window !== 'undefined') {
     window.tapestryEmitter.emit('dataStart', 'start')
   }
-  return fetch(`${baseUrl}/${endpoint}`)
-    // .then(resp => {
-    //   // catch server error
-    //   // if (!resp.ok) throw new Error(resp)
-    //   return resp
-    // })
-    .then(resp => resp.json())
-    .then(resp => {
-      if (typeof window !== 'undefined') {
-        window.tapestryEmitter.emit('dataStop', 'stop')
-      }
-      cb(null, { data: resp })
-    })
-    .catch(error => {
-      if (typeof window !== 'undefined') {
-        window.tapestryEmitter.emit('dataStop', 'stop')
-      }
-      errorObject(error)
-      cb(error)
-    })
+
+  if (isArray(loadFrom)) {
+    return Promise
+      .all(
+        loadFrom.map(endpoint =>
+          fetch(`${baseUrl}/${endpoint}`).then(resp => resp.json())
+        )
+      )
+      .then(resp => {
+        if (typeof window !== 'undefined') {
+          window.tapestryEmitter.emit('dataStop', 'stop')
+        }
+        cb(null, { data: resp })
+      })
+      .catch(error => {
+        if (typeof window !== 'undefined') {
+          window.tapestryEmitter.emit('dataStop', 'stop')
+        }
+        errorObject(error)
+        cb(error)
+      })
+  } else {
+    return fetch(`${baseUrl}/${endpoint}`)
+      .then(resp => resp.json())
+      .then(resp => {
+        if (typeof window !== 'undefined') {
+          window.tapestryEmitter.emit('dataStop', 'stop')
+        }
+        cb(null, { data: resp })
+      })
+      .catch(error => {
+        if (typeof window !== 'undefined') {
+          window.tapestryEmitter.emit('dataStop', 'stop')
+        }
+        errorObject(error)
+        cb(error)
+      })
+  }
 }
