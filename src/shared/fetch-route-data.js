@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch'
 import mitt from 'mitt'
 import isArray from 'lodash/isArray'
+import isObject from 'lodash/isObject'
 import { errorObject } from '../utilities/logger'
 
 mitt()
@@ -38,6 +39,19 @@ export default ({
     const endpoints = loadFrom.map(endpoint => fetchJSON(`${baseUrl}/${endpoint}`))
     return Promise
       .all(endpoints)
+      .then(resp => handleResolve(resp, cb))
+      .catch(err => handleReject(err, cb))
+  } else if (isObject(loadFrom)) {
+    const endpoints = Object.keys(loadFrom).map(i => fetchJSON(`${baseUrl}/${loadFrom[i]}`))
+    return Promise
+      .all(endpoints)
+      .then(resp => {
+        const keys = Object.keys(loadFrom)
+        return resp.reduce((prev, curr, i) => {
+          prev[keys[i]] = resp[i]
+          return prev
+        }, {})
+      })
       .then(resp => handleResolve(resp, cb))
       .catch(err => handleReject(err, cb))
   } else {
