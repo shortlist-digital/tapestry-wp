@@ -5,51 +5,44 @@ import { errorObject } from '../utilities/logger'
 
 mitt()
 
-export default ({ loadFrom, loadContext, cb }) => {
-  const endpoint = loadFrom
-  // create API path
-  const baseUrl = `${loadContext.serverUri || window.location.origin}/api/v1`
-  // go and fetch data from constructed API path
-  // run callback from AsyncProps
+const fetchJSON = url => fetch(url).then(resp => resp.json())
+const emitEvent = (event, data) => {
   if (typeof window !== 'undefined') {
-    window.tapestryEmitter.emit('dataStart', 'start')
+    window.tapestryEmitter.emit(event, data)
   }
+}
 
+// handle promise resolution
+const handleResolve = (resp, cb) => {
+  emitEvent('dataStop', 'stop')
+  cb(null, { data: resp })
+}
+const handleReject = (err, cb) => {
+  emitEvent('dataStop', 'stop')
+  errorObject(err)
+  cb(err)
+}
+
+export default ({
+  loadFrom,
+  loadContext,
+  cb
+}) => {
+  const origin = loadContext.serverUri || window.location.origin
+  const baseUrl = `${origin}/api/v1`
+  // kick off progress loader
+  emitEvent('dataStart', 'start')
+  // handle endpoint configurations
   if (isArray(loadFrom)) {
+    // map out all endpoint requests
+    const endpoints = loadFrom.map(endpoint => fetchJSON(`${baseUrl}/${endpoint}`))
     return Promise
-      .all(
-        loadFrom.map(endpoint =>
-          fetch(`${baseUrl}/${endpoint}`).then(resp => resp.json())
-        )
-      )
-      .then(resp => {
-        if (typeof window !== 'undefined') {
-          window.tapestryEmitter.emit('dataStop', 'stop')
-        }
-        cb(null, { data: resp })
-      })
-      .catch(error => {
-        if (typeof window !== 'undefined') {
-          window.tapestryEmitter.emit('dataStop', 'stop')
-        }
-        errorObject(error)
-        cb(error)
-      })
+      .all(endpoints)
+      .then(resp => handleResolve(resp, cb))
+      .catch(err => handleReject(err, cb))
   } else {
-    return fetch(`${baseUrl}/${endpoint}`)
-      .then(resp => resp.json())
-      .then(resp => {
-        if (typeof window !== 'undefined') {
-          window.tapestryEmitter.emit('dataStop', 'stop')
-        }
-        cb(null, { data: resp })
-      })
-      .catch(error => {
-        if (typeof window !== 'undefined') {
-          window.tapestryEmitter.emit('dataStop', 'stop')
-        }
-        errorObject(error)
-        cb(error)
-      })
+    return fetchJSON(`${baseUrl}/${loadFrom}`)
+      .then(resp => handleResolve(resp, cb))
+      .catch(err => handleReject(err, cb))
   }
 }
