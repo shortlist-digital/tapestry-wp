@@ -1,6 +1,19 @@
 
 export default ({ server }) => {
 
+  // Default favicon redirect
+  server.route({
+    method: 'GET',
+    path: '/favicon.ico',
+    handler: (request, reply) => {
+      reply
+        .redirect('/public/favicon.ico')
+        .permanent()
+        .rewritable(false)
+    }
+  })
+
+  // Static folders
   const staticPaths = ['_scripts', 'public']
 
   staticPaths.map(path => {
@@ -14,4 +27,5 @@ export default ({ server }) => {
       }
     })
   })
+
 }

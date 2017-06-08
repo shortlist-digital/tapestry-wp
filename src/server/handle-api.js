@@ -1,11 +1,18 @@
-
 import fetch from 'isomorphic-fetch'
 import CacheManager from '../utilities/cache-manager'
+import { errorObject } from '../utilities/logger'
+import winston from 'winston'
 
 export default ({ server, config }) => {
 
   // Create a new cache | 100 requests only, expire after 2 minutes
   const cache = CacheManager.createCache('api')
+
+  // Allow purge of individual URL
+  server.on('purge-api-cache-by-key', (key) => {
+    winston.log('debug', `Server will purge api cache by key: ${key}`)
+    cache.del(key)
+  })
 
   server.route({
     method: 'GET',
@@ -13,19 +20,29 @@ export default ({ server, config }) => {
     handler: (req, reply) => {
       const remote = `${config.siteUrl}/wp-json/wp/v2/${req.params.query}${req.url.search}`
       // Look for a cached response - maybe undefined
-      const cacheResponse = cache.get(remote)
+      const cacheRecord = cache.get(remote)
       // If we find a response in the cache send it back
-      if (cacheResponse) {
-        reply(cacheResponse)
+      if (cacheRecord) {
+        winston.log('debug', `Server loading API response from cache for ${remote}`)
+        reply(cacheRecord.response)
       } else {
         fetch(remote)
-          .then(response => response.json())
+          // .then(resp => {
+          //   // catch server error
+          //   if (!resp.ok) throw new Error(resp)
+          //   return resp
+          // })
+          .then(resp => resp.json())
           .then(resp => {
             // We can only get here if there's nothing cached
             // Put the response into the cache using the request path as a key
-            cache.set(remote, resp)
+            cache.set(remote, {
+              response: resp
+            })
+            winston.log('debug', `Server returned a fresh API response over HTTP for ${remote}`)
             reply(resp)
           })
+          .catch(error => errorObject(error))
       }
     }
   })

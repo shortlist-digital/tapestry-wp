@@ -1,40 +1,50 @@
 import { expect } from 'chai'
 import request from 'request'
-import { bootServer, mockProxy, mockApi } from '../utils'
+import nock from 'nock'
+
+import { bootServer } from '../utils'
+
 
 describe('Handling proxies', () => {
 
   let tapestry = null
-  let proxyFile = '/robots.txt'
+  let uri = null
+  let proxyPath = '/robots.txt'
   let proxyContents = 'Test file'
   let config = {
-    proxyPaths: [proxyFile],
-    siteUrl: 'http://dummy.api'
+    proxyPaths: [proxyPath],
+    siteUrl: 'http://dummy.api',
+    components: {}
   }
 
   before(done => {
-    mockApi()
-    mockProxy({
-      path: proxyFile,
-      resp: proxyContents
-    })
+    // mock api response
+    nock('http://dummy.api')
+      .get(proxyPath)
+      .reply(200, proxyContents)
+      .get('/wp-json/wp/v2/pages?slug=test.txt&_embed')
+      .reply(404, { data: { status: 404 } })
+    // boot tapestry server
     tapestry = bootServer(config)
-    tapestry.server.on('start', done)
+    tapestry.server.on('start', () => {
+      uri = tapestry.server.info.uri
+      done()
+    })
   })
 
   after(() => tapestry.server.stop())
 
   it('Proxy should return correct content', (done) => {
     request
-      .get(tapestry.server.info.uri + proxyFile, (err, res, body) => {
-          expect(body).to.contain(proxyContents)
-          done()
-        })
+      .get(uri + proxyPath, (err, res, body) => {
+        expect(body).to.contain(proxyContents)
+        done()
+      })
   })
 
   it('Undeclared proxy should return 404', (done) => {
     request
-      .get(`${tapestry.server.info.uri}/test.txt`, (err, res) => {
+      .get(`${uri}/test.txt`, (err, res) => {
         expect(res.statusCode).to.equal(404)
         done()
       })

@@ -1,16 +1,23 @@
 const path = require('path')
 const webpack = require('webpack')
 const nodeExternals = require('webpack-node-externals')
-const shared = require('./shared')
+const sharedModules = require('./shared')
+
+// temp fix for webpack loader-utils deprecated message
+// waiting on babel-loader 7.0
+// https://github.com/webpack/loader-utils/issues/56
+process.noDeprecation = true
 
 // module.exports to enable CLI usage
-module.exports = ({ cwd, env }) => {
+module.exports = ({ cwd, env, babelrc }) => {
   // expose environment to user
   const __DEV__ = env === 'development'
   // return webpack config
   return {
     // target node as runtime
     target: 'node',
+    // enable sourcemaps
+    devtool: 'sourcemap',
     // enable webpack node polyfill for __dirname
     node: {
       __dirname: true
@@ -25,7 +32,7 @@ module.exports = ({ cwd, env }) => {
       libraryTarget: 'commonjs2'
     },
     // share module rules with client config
-    module: shared.module,
+    module: sharedModules(babelrc),
     // aliasing the users config
     resolve: {
       alias: {
@@ -41,7 +48,12 @@ module.exports = ({ cwd, env }) => {
     ],
     plugins: [
       // expose environment to user
-      new webpack.DefinePlugin({ __DEV__ })
+      new webpack.DefinePlugin({ __DEV__ }),
+      new webpack.BannerPlugin({
+        banner: 'require("source-map-support").install();',
+        raw: true,
+        entryOnly: false
+      })
     ]
   }
 }
