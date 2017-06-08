@@ -14,12 +14,8 @@ const fetchData = (TopLevelComponent, route) => {
 
     static loadProps({ params, loadContext }, cb) {
       let loadFrom = this.endpoint
-      // get endpoint, either as a string or function
-      if (typeof this.endpoint === 'function') {
-        loadFrom = this.endpoint(params)
-      }
       // go get all that data
-      return fetchRouteData({ loadFrom, loadContext, cb })
+      return fetchRouteData({ loadFrom, loadContext, params, cb })
     }
 
     shouldComponentUpdate(nextProps) {
