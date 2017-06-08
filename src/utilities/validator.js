@@ -32,7 +32,12 @@ const schema = joi.object({
     // object containing a string path and React component
     joi.object({
       component: joi.func(),
-      endpoint: joi.alternatives().try(joi.string(), joi.func()),
+      endpoint: [
+        joi.string(),
+        joi.func(),
+        joi.object(),
+        joi.array()
+      ],
       getComponent: joi.func(),
       options: joi.object().keys({
         allowEmptyResponse: joi.boolean()
