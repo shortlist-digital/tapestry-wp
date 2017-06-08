@@ -1,50 +1,57 @@
 import React from 'react'
 import { expect } from 'chai'
 import request from 'request'
-import { bootServer, mockApi } from '../utils'
-import pageData from '../mocks/page.json'
-import Page from '../components/page'
+import nock from 'nock'
 import { css } from 'glamor'
 
-// test Tapestry components and data
-describe('HTML document', () => {
+import { bootServer } from '../utils'
+import dataPosts from '../mocks/posts.json'
+
+
+describe('Not sure what these tests should be defined as', () => {
+
   let tapestry = null
+  let uri = null
   let config = {
     components: {
-      Page
+      FrontPage: () =>
+        <p className={css({ color: '#639' })}>Hello</p>
     },
     siteUrl: 'http://dummy.api'
   }
 
   before(done => {
-    mockApi()
+    // mock api response
+    nock('http://dummy.api')
+      .get('/wp-json/wp/v2/posts?_embed')
+      .times(5)
+      .reply(200, dataPosts.data)
+    // boot tapestry server
     tapestry = bootServer(config)
-    tapestry.server.on('start', done)
+    tapestry.server.on('start', () => {
+      uri = tapestry.server.info.uri
+      done()
+    })
   })
 
-  after(() => {
-    tapestry.server.emit('reset-cache')
-    tapestry.server.stop()
+  after(() => tapestry.server.stop())
+
+  it('AsyncProps defined correctly', (done) => {
+    request.get(uri, (err, res, body) => {
+      expect(body).to.contain(`window.__ASYNC_PROPS__ = [{"data":${
+        JSON.stringify(dataPosts.data)
+          .replace(/\//g, '\\/')
+          .replace(/\u2028/g, "\\u2028")
+          .replace(/\u2029/g, "\\u2029")
+      }}]`)
+      done()
+    })
   })
 
-  it('Data is correctly loaded on page, escapes <script> tags', (done) => {
-    request
-      .get(`${tapestry.server.info.uri}/sample-page`, (err, res, body) => {
-        expect(body).to.contain(`window.__ASYNC_PROPS__ = [{"data":${
-          JSON.stringify(pageData)
-            .replace(/\//g, '\\/')
-            .replace(/\u2028/g, "\\u2028")
-            .replace(/\u2029/g, "\\u2029")
-        }}]`)
-        done()
-      })
-  })
-
-  it('Page should render project Glamor CSS', (done) => {
-    request
-      .get(`${tapestry.server.info.uri}/sample-page`, (err, res, body) => {
-        expect(body).to.contain('#bada55')
-        done()
-      })
+  it('Glamor CSS works', (done) => {
+    request.get(uri, (err, res, body) => {
+      expect(body).to.contain('#639')
+      done()
+    })
   })
 })

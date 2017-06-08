@@ -1,0 +1,25 @@
+{
+  "data": [{
+    "id": 1,
+    "slug": "sample-page",
+    "type": "page",
+    "link": "http://dummy.api/sample-page",
+    "title": {
+      "rendered": "Sample Page"
+    },
+    "content": {
+      "rendered": "<p>This is an example page.</p>"
+    }
+  }, {
+    "id": 2,
+    "slug": "sample-page",
+    "type": "page",
+    "link": "http://dummy.api/sample-page",
+    "title": {
+      "rendered": "Sample Page"
+    },
+    "content": {
+      "rendered": "<p>This is an example page.</p>"
+    }
+  }]
+}
