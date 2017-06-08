@@ -12,7 +12,8 @@
     "es6": true,
     "browser": true,
     "node": true,
-    "jest": true
+    "jest": true,
+    "mocha": true
   },
   "globals": {
     "__DEV__": true
