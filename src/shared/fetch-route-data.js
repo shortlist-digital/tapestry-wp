@@ -1,36 +1,77 @@
 import fetch from 'isomorphic-fetch'
 import mitt from 'mitt'
+import isArray from 'lodash/isArray'
+import isPlainObject from 'lodash/isPlainObject'
+import isFunction from 'lodash/isFunction'
 import { errorObject } from '../utilities/logger'
 
 mitt()
 
-export default ({ loadFrom, loadContext, cb }) => {
-  const endpoint = loadFrom
-  // create API path
-  const baseUrl = `${loadContext.serverUri || window.location.origin}/api/v1`
-  // go and fetch data from constructed API path
-  // run callback from AsyncProps
+const fetchJSON = url => {
+  return fetch(url).then(resp => resp.json())
+}
+const emitEvent = (event, data) => {
   if (typeof window !== 'undefined') {
-    window.tapestryEmitter.emit('dataStart', 'start')
+    window.tapestryEmitter.emit(event, data)
   }
-  return fetch(`${baseUrl}/${endpoint}`)
-    // .then(resp => {
-    //   // catch server error
-    //   // if (!resp.ok) throw new Error(resp)
-    //   return resp
-    // })
-    .then(resp => resp.json())
-    .then(resp => {
-      if (typeof window !== 'undefined') {
-        window.tapestryEmitter.emit('dataStop', 'stop')
-      }
-      cb(null, { data: resp })
-    })
-    .catch(error => {
-      if (typeof window !== 'undefined') {
-        window.tapestryEmitter.emit('dataStop', 'stop')
-      }
-      errorObject(error)
-      cb(error)
-    })
+}
+const mapArrayToObject = (arr, obj) => {
+  const keys = Object.keys(obj)
+  return arr.reduce((prev, curr, i) => {
+    prev[keys[i]] = arr[i]
+    return prev
+  }, {})
+}
+
+// handle promise resolution
+const handleResolve = (resp, cb) => {
+  emitEvent('dataStop', 'stop')
+  cb(null, { data: resp })
+}
+const handleReject = (err, cb) => {
+  emitEvent('dataStop', 'stop')
+  errorObject(err)
+  cb(err)
+}
+
+export default ({
+  loadFrom,
+  loadContext,
+  params,
+  cb
+}) => {
+  const origin = loadContext.serverUri || window.location.origin
+  const baseUrl = `${origin}/api/v1`
+  // kick off progress loader
+  emitEvent('dataStart', 'start')
+  // resolve function if required
+  if (isFunction(loadFrom)) {
+    loadFrom = loadFrom(params)
+  }
+  // handle endpoint configurations
+  // can be one of Array, Object, String
+  if (isArray(loadFrom)) {
+    // map out all endpoints in array, fetch each endpoint
+    // wait for all to resolve then handle response
+    const endpoints = loadFrom.map(endpoint => fetchJSON(`${baseUrl}/${endpoint}`))
+    return Promise
+      .all(endpoints)
+      .then(resp => handleResolve(resp, cb))
+      .catch(err => handleReject(err, cb))
+  } else if (isPlainObject(loadFrom)) {
+    // map out endpoints by object keys, fetch each endpoint
+    // wait for all to resolve then update response to original object schema (Promise.all() will return an ordered array so we can map back onto the object correctly)
+    const endpoints = Object.keys(loadFrom).map(i => fetchJSON(`${baseUrl}/${loadFrom[i]}`))
+    return Promise
+      .all(endpoints)
+      .then(resp => mapArrayToObject(resp, loadFrom))
+      .then(resp => handleResolve(resp, cb))
+      .catch(err => handleReject(err, cb))
+  } else {
+    // handle endpoint as a function
+    // then fetch single endpoint and handle response
+    return fetchJSON(`${baseUrl}/${loadFrom}`)
+      .then(resp => handleResolve(resp, cb))
+      .catch(err => handleReject(err, cb))
+  }
 }

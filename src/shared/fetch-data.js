@@ -14,12 +14,8 @@ const fetchData = (TopLevelComponent, route) => {
 
     static loadProps({ params, loadContext }, cb) {
       let loadFrom = this.endpoint
-      // get endpoint, either as a string or function
-      if (typeof this.endpoint === 'function') {
-        loadFrom = this.endpoint(params)
-      }
       // go get all that data
-      return fetchRouteData({ loadFrom, loadContext, cb })
+      return fetchRouteData({ loadFrom, loadContext, params, cb })
     }
 
     shouldComponentUpdate(nextProps) {
@@ -48,10 +44,10 @@ const fetchData = (TopLevelComponent, route) => {
       const response = this.props.data
       const arrayResponse = isArray(response)
       // to avoid React mangling the array to {'0':{},'1':{}}
-      // pass through as 'posts'.
+      // pass through as 'data'.
       // TODO - update posts key to something more generic
       const data = arrayResponse ?
-        { posts: response } :
+        { data: response } :
         response
       // should fail if an empty response?
       // TODO - BLEAURGH, improve this.
