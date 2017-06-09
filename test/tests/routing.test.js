@@ -91,8 +91,8 @@ describe('Handling custom endpoint routes', () => {
     }, {
       path: 'dynamic-object-endpoint/:custom',
       endpoint: (params) => ({
-        pages: `pages?slug=${params.custom}`,
-        posts: `posts?slug=${params.custom}`
+        page: `pages?slug=${params.custom}`,
+        post: `posts?slug=${params.custom}`
       }),
       component: () => <p>Custom endpoint</p>
     }],
@@ -133,24 +133,26 @@ describe('Handling custom endpoint routes', () => {
 
   it('Route matched, array endpoint works', (done) => {
     request.get(`${uri}/array-endpoint`, (err, res, body) => {
-      const expectedJson = `[{"data":[${
-        prepareJson(dataPages.data)
-      },${
-        prepareJson(dataPosts.data)
-      }]}]`
-      expect(body).to.contain(expectedJson)
+      const expectedJson = [{
+        data: [
+          dataPages.data,
+          dataPosts.data
+        ]
+      }]
+      expect(body).to.contain(prepareJson(expectedJson))
       done()
     })
   })
 
   it('Route matched, object endpoint works', (done) => {
     request.get(`${uri}/object-endpoint`, (err, res, body) => {
-      const expectedJson = `[{"data":{"pages":${
-        prepareJson(dataPages.data)
-      },"posts":${
-        prepareJson(dataPosts.data)
-      }}}]`
-      expect(body).to.contain(expectedJson)
+      const expectedJson = [{
+        data: {
+          pages: dataPages.data,
+          posts: dataPosts.data
+        }
+      }]
+      expect(body).to.contain(prepareJson(expectedJson))
       done()
     })
   })
@@ -164,24 +166,26 @@ describe('Handling custom endpoint routes', () => {
 
   it('Route matched, dynamic array endpoint works', (done) => {
     request.get(`${uri}/dynamic-array-endpoint/test`, (err, res, body) => {
-      const expectedJson = `[{"data":[${
-        prepareJson(dataPage)
-      },${
-        prepareJson(dataPost)
-      }]}]`
-      expect(body).to.contain(expectedJson)
+      const expectedJson = [{
+        data: [
+          dataPage,
+          dataPost
+        ]
+      }]
+      expect(body).to.contain(prepareJson(expectedJson))
       done()
     })
   })
 
   it('Route matched, dynamic object endpoint works', (done) => {
     request.get(`${uri}/dynamic-object-endpoint/test`, (err, res, body) => {
-      const expectedJson = `[{"data":{"pages":${
-        prepareJson(dataPage)
-      },"posts":${
-        prepareJson(dataPost)
-      }}}]`
-      expect(body).to.contain(expectedJson)
+      const expectedJson = [{
+        data: {
+          page: dataPage,
+          post: dataPost
+        }
+      }]
+      expect(body).to.contain(prepareJson(expectedJson))
       done()
     })
   })
