@@ -1,21 +1,28 @@
 import joi from 'joi'
 import { errorMessage } from './logger'
 
+const options = {
+  abortEarly: false, // we want all the errors, not just the first
+  language: {
+    any: {
+      unknown: 'has been deprecated, refer to tapestry-wp.js.org for config options'
+    }
+  }
+}
+
 
 // define valid config schema
 const schema = joi.object({
+  // DEPRECATED
+  frontPage: joi.any().forbidden(),
+  loaders: joi.any().forbidden(),
   // required url
   siteUrl: joi.string().uri().required(),
-  // optional string e.g. 'localhost', '0.0.0.0'
-  host: joi.string(),
-  // optional number e.g. 3030
-  port: joi.number(),
-  // optional number for page id or string for page name
-  frontPage: [joi.number(), joi.string()],
   // optional object containing React components
   components: joi.object().keys({
+    Error: joi.any().forbidden(), // DEPRECATED
     Category: joi.func(),
-    Error: joi.func(),
+    CustomError: joi.func(),
     FrontPage: joi.func(),
     Page: joi.func(),
     Post: joi.func()
@@ -25,23 +32,34 @@ const schema = joi.object({
     // object containing a string path and React component
     joi.object({
       component: joi.func(),
+      endpoint: [
+        joi.string(),
+        joi.func(),
+        joi.object(),
+        joi.array()
+      ],
       getComponent: joi.func(),
-      path: joi.string()
+      options: joi.object().keys({
+        allowEmptyResponse: joi.boolean()
+      }),
+      path: joi.string().required()
     })
   ),
-  // optional loaders exporting a fetch request
-  loaders: joi.object().keys({
-    Category: joi.func(),
-    FrontPage: joi.func(),
-    Page: joi.func(),
-    Post: joi.func()
-  }),
-  // optional array of proxy paths
+  // optional array of proxy paths e.g. ['path', 'another/path']
   proxyPaths: joi.array().items(joi.string()),
-  // optional object of redirects
-  redirectPaths: joi.object(),
+  // optional object of redirects e.g. { 'path': 'to-redirect' }
+  redirectPaths: joi.object().pattern(/.*/, joi.string()),
   // optional function run when routing on the client
-  onPageUpdate: joi.func()
+  onPageUpdate: joi.func(),
+  // misc options
+  options: joi.object().keys({
+    // string e.g. 'localhost', '0.0.0.0'
+    host: joi.string(),
+    // number e.g. 3030
+    port: joi.number(),
+    // theme color for progress bar
+    progressBarColor: joi.string()
+  })
 })
 
 
@@ -53,9 +71,7 @@ const logErrors = (err) => {
 const validator = (config, cb) => {
   // run the users config object through joi.validate
   // joi will parse the config and match the defined schema
-  joi.validate(config, schema, {
-    abortEarly: false // we want all the errors, not just the first
-  }, (err, value) => {
+  joi.validate(config, schema, options, (err, value) => {
     // handle validation errors
     if (err)
       return logErrors(err)

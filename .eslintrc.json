@@ -12,10 +12,11 @@
     "es6": true,
     "browser": true,
     "node": true,
-    "jest": true
+    "jest": true,
+    "mocha": true
   },
   "globals": {
-    "React": true
+    "__DEV__": true
   },
   "extends": [
     "eslint:recommended",
@@ -51,7 +52,9 @@
     "react/jsx-no-bind": 2,
     "react/jsx-no-target-blank": 2,
     "react/jsx-pascal-case": 2,
-    "react/jsx-wrap-multilines": 2,
+    "react/jsx-wrap-multilines": [1, {
+      "arrow": false
+    }],
     "react/no-children-prop": 2,
     "react/prefer-stateless-function": 2
   }
