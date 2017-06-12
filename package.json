@@ -1,6 +1,6 @@
 {
   "name": "tapestry-wp",
-  "version": "2.0.0-8",
+  "version": "2.0.0-9",
   "description": "Wordpress API Universal React Renderer",
   "main": "./dist/index.js",
   "repository": "shortlist-digital/tapestry-wp",
@@ -57,7 +57,7 @@
     "glamor": "^2.20.24",
     "glob-fs": "^0.1.6",
     "h2o2": "5.4.0",
-    "hapi": "16.3.0",
+    "hapi": "16.4.3",
     "idx": "^1.5.0",
     "inert": "^4.2.0",
     "isomorphic-fetch": "^2.2.1",

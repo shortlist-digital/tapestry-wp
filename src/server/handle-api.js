@@ -14,7 +14,10 @@ export default ({ server, config }) => {
     method: 'GET',
     path: '/api/v1/{query*}',
     handler: (req, reply) => {
-      const remote = `${config.siteUrl}/wp-json/wp/v2/${req.params.query}${req.url.search}`
+
+      const base = `${config.siteUrl}/wp-json/wp/v2`
+      const path = `${req.params.query}${req.url.search}`
+      const remote = `${base}/${path}`
       // Look for a cached response - maybe undefined
       const cacheRecord = cache.get(remote)
       // If we find a response in the cache send it back
@@ -23,11 +26,6 @@ export default ({ server, config }) => {
         reply(cacheRecord.response)
       } else {
         fetch(remote)
-          // .then(resp => {
-          //   // catch server error
-          //   if (!resp.ok) throw new Error(resp)
-          //   return resp
-          // })
           .then(resp => resp.json())
           .then(resp => {
             // We can only get here if there's nothing cached

@@ -1,6 +1,7 @@
 import { match } from 'react-router'
 import { loadPropsOnServer } from 'async-props'
 import has from 'lodash/has'
+import idx from 'idx'
 import winston from 'winston'
 
 import RouteWrapper from '../shared/route-wrapper'
@@ -47,6 +48,8 @@ export default ({ server, config, assets }) => {
         if (redirectLocation)
           return reply.redirect(redirectLocation)
 
+        loadContext.location = renderProps.location
+
         // get all the props yo
         loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
           // 500 if error from AsyncProps
@@ -82,8 +85,11 @@ export default ({ server, config, assets }) => {
 
             // 200 with rendered HTML
             // We can only get here if there's nothing cached for this URL path
-            // Bung the HTML into the cache
-            cache.set(request.url.path, html)
+            // Bung the HTML into the cache, if not a preview link
+            const isPreview = idx(renderProps, _ => _.location.query.tapestry_hash)
+            if (!isPreview) {
+              cache.set(request.url.path, html)
+            }
             winston.log('debug', `Server rendered HTML from scratch for ${request.url.path}`)
             reply(html).code(status)
           }
