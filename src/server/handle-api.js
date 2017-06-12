@@ -27,11 +27,6 @@ export default ({ server, config }) => {
         reply(cacheRecord.response)
       } else {
         fetch(remote)
-          // .then(resp => {
-          //   // catch server error
-          //   if (!resp.ok) throw new Error(resp)
-          //   return resp
-          // })
           .then(resp => resp.json())
           .then(resp => {
             // We can only get here if there's nothing cached
