@@ -190,3 +190,53 @@ describe('Handling custom endpoint routes', () => {
     })
   })
 })
+
+
+describe('Handling preview endpoint routes', () => {
+
+    let tapestry = null
+    let uri = null
+    let config = {
+      routes: [{
+        path: 'path-without-embed',
+        endpoint: 'pages/10',
+        component: () => <p>Basic endpoint</p>
+      }, {
+        path: 'path-with-embed',
+        endpoint: 'pages/10?_embed',
+        component: () => <p>Basic endpoint</p>
+      }],
+      siteUrl: 'http://dummy.api'
+    }
+
+    before(done => {
+      // mock api response
+      nock('http://dummy.api')
+        .get('/wp-json/revision/v1/pages/10?tapestry_hash=hash&p=10')
+        .reply(200, dataPage)
+        .get('/wp-json/revision/v1/pages/10?_embed&tapestry_hash=hash&p=10')
+        .reply(200, dataPage)
+      // boot tapestry server
+      tapestry = bootServer(config)
+      tapestry.server.on('start', () => {
+        uri = tapestry.server.info.uri
+        done()
+      })
+    })
+
+    after(() => tapestry.server.stop())
+
+    it('Preview route without embed, endpoint works', (done) => {
+      request.get(`${uri}/path-without-embed?tapestry_hash=hash&p=10`, (err, res, body) => {
+        expect(body).to.contain(prepareJson(dataPage))
+        done()
+      })
+    })
+
+    it('Preview route with embed, endpoint works', (done) => {
+      request.get(`${uri}/path-with-embed?tapestry_hash=hash&p=10`, (err, res, body) => {
+        expect(body).to.contain(prepareJson(dataPage))
+        done()
+      })
+    })
+})
