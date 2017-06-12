@@ -12,10 +12,10 @@ let origin = null
 
 const fetchJSON = (endpoint, loadContext) => {
   const isPreview = idx(loadContext, _ => _.location.query.tapestry_hash)
+  const search = endpoint.indexOf('?') > -1 ? '&' : '?'
   let url = null
-
   if (isPreview) {
-    url = `${origin}/api/preview/v1/${endpoint}${endpoint.indexOf('?') ? '&' : '?'}tapestry_hash=${loadContext.location.query.tapestry_hash}&p=${loadContext.location.query.p}`
+    url = `${origin}/api/preview/v1/${endpoint}${search}tapestry_hash=${loadContext.location.query.tapestry_hash}&p=${loadContext.location.query.p}`
   } else {
     url = `${origin}/api/v1/${endpoint}`
   }
