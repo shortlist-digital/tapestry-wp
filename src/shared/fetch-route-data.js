@@ -8,18 +8,22 @@ import { errorObject } from '../utilities/logger'
 
 mitt()
 
+let query = null
 let origin = null
+let preview = false
 
-const fetchJSON = (endpoint, loadContext) => {
-  const isPreview = idx(loadContext, _ => _.location.query.tapestry_hash)
-  const search = endpoint.indexOf('?') > -1 ? '&' : '?'
-  let url = null
-  if (isPreview) {
-    url = `${origin}/api/preview/v1/${endpoint}${search}tapestry_hash=${loadContext.location.query.tapestry_hash}&p=${loadContext.location.query.p}`
-  } else {
-    url = `${origin}/api/v1/${endpoint}`
+const fetchJSON = (endpoint) => {
+  // set default JSON source
+  let url = `${origin}/api/v1/${endpoint}`
+  // detect if preview source required
+  if (preview) {
+    const queryPrefix = endpoint.indexOf('?') > -1 ? '&' : '?'
+    const queryParams = `tapestry_hash=${query.tapestry_hash}&p=${query.p}`
+    url = `${origin}/api/preview/v1/${endpoint}${queryPrefix}${queryParams}`
   }
-  return fetch(url).then(resp => resp.json())
+  // return fetch as promise
+  return fetch(url)
+    .then(resp => resp.json())
 }
 const emitEvent = (event, data) => {
   if (typeof window !== 'undefined') {
@@ -51,7 +55,10 @@ export default ({
   params,
   cb
 }) => {
+  // save data for use in util functions
+  query = loadContext.location.query
   origin = loadContext.serverUri || window.location.origin
+  preview = idx(loadContext, _ => _.location.query.tapestry_hash)
   // kick off progress loader
   emitEvent('dataStart', 'start')
   // resolve function if required
@@ -64,7 +71,7 @@ export default ({
     // map out all endpoints in array, fetch each endpoint
     // wait for all to resolve then handle response
     const endpoints = loadFrom.map(
-      endpoint => fetchJSON(endpoint, loadContext)
+      endpoint => fetchJSON(endpoint)
     )
     return Promise
       .all(endpoints)
@@ -74,7 +81,7 @@ export default ({
     // map out endpoints by object keys, fetch each endpoint
     // wait for all to resolve then update response to original object schema (Promise.all() will return an ordered array so we can map back onto the object correctly)
     const endpoints = Object.keys(loadFrom).map(
-      i => fetchJSON(loadFrom[i], loadContext)
+      i => fetchJSON(loadFrom[i])
     )
     return Promise
       .all(endpoints)
@@ -84,7 +91,7 @@ export default ({
   } else {
     // handle endpoint as a function
     // then fetch single endpoint and handle response
-    return fetchJSON(loadFrom, loadContext)
+    return fetchJSON(loadFrom)
       .then(resp => handleResolve(resp, cb))
       .catch(err => handleReject(err, cb))
   }
