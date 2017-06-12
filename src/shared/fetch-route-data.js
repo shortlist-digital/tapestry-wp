@@ -1,3 +1,4 @@
+import idx from 'idx'
 import fetch from 'isomorphic-fetch'
 import mitt from 'mitt'
 import isArray from 'lodash/isArray'
@@ -7,7 +8,17 @@ import { errorObject } from '../utilities/logger'
 
 mitt()
 
-const fetchJSON = url => {
+let origin = null
+
+const fetchJSON = (endpoint, loadContext) => {
+  const isPreview = idx(loadContext, _ => _.location.query.tapestry_hash)
+  let url = null
+
+  if (isPreview) {
+    url = `${origin}/api/preview/v1/${endpoint}${endpoint.indexOf('?') ? '&' : '?'}tapestry_hash=${loadContext.location.query.tapestry_hash}&p=${loadContext.location.query.p}`
+  } else {
+    url = `${origin}/api/v1/${endpoint}`
+  }
   return fetch(url).then(resp => resp.json())
 }
 const emitEvent = (event, data) => {
@@ -40,8 +51,7 @@ export default ({
   params,
   cb
 }) => {
-  const origin = loadContext.serverUri || window.location.origin
-  const baseUrl = `${origin}/api/v1`
+  origin = loadContext.serverUri || window.location.origin
   // kick off progress loader
   emitEvent('dataStart', 'start')
   // resolve function if required
@@ -53,7 +63,9 @@ export default ({
   if (isArray(loadFrom)) {
     // map out all endpoints in array, fetch each endpoint
     // wait for all to resolve then handle response
-    const endpoints = loadFrom.map(endpoint => fetchJSON(`${baseUrl}/${endpoint}`))
+    const endpoints = loadFrom.map(
+      endpoint => fetchJSON(endpoint, loadContext)
+    )
     return Promise
       .all(endpoints)
       .then(resp => handleResolve(resp, cb))
@@ -61,7 +73,9 @@ export default ({
   } else if (isPlainObject(loadFrom)) {
     // map out endpoints by object keys, fetch each endpoint
     // wait for all to resolve then update response to original object schema (Promise.all() will return an ordered array so we can map back onto the object correctly)
-    const endpoints = Object.keys(loadFrom).map(i => fetchJSON(`${baseUrl}/${loadFrom[i]}`))
+    const endpoints = Object.keys(loadFrom).map(
+      i => fetchJSON(loadFrom[i], loadContext)
+    )
     return Promise
       .all(endpoints)
       .then(resp => mapArrayToObject(resp, loadFrom))
@@ -70,7 +84,7 @@ export default ({
   } else {
     // handle endpoint as a function
     // then fetch single endpoint and handle response
-    return fetchJSON(`${baseUrl}/${loadFrom}`)
+    return fetchJSON(loadFrom, loadContext)
       .then(resp => handleResolve(resp, cb))
       .catch(err => handleReject(err, cb))
   }

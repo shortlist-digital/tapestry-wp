@@ -51,6 +51,8 @@ export default ({ server, config, assets }) => {
         if (redirectLocation)
           return reply.redirect(redirectLocation)
 
+        loadContext.location = renderProps.location
+
         // get all the props yo
         loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
           // 500 if error from AsyncProps

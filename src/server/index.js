@@ -9,12 +9,13 @@ winston.level = process.env.LOG_LEVEL || 'info'
 winston.cli()
 
 import { success, errorObject } from '../utilities/logger'
-import handleStatic from './handle-static'
 import handleApi from './handle-api'
 import handleDynamic from './handle-dynamic'
+import handlePreview from './handle-preview'
 import handleProxies from './handle-proxies'
 import handlePurge from './handle-purge'
 import handleRedirects from './handle-redirects'
+import handleStatic from './handle-static'
 import CacheManager from '../utilities/cache-manager'
 
 export default class Tapestry {
@@ -55,6 +56,7 @@ export default class Tapestry {
     handleStatic(data)
     handlePurge(data)
     handleApi(data)
+    handlePreview(data)
     handleProxies(data)
     handleDynamic(data)
 
