@@ -1,6 +1,8 @@
 import winston from 'winston'
 import { match } from 'react-router'
 import RouteWrapper from '../shared/route-wrapper'
+import CacheManager from '../utilities/cache-manager'
+const cacheManager = new CacheManager()
 const purgePath = process.env.SECRET_PURGE_PATH || 'purge'
 
 export default ({ server, config }) => {
@@ -28,11 +30,11 @@ export default ({ server, config }) => {
         winston.log('debug', `Request: ${request.params.path} mapped to API: ${apiRoute}`)
         const remote = `${config.siteUrl}/wp-json/wp/v2/${apiRoute}`
 
-        winston.log('debug', `Emitting purge-html-cache-by-key for ${request.params.path}`)
-        server.emit('purge-html-cache-by-key', `${request.params.path}`)
+        winston.log('debug', `Directly clearing html cache for ${request.params.path}`)
+        cacheManager.clearCache('html', request.params.path)
 
-        winston.log('debug', `Emitting purge-api-cache-by-key for ${remote}`)
-        server.emit('purge-api-cache-by-key', `${remote}`)
+        winston.log('debug', `Directly clearing api cache for ${remote}`)
+        cacheManager.clearCache('api', remote)
 
         reply({status: `Purged ${request.params.path}`}, 200)
       })

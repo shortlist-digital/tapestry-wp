@@ -8,16 +8,12 @@ import RouteWrapper from '../shared/route-wrapper'
 import { renderHtml } from './render'
 import { errorObject } from '../utilities/logger'
 import CacheManager from '../utilities/cache-manager'
+let cacheManager = new CacheManager()
 
 export default ({ server, config, assets }) => {
 
   // Create a new cache
-  const cache = CacheManager.createCache('html')
- // Allow purge of individual URL
-  server.on('purge-html-cache-by-key', (key) => {
-    winston.log('debug', `Server will purge html cache by key: ${key}`)
-    cache.del(key)
-  })
+  const cache = cacheManager.createCache('html')
 
   server.route({
     method: 'GET',
