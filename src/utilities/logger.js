@@ -5,9 +5,7 @@ import path from 'path'
 const cwd = process.cwd()
 const tsFormat = () => (new Date()).toLocaleTimeString()
 
-winston.cli()
-
-const logger = new (winston.Logger)({
+const log = new (winston.Logger)({
   transports: [
     new (winston.transports.Console)({
       timestamp: tsFormat,
@@ -21,11 +19,12 @@ const logger = new (winston.Logger)({
   ]
 })
 
-logger.level = process.env.LOG_LEVEL || 'info'
+log.cli()
+log.level = process.env.LOG_LEVEL || 'info'
 
 // success: green arrow, white text
 export const notify = (str) => {
   console.log(`${chalk.green('→')} ${chalk.white(str)}`) // eslint-disable-line
 }
 
-export default logger
+export default log

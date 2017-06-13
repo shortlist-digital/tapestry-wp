@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import fetch from 'isomorphic-fetch'
-import logger from '../utilities/logger'
+import log from '../utilities/logger'
 
 export default ({ server, config }) => {
 
@@ -13,15 +13,15 @@ export default ({ server, config }) => {
       const path = `${req.params.query}${req.url.search}`
       const remote = `${base}/${path}`
 
-      logger.debug(`Preview: Server loading API response over HTTP for ${chalk.green(remote)}`)
+      log.debug(`Preview: Server loading API response over HTTP for ${chalk.green(remote)}`)
 
       fetch(remote)
         .then(resp => resp.json())
         .then(resp => {
-          logger.debug(`Preview: Server returned a fresh API response over HTTP for ${chalk.green(remote)}`)
+          log.debug(`Preview: Server returned a fresh API response over HTTP for ${chalk.green(remote)}`)
           reply(resp)
         })
-        .catch(err => logger.error(err))
+        .catch(err => log.error(err))
     }
   })
 }

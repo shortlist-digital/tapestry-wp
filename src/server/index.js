@@ -4,7 +4,7 @@ import Inert from 'inert'
 import idx from 'idx'
 import chalk from 'chalk'
 
-import logger, { notify } from '../utilities/logger'
+import log, { notify } from '../utilities/logger'
 import handleApi from './handle-api'
 import handleDynamic from './handle-dynamic'
 import handlePreview from './handle-preview'
@@ -77,11 +77,11 @@ export default class Tapestry {
     // run server
     this.server.start(err => {
       if (err) {
-        logger.error(err)
+        log.error(err)
       }
       if (this.env !== 'test') {
         notify(`Server ready: ${this.server.info.uri}`)
-        logger.debug(`Server started at ${chalk.green(this.server.info.uri)}`)
+        log.debug(`Server started at ${chalk.green(this.server.info.uri)}`)
       }
     })
   }

@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import LRU from 'lru-cache'
-import logger from '../utilities/logger'
+import log from '../utilities/logger'
 
 let internalCaches = []
 let instance = null
@@ -39,9 +39,9 @@ export default class CacheManager {
   }
 
   clearCache(cacheName, keyName) {
-    logger.debug(`purging ${chalk.green(keyName)} from cache: ${chalk.green(cacheName)}`)
-    logger.silly(JSON.stringify(internalCaches, null, 2))
+    log.debug(`purging ${chalk.green(keyName)} from cache: ${chalk.green(cacheName)}`)
+    log.silly(JSON.stringify(internalCaches, null, 2))
     const cacheStatus = internalCaches[cacheName].del(keyName) || 'not found'
-    logger.debug(`Clear status for \`${chalk.green(keyName)}\`:`, cacheStatus)
+    log.debug(`Clear status for \`${chalk.green(keyName)}\`:`, cacheStatus)
   }
 }

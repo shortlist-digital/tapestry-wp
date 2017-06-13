@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const webpack = require('webpack')
 const chalk = require('chalk')
-const logger = require('./logger').default
+const log = require('./logger').default
 
 const mergeConfigs = require('./merge-config').default
 const configClientDefault = require('../src/webpack/client.config')
@@ -26,7 +26,7 @@ module.exports = ({ cwd, env }) => {
   }
 
   if (babelCustom) {
-    logger.debug(`Using custom .babelrc from ${chalk.green(babelCustomPath)}`)
+    log.debug(`Using custom .babelrc from ${chalk.green(babelCustomPath)}`)
   }
 
   const createCompiler = (configDefault) => {

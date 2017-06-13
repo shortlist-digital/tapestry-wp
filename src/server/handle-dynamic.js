@@ -6,7 +6,7 @@ import chalk from 'chalk'
 
 import RouteWrapper from '../shared/route-wrapper'
 import { renderHtml } from './render'
-import logger from '../utilities/logger'
+import log from '../utilities/logger'
 import CacheManager from '../utilities/cache-manager'
 let cacheManager = new CacheManager()
 
@@ -27,7 +27,7 @@ export default ({ server, config, assets }) => {
 
         // 500 if error from Router
         if (err) {
-          logger.error(err)
+          log.error(err)
           return reply(err.message).code(500)
         }
 
@@ -54,7 +54,7 @@ export default ({ server, config, assets }) => {
         loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
           // 500 if error from AsyncProps
           if (err) {
-            logger.error(err)
+            log.error(err)
             return reply(err).code(500)
           }
 
@@ -71,7 +71,7 @@ export default ({ server, config, assets }) => {
 
           // respond with HTML from cache if not undefined
           if (cachedHTML) {
-            logger.debug(`Server loading HTML from cache for ${chalk.green(request.url.path)}`)
+            log.debug(`Server loading HTML from cache for ${chalk.green(request.url.path)}`)
             reply(cachedHTML).code(status)
           } else {
             // No HTML found for this path, or cache expired
@@ -90,7 +90,7 @@ export default ({ server, config, assets }) => {
             if (!isPreview) {
               cache.set(request.url.path, html)
             }
-            logger.debug(`Server rendered HTML from scratch for ${chalk.green(request.url.path)}`)
+            log.debug(`Server rendered HTML from scratch for ${chalk.green(request.url.path)}`)
             reply(html).code(status)
           }
         })

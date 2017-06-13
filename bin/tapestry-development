@@ -2,9 +2,9 @@
 
 const path = require('path')
 const createCompilers = require('../dist/create-compilers')
-const logger = require('../dist/logger')
-const notify = logger.notify
-const winston = logger.default
+const log = require('../dist/logger')
+const notify = log.notify
+const winston = log.default
 const cwd = process.cwd()
 const env = 'development'
 
