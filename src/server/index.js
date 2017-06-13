@@ -2,6 +2,7 @@ import { Server } from 'hapi'
 import h2o2 from 'h2o2'
 import Inert from 'inert'
 import idx from 'idx'
+import chalk from 'chalk'
 
 import logger, { notify } from '../utilities/logger'
 import handleApi from './handle-api'
@@ -17,11 +18,11 @@ const cacheManager = new CacheManager
 
 export default class Tapestry {
 
-  constructor ({ config, assets = {} }, { silent } = {}) {
+  constructor ({ config, assets = {}, env }) {
 
     // allow access from class
     this.config = config
-    this.silent = silent
+    this.env = env
 
     // create server instance
     this.server = this.bootServer()
@@ -78,8 +79,9 @@ export default class Tapestry {
       if (err) {
         logger.error(err)
       }
-      if (!this.silent) {
+      if (this.env !== 'test') {
         notify(`Server ready: ${this.server.info.uri}`)
+        logger.debug(`Server started at ${chalk.green(this.server.info.uri)}`)
       }
     })
   }

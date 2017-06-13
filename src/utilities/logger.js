@@ -1,6 +1,8 @@
 import chalk from 'chalk'
 import winston from 'winston'
+import path from 'path'
 
+const cwd = process.cwd()
 const tsFormat = () => (new Date()).toLocaleTimeString()
 
 winston.cli()
@@ -11,6 +13,10 @@ const logger = new (winston.Logger)({
       timestamp: tsFormat,
       colorize: true,
       prettyPrint: true
+    }),
+    new (winston.transports.File)({
+      filename: path.resolve(cwd, '.tapestry/tapestry-log.log'),
+      timestamp: tsFormat
     })
   ]
 })

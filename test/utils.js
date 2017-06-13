@@ -16,7 +16,5 @@ export const bootServer = (config, options = {}) => {
     },
     cwd,
     env
-  }, {
-    silent: true
   })
 }
