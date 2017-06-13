@@ -1,5 +1,5 @@
 import joi from 'joi'
-import { errorMessage } from './logger'
+const logger = require('./logger').default
 
 const options = {
   abortEarly: false, // we want all the errors, not just the first
@@ -65,7 +65,8 @@ const schema = joi.object({
 
 const logErrors = (err) => {
   // for each error message, output to console
-  errorMessage(`There are some issues with your tapestry.config.js\n ${err.details.reduce((prev, item) => `${prev}\n  ${item.message}`, '')}`)
+  logger.error(`There are some issues with your tapestry.config.js\n ${err.details.reduce((prev, item) => `${prev}\n  ${item.message}`, '')}`)
+  logger.debug('tapestry.config.js error', err.details)
 }
 
 const validator = (config, cb) => {

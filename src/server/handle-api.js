@@ -1,7 +1,7 @@
+import chalk from 'chalk'
 import fetch from 'isomorphic-fetch'
 import CacheManager from '../utilities/cache-manager'
-import { errorObject } from '../utilities/logger'
-import winston from 'winston'
+import logger from '../utilities/logger'
 
 let cacheManager = new CacheManager()
 
@@ -22,7 +22,7 @@ export default ({ server, config }) => {
       const cacheRecord = cache.get(remote)
       // If we find a response in the cache send it back
       if (cacheRecord) {
-        winston.log('debug', `Server loading API response from cache for ${remote}`)
+        logger.debug(`Server loading API response from cache for ${chalk.green(remote)}`)
         reply(cacheRecord.response)
       } else {
         fetch(remote)
@@ -33,10 +33,10 @@ export default ({ server, config }) => {
             cache.set(remote, {
               response: resp
             })
-            winston.log('debug', `Server returned a fresh API response over HTTP for ${remote}`)
+            logger.debug(`Server returned a fresh API response over HTTP for ${chalk.green(remote)}`)
             reply(resp)
           })
-          .catch(error => errorObject(error))
+          .catch(error => logger.error(error))
       }
     }
   })

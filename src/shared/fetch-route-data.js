@@ -4,7 +4,7 @@ import mitt from 'mitt'
 import isArray from 'lodash/isArray'
 import isPlainObject from 'lodash/isPlainObject'
 import isFunction from 'lodash/isFunction'
-import { errorObject } from '../utilities/logger'
+import logger from '../utilities/logger'
 
 mitt()
 
@@ -45,7 +45,7 @@ const handleResolve = (resp, cb) => {
 }
 const handleReject = (err, cb) => {
   emitEvent('dataStop', 'stop')
-  errorObject(err)
+  logger.error(err)
   cb(err)
 }
 

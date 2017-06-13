@@ -3,12 +3,7 @@ import h2o2 from 'h2o2'
 import Inert from 'inert'
 import idx from 'idx'
 
-// Configure Logging
-import winston from 'winston'
-winston.level = process.env.LOG_LEVEL || 'info'
-winston.cli()
-
-import { success, errorObject } from '../utilities/logger'
+import logger, { notify } from '../utilities/logger'
 import handleApi from './handle-api'
 import handleDynamic from './handle-dynamic'
 import handlePreview from './handle-preview'
@@ -80,9 +75,12 @@ export default class Tapestry {
   startServer () {
     // run server
     this.server.start(err => {
-      if (err) errorObject(err)
-      if (!this.silent)
-        success(`Server ready: ${this.server.info.uri}`)
+      if (err) {
+        logger.error(err)
+      }
+      if (!this.silent) {
+        notify(`Server ready: ${this.server.info.uri}`)
+      }
     })
   }
 }

@@ -1,27 +1,25 @@
 import chalk from 'chalk'
+import winston from 'winston'
 
-// log message to console and optionally cancel current process
-const log = (message) => {
-  console.log(message) // eslint-disable-line
-  // if (quit) process.exit(0)
-}
+const tsFormat = () => (new Date()).toLocaleTimeString()
 
-// wrappers to visually change message
+winston.cli()
 
-// error message: red text with 'Error:'
-export const errorMessage = (str, quit = false)  =>
-  log(`${chalk.bold.red('Error:')} ${chalk.red(str)}\n`, quit)
+const logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.Console)({
+      timestamp: tsFormat,
+      colorize: true,
+      prettyPrint: true
+    })
+  ]
+})
 
-// error object: red text with 'Error:' followed by stack trace
-export const errorObject = (obj, quit = true) => {
-  errorMessage(obj.message)
-  log(obj, quit)
-}
-
-// info: white text
-export const info = (str) =>
-  log(chalk.white(str))
+logger.level = process.env.LOG_LEVEL || 'info'
 
 // success: green arrow, white text
-export const success = (str, quit = false) =>
-  log(`${chalk.green('→')} ${chalk.white(str)}`, quit)
+export const notify = (str) => {
+  console.log(`${chalk.green('→')} ${chalk.white(str)}`) // eslint-disable-line
+}
+
+export default logger

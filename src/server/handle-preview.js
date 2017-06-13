@@ -1,6 +1,6 @@
+import chalk from 'chalk'
 import fetch from 'isomorphic-fetch'
-import winston from 'winston'
-import { errorObject } from '../utilities/logger'
+import logger from '../utilities/logger'
 
 export default ({ server, config }) => {
 
@@ -13,15 +13,15 @@ export default ({ server, config }) => {
       const path = `${req.params.query}${req.url.search}`
       const remote = `${base}/${path}`
 
-      winston.log('debug', `Preview: Server loading API response over HTTP for ${remote}`)
+      logger.debug(`Preview: Server loading API response over HTTP for ${chalk.green(remote)}`)
 
       fetch(remote)
         .then(resp => resp.json())
         .then(resp => {
-          winston.log('debug', `Preview: Server returned a fresh API response over HTTP for ${remote}`)
+          logger.debug(`Preview: Server returned a fresh API response over HTTP for ${chalk.green(remote)}`)
           reply(resp)
         })
-        .catch(error => errorObject(error))
+        .catch(err => logger.error(err))
     }
   })
 }
