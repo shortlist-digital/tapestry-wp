@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs-extra')
 const webpack = require('webpack')
+const logger = require('./logger')
 
 const mergeConfigs = require('./merge-config').default
 const configClientDefault = require('../src/webpack/client.config')
@@ -21,6 +22,10 @@ module.exports = ({ cwd, env }) => {
   let babelCustom = null
   if (fs.existsSync(babelCustomPath)) {
     babelCustom = fs.readJsonSync(babelCustomPath)
+  }
+
+  if (babelCustom) {
+    logger.info(`Using a custom .babelrc\n`)
   }
 
   const createCompiler = (configDefault) => {
