@@ -28,7 +28,7 @@ module.exports = ({ cwd, env, babelrc }) => {
     // output bundle to .tapestry dir, commonjs2 exports the bundle as module.exports
     output: {
       path: path.resolve(cwd, '.tapestry'),
-      filename: '[name].bundle.js',
+      filename: '[name].js',
       libraryTarget: 'commonjs2'
     },
     // share module rules with client config
