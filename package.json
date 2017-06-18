@@ -84,7 +84,7 @@
     "eslint-plugin-react": "^6.10.0",
     "gitbook-cli": "^2.3.0",
     "icon-gen": "^1.0.7",
-    "lint-staged": "^3.3.1",
+    "lint-staged": "^4.0.0",
     "mocha": "^3.2.0",
     "nock": "^9.0.9",
     "pre-commit": "^1.2.2",
