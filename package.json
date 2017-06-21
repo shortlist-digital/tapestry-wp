@@ -11,7 +11,6 @@
     "pre-commit-msg": "echo \"Performing pre-commit checks...\" && exit 0",
     "lint-staged": "lint-staged",
     "prepublish": "npm run build:utils",
-    "postinstall": "npm run build:utils",
     "preversion": "npm run lint && npm run test",
     "postversion": "git push && git push --tags",
     "docs:build": "npm run docs:prepare && gitbook build && npm run docs:favicon",
