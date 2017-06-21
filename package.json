@@ -2,7 +2,13 @@
   "name": "tapestry-wp",
   "version": "2.0.0-10",
   "description": "Wordpress API Universal React Renderer",
-  "main": "./dist/index.js",
+  "main": "./src/index.js",
+  "files": [
+    "bin/",
+    "bootstrap/",
+    "dist/",
+    "src/"
+  ],
   "repository": "shortlist-digital/tapestry-wp",
   "scripts": {
     "build:utils": "babel src/utilities --out-dir dist --presets=es2015,react",
