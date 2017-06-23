@@ -6,7 +6,7 @@ const log = require('../dist/logger').default
 const cwd = process.cwd()
 const env = 'production'
 
-const serverPath = path.resolve(cwd, '.tapestry/server.bundle.js')
+const serverPath = path.resolve(cwd, '.tapestry/server.js')
 // detect scripts have been created before running server
 if (!fs.existsSync(serverPath)) {
   log.error('Tapestry scripts missing, make sure to run tapestry build before running')

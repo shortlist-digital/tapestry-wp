@@ -54,7 +54,7 @@ export default ({
   cb
 }) => {
   // save data for use in util functions
-  query = loadContext.location.query
+  query = idx(loadContext, _ => _.location.query)
   origin = loadContext.serverUri || window.location.origin
   preview = idx(loadContext, _ => _.location.query.tapestry_hash)
   // kick off progress loader

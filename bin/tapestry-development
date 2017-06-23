@@ -34,7 +34,7 @@ serverCompiler.run(err => {
     // boot server if not already running
     if (!serverBooted) {
       // server path relative to root
-      const serverPath = path.resolve(cwd, '.tapestry/server.bundle.js')
+      const serverPath = path.resolve(cwd, '.tapestry/server.js')
       // require server and boot
       const server = require(serverPath).default
       server({ cwd, env })

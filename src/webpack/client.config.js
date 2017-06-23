@@ -15,7 +15,7 @@ module.exports = ({ cwd, env, babelrc }) => {
     // enable sourcemap
     devtool: 'source-map',
     entry: {
-      bundle: 'tapestry-wp/src/client/webpack.entry.js'
+      bundle: 'tapestry-wp/src/client/index.js'
     },
     // output bundle to _scripts, no caching required in dev mode so bundle.js is sufficient
     output: {
@@ -47,6 +47,17 @@ module.exports = ({ cwd, env, babelrc }) => {
         verbose: false
       })
     ]
+  }
+
+  // development specific config
+  if (env === 'development') {
+    // config.plugins already defined so lets push any extras
+    config.plugins.push(
+      // output chunk stats (path is relative to output path)
+      new StatsPlugin('../.tapestry/stats.json', {
+        chunkModules: true
+      })
+    )
   }
 
   // production specific config
@@ -81,10 +92,6 @@ module.exports = ({ cwd, env, babelrc }) => {
       new webpack.LoaderOptionsPlugin({
         minimize: true,
         debug: false
-      }),
-      // output chunk stats (path is relative to output path)
-      new StatsPlugin('../.tapestry/stats.json', {
-        chunkModules: true
       }),
       // minify/optimize output bundle, screw_ie8 a bunch
       new webpack.optimize.UglifyJsPlugin({

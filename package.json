@@ -1,8 +1,14 @@
 {
   "name": "tapestry-wp",
-  "version": "2.0.0-9",
+  "version": "2.0.0-11",
   "description": "Wordpress API Universal React Renderer",
-  "main": "./dist/index.js",
+  "main": "./src/index.js",
+  "files": [
+    "bin/",
+    "bootstrap/",
+    "dist/",
+    "src/"
+  ],
   "repository": "shortlist-digital/tapestry-wp",
   "scripts": {
     "build:utils": "babel src/utilities --out-dir dist --presets=es2015,react",
@@ -11,7 +17,6 @@
     "pre-commit-msg": "echo \"Performing pre-commit checks...\" && exit 0",
     "lint-staged": "lint-staged",
     "prepublish": "npm run build:utils",
-    "postinstall": "npm run build:utils",
     "preversion": "npm run lint && npm run test",
     "postversion": "git push && git push --tags",
     "docs:build": "npm run docs:prepare && gitbook build && npm run docs:favicon",
