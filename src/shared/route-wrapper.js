@@ -34,14 +34,14 @@ const RouteWrapper = (config) => {
           // 'getComponent' will fetch the component async
           // 'component' will read the component from the bundle
           const component = route.getComponent ?
-          {
-            getComponent: (loc, cb) => route
-            .getComponent()
-            .then(module => cb(null, ComponentWrapper(module.default, route)))
-            .catch(err => cb(err))
-          } : {
-            component: ComponentWrapper(route.component, route)
-          }
+            {
+              getComponent: (loc, cb) => route
+                .getComponent()
+                .then(module => cb(null, ComponentWrapper(module.default, route)))
+                .catch(err => cb(err))
+            } : {
+              component: ComponentWrapper(route.component, route)
+            }
           const onEnter = () => {
             // if we're not delaying load with AsyncProps and we're in the client
             if (!route.endpoint && typeof window !== 'undefined' ) {
