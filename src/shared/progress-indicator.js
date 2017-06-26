@@ -68,9 +68,9 @@ class ProgressIndicator extends Component {
             ...this.customStyle(this.props.route.config),
             opacity: visible ? 1 : 0,
             transition: visible ?
-             `opacity 0ms linear 0ms,
+              `opacity 0ms linear 0ms,
               width 400ms ease` :
-             `opacity 300ms ease 300ms,
+              `opacity 300ms ease 300ms,
               width 300ms ease`,
             width: `${percent}%`
           }}
