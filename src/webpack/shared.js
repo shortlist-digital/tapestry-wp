@@ -5,6 +5,7 @@ module.exports = (babelrc) => ({
     use: [{
       loader: 'babel-loader',
       options: babelrc || {
+        cacheDirectory: true,
         presets: [
           'es2015',
           'react'
