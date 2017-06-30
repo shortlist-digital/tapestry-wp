@@ -5,7 +5,7 @@ import styles from '../styles'
 
 // remove protocol and host from URL string
 const getRelativeUrl = url =>
-  url.replace(/^(?:\/\/|[^\/]+)*\//, '/')
+  url.replace(/^(?:\/\/|[^/]+)*\//, '/')
 
 const FrontPage = ({ posts }) =>
   <main className={styles.wrapper}>

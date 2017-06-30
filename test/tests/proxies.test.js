@@ -5,7 +5,7 @@ import nock from 'nock'
 import { bootServer } from '../utils'
 
 
-describe('Handling proxies', () => {
+describe('Handling static proxies', () => {
 
   let tapestry = null
   let uri = null
@@ -49,4 +49,51 @@ describe('Handling proxies', () => {
         done()
       })
   })
+})
+
+describe('Handling wildcard proxies', () => {
+
+  let tapestry = null
+  let uri = null
+  let proxyPath = '/sitemap/{sitemapId}'
+  let proxyContents = 'Test file'
+  let config = {
+    proxyPaths: [proxyPath],
+    siteUrl: 'http://dummy.api',
+    components: {}
+  }
+
+  before(done => {
+    // mock api response
+    nock('http://dummy.api')
+      .get('/sitemap/test.xml')
+      .reply(200, proxyContents)
+      .get('/sitemap/different-id.xml')
+      .reply(200, proxyContents)
+    // boot tapestry server
+    tapestry = bootServer(config)
+    tapestry.server.on('start', () => {
+      uri = tapestry.server.info.uri
+      done()
+    })
+  })
+
+  after(() => tapestry.server.stop())
+
+  it('Proxy should return correct content from test a', (done) => {
+    request
+      .get(uri + '/sitemap/test.xml', (err, res, body) => {
+        expect(body).to.contain(proxyContents)
+        done()
+      })
+  })
+
+  it('Proxy should return correct content from test b', (done) => {
+    request
+      .get(uri + '/sitemap/different-id.xml', (err, res, body) => {
+        expect(body).to.contain(proxyContents)
+        done()
+      })
+  })
+
 })
