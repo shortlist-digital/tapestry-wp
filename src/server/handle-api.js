@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import fetch from 'isomorphic-fetch'
-import CacheManager from '../utilities/cache-manager'
+import CacheManager, { normalizePath } from '../utilities/cache-manager'
 import log from '../utilities/logger'
 
 let cacheManager = new CacheManager()
@@ -15,26 +15,35 @@ export default ({ server, config }) => {
     path: '/api/v1/{query*}',
     handler: (req, reply) => {
 
-      const base = `${config.siteUrl}/wp-json/wp/v2`
+      const base = `${normalizePath(config.siteUrl)}/wp-json/wp/v2`
       const path = `${req.params.query}${req.url.search}`
       const remote = `${base}/${path}`
+      const cacheKey = normalizePath(path)
+
       // Look for a cached response - maybe undefined
-      const cacheRecord = cache.get(remote)
+      const cacheRecord = cache.get(cacheKey)
+      log.debug(`Cache attempting to access ${chalk.green(cacheKey)} in API: ${Boolean(cacheRecord)}`)
+
       // If we find a response in the cache send it back
       if (cacheRecord) {
-        log.debug(`Server loading API response from cache for ${chalk.green(remote)}`)
+
+        log.debug(`API response via cache for ${chalk.green(cacheKey)}`)
         reply(cacheRecord.response)
+
       } else {
+
         fetch(remote)
           .then(resp => resp.json())
           .then(resp => {
+
+            log.debug(`API response via HTTP for ${chalk.green(path)}`)
+            reply(resp)
+
             // We can only get here if there's nothing cached
             // Put the response into the cache using the request path as a key
-            cache.set(remote, {
-              response: resp
-            })
-            log.debug(`Server returned a fresh API response over HTTP for ${chalk.green(remote)}`)
-            reply(resp)
+            log.debug(`Cache set ${chalk.green(cacheKey)} in API`)
+            cache.set(cacheKey, { response: resp })
+            log.debug(`Cache has ${chalk.green(cache.keys())} in API`)
           })
           .catch(error => log.error(error))
       }

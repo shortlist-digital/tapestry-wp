@@ -5,6 +5,13 @@ import log from '../utilities/logger'
 let internalCaches = []
 let instance = null
 
+export const normalizePath = path => {
+  if (path !== '/') {
+    return path.replace(/^\/+|\/+$/g, '')
+  }
+  return path
+}
+
 export default class CacheManager {
 
 

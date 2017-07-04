@@ -7,7 +7,7 @@ import chalk from 'chalk'
 import RouteWrapper from '../shared/route-wrapper'
 import { renderHtml } from './render'
 import log from '../utilities/logger'
-import CacheManager from '../utilities/cache-manager'
+import CacheManager, { normalizePath } from '../utilities/cache-manager'
 let cacheManager = new CacheManager()
 
 export default ({ server, config, assets }) => {
@@ -62,16 +62,18 @@ export default ({ server, config, assets }) => {
 
           const failApi = has(asyncProps.propsArray[0], 'data.data.status')
           const failRoute = renderProps.routes[1].path === '*'
+          const cacheKey = normalizePath(request.url.path)
 
           if (failApi || failRoute)
             status = 404
 
           // Find HTML based on path - might be undefined
-          const cachedHTML = cache.get(request.url.path)
+          const cachedHTML = cache.get(cacheKey)
+          log.debug(`Cache attempting to access ${chalk.green(cacheKey)} in HTML: ${Boolean(cachedHTML)}`)
 
           // respond with HTML from cache if not undefined
           if (cachedHTML) {
-            log.debug(`Server loading HTML from cache for ${chalk.green(request.url.path)}`)
+            log.debug(`HTML rendered from cache for ${chalk.green(cacheKey)}`)
             reply(cachedHTML).code(status)
           } else {
             // No HTML found for this path, or cache expired
@@ -84,14 +86,18 @@ export default ({ server, config, assets }) => {
             })
 
             // 200 with rendered HTML
+            log.debug(`HTML rendered from scratch for ${chalk.green(cacheKey)}`)
+            reply(html).code(status)
+
             // We can only get here if there's nothing cached for this URL path
             // Bung the HTML into the cache, if not a preview link
             const isPreview = idx(renderProps, _ => _.location.query.tapestry_hash)
+
             if (!isPreview) {
-              cache.set(request.url.path, html)
+              log.debug(`Cache set ${chalk.green(cacheKey)} in HTML`)
+              cache.set(cacheKey, html)
+              log.debug(`Cache has ${chalk.green(cache.keys())} in HTML`)
             }
-            log.debug(`Server rendered HTML from scratch for ${chalk.green(request.url.path)}`)
-            reply(html).code(status)
           }
         })
       })
