@@ -2,11 +2,13 @@
 
 const path = require('path')
 const createCompilers = require('../dist/create-compilers')
-const logger = require('../dist/logger')
+const log = require('../dist/logger')
+const notify = log.notify
+const winston = log.default
 const cwd = process.cwd()
 const env = 'development'
 
-logger.info(`Preparing Tapestry… \n`)
+notify(`Preparing Tapestry… \n`)
 
 // create webpack node compilers
 const {
@@ -20,13 +22,13 @@ let serverBooted = false
 // run server webpack build
 serverCompiler.run(err => {
   if (err) {
-    logger.errorObject(err)
+    winston.error(err)
     process.exit(0)
   }
   // run client webpack build when complete as a watch command
   clientCompiler.watch({}, err => {
     if (err) {
-      logger.errorObject(err)
+      winston.error(err)
       process.exit(0)
     }
     // boot server if not already running

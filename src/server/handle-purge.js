@@ -1,6 +1,7 @@
-import winston from 'winston'
+import chalk from 'chalk'
 import { match } from 'react-router'
 import RouteWrapper from '../shared/route-wrapper'
+import log from '../utilities/logger'
 import CacheManager from '../utilities/cache-manager'
 const cacheManager = new CacheManager()
 const purgePath = process.env.SECRET_PURGE_PATH || 'purge'
@@ -16,7 +17,7 @@ export default ({ server, config }) => {
       if (typeof endpoint == 'function') {
         endpoint = endpoint(renderProps.params)
       }
-      winston.log('debug', `Purge request for endpoint ${endpoint}`)
+      log.debug(`Purge request for endpoint ${chalk.green(endpoint)}`)
       cb(endpoint)
     })
   }
@@ -27,13 +28,13 @@ export default ({ server, config }) => {
     handler: (request, reply) => {
       calculateApiRoute(request.params.path, (apiRoute) => {
 
-        winston.log('debug', `Request: ${request.params.path} mapped to API: ${apiRoute}`)
+        log.debug(`Request: ${chalk.green(request.params.path)} mapped to API: ${apiRoute}`)
         const remote = `${config.siteUrl}/wp-json/wp/v2/${apiRoute}`
 
-        winston.log('debug', `Directly clearing html cache for ${request.params.path}`)
+        log.debug(`Directly clearing html cache for ${chalk.green(request.params.path)}`)
         cacheManager.clearCache('html', request.params.path)
 
-        winston.log('debug', `Directly clearing api cache for ${remote}`)
+        log.debug(`Directly clearing api cache for ${chalk.green(remote)}`)
         cacheManager.clearCache('api', remote)
 
         reply({status: `Purged ${request.params.path}`}, 200)

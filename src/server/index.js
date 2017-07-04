@@ -2,13 +2,9 @@ import { Server } from 'hapi'
 import h2o2 from 'h2o2'
 import Inert from 'inert'
 import idx from 'idx'
+import chalk from 'chalk'
 
-// Configure Logging
-import winston from 'winston'
-winston.level = process.env.LOG_LEVEL || 'info'
-winston.cli()
-
-import { success, errorObject } from '../utilities/logger'
+import log, { notify } from '../utilities/logger'
 import handleApi from './handle-api'
 import handleDynamic from './handle-dynamic'
 import handlePreview from './handle-preview'
@@ -22,11 +18,11 @@ const cacheManager = new CacheManager
 
 export default class Tapestry {
 
-  constructor ({ config, assets = {} }, { silent } = {}) {
+  constructor ({ config, assets = {}, env }) {
 
     // allow access from class
     this.config = config
-    this.silent = silent
+    this.env = env
 
     // create server instance
     this.server = this.bootServer()
@@ -80,9 +76,13 @@ export default class Tapestry {
   startServer () {
     // run server
     this.server.start(err => {
-      if (err) errorObject(err)
-      if (!this.silent)
-        success(`Server ready: ${this.server.info.uri}`)
+      if (err) {
+        log.error(err)
+      }
+      if (this.env !== 'test') {
+        notify(`Server ready: ${this.server.info.uri}`)
+        log.debug(`Server started at ${chalk.green(this.server.info.uri)}`)
+      }
     })
   }
 }

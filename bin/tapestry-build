@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 
 const createCompilers = require('../dist/create-compilers')
-const logger = require('../dist/logger')
+const log = require('../dist/logger')
+const notify = log.notify
+const winston = log.default
 const cwd = process.cwd()
 const env = 'production'
 
-logger.info(`Building Tapestry… \n`)
+notify(`Building Tapestry… \n`)
 
 // create webpack node compilers
 const {
@@ -16,15 +18,15 @@ const {
 // run server webpack build
 serverCompiler.run(err => {
   if (err) {
-    logger.errorObject(err)
+    winston.error(err)
     process.exit(0)
   }
   // run client webpack build
   clientCompiler.run(err => {
     if (err) {
-      logger.errorObject(err)
+      winston.error(err)
       process.exit(0)
     }
-    logger.success(`Tapestry scripts built\n`)
+    notify(`Tapestry scripts built\n`)
   })
 })

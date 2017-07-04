@@ -1,8 +1,8 @@
+import chalk from 'chalk'
 import LRU from 'lru-cache'
-import winston from 'winston'
+import log from '../utilities/logger'
 
 let internalCaches = []
-
 let instance = null
 
 export default class CacheManager {
@@ -39,9 +39,9 @@ export default class CacheManager {
   }
 
   clearCache(cacheName, keyName) {
-    winston.debug(`purging ${keyName} from cache: ${cacheName}`)
-    winston.silly(JSON.stringify(internalCaches, null, 2))
+    log.debug(`purging ${chalk.green(keyName)} from cache: ${chalk.green(cacheName)}`)
+    log.silly(JSON.stringify(internalCaches, null, 2))
     const cacheStatus = internalCaches[cacheName].del(keyName) || 'not found'
-    winston.debug(`Clear status for \`${keyName}\`:`, cacheStatus)
+    log.debug(`Clear status for \`${chalk.green(keyName)}\`:`, cacheStatus)
   }
 }
