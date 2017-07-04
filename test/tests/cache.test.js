@@ -3,6 +3,7 @@ import { expect } from 'chai'
 import request from 'request'
 import nock from 'nock'
 
+import CacheManager from '../../src/utilities/cache-manager'
 import { bootServer } from '../utils'
 import dataPost from '../mocks/post.json'
 import dataPosts from '../mocks/posts.json'
@@ -37,7 +38,6 @@ describe('Handling purges', () => {
 
   after(() => tapestry.server.stop())
 
-
   it('Homepage is purgeable', (done) => {
     request.get(uri, (err, res, body) => {
       expect(body).to.contain('Hello')
@@ -64,6 +64,47 @@ describe('Handling purges', () => {
           expect(res.statusCode).to.equal(200)
           done()
         })
+    })
+  })
+})
+
+describe('Cache working', () => {
+
+  let tapestry = null
+  let uri = null
+  let config = {
+    components: {
+      FrontPage: () => <p>Hello</p>,
+      Post: () => <p>Hello</p>
+    },
+    siteUrl: 'http://dummy.api'
+  }
+  let cacheManager = new CacheManager()
+
+  before(done => {
+    // mock api response
+    nock('http://dummy.api')
+      .get('/wp-json/wp/v2/posts?_embed')
+      .reply(200, dataPosts.data)
+      .get('/wp-json/wp/v2/posts?slug=test&_embed')
+      .reply(200, dataPost)
+    // boot tapestry server
+    tapestry = bootServer(config)
+    tapestry.server.on('start', () => {
+      uri = tapestry.server.info.uri
+      done()
+    })
+  })
+
+  after(() => tapestry.server.stop())
+
+  it('Sets API/HTML cache items correctly', done => {
+    request.get(uri, (err, res, body) => {
+      let cacheApi = cacheManager.getCache('api')
+      let cacheHtml = cacheManager.getCache('html')
+      expect(cacheApi.keys()).to.include('posts?_embed')
+      expect(cacheHtml.keys()).to.include('/')
+      done()
     })
   })
 })
