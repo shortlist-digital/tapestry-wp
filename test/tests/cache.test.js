@@ -9,7 +9,7 @@ import dataPost from '../mocks/post.json'
 import dataPosts from '../mocks/posts.json'
 
 
-describe('Handling purges', () => {
+describe('Handling cache purges', () => {
 
   let tapestry = null
   let uri = null
@@ -68,7 +68,7 @@ describe('Handling purges', () => {
   })
 })
 
-describe('Cache working', () => {
+describe('Handling cache set/get', () => {
 
   let tapestry = null
   let uri = null
@@ -79,31 +79,59 @@ describe('Cache working', () => {
     },
     siteUrl: 'http://dummy.api'
   }
-  let cacheManager = new CacheManager()
+  const cacheManager = new CacheManager()
 
   before(done => {
+    // sorry for this
+    process.env.NODE_ENV = 'production'
     // mock api response
     nock('http://dummy.api')
       .get('/wp-json/wp/v2/posts?_embed')
+      .times(2)
       .reply(200, dataPosts.data)
       .get('/wp-json/wp/v2/posts?slug=test&_embed')
       .reply(200, dataPost)
     // boot tapestry server
-    tapestry = bootServer(config)
+    tapestry = bootServer(config, { __DEV__: false })
     tapestry.server.on('start', () => {
       uri = tapestry.server.info.uri
       done()
     })
   })
 
-  after(() => tapestry.server.stop())
+  after(() => {
+    // sorry for this
+    process.env.NODE_ENV = ''
+    tapestry.server.stop()
+  })
 
   it('Sets API/HTML cache items correctly', done => {
     request.get(uri, (err, res, body) => {
-      let cacheApi = cacheManager.getCache('api')
-      let cacheHtml = cacheManager.getCache('html')
+      const cacheApi = cacheManager.getCache('api')
+      const cacheHtml = cacheManager.getCache('html')
       expect(cacheApi.keys()).to.include('posts?_embed')
       expect(cacheHtml.keys()).to.include('/')
+      done()
+    })
+  })
+
+  it('Retrieves API cache items correctly', done => {
+    const cacheApi = cacheManager.getCache('api')
+    const postRoute = '2017/12/01/test'
+    const response = { cache: 'response' }
+    cacheApi.set('posts?slug=test&_embed', { response: response })
+    request.get(`${uri}/${postRoute}`, (err, res, body) => {
+      expect(body).to.contain(JSON.stringify(response))
+      done()
+    })
+  })
+
+  it('Retrieves HTML cache items correctly', done => {
+    const cacheHtml = cacheManager.getCache('html')
+    const response = 'test string'
+    cacheHtml.set('/', response)
+    request.get(uri, (err, res, body) => {
+      expect(body).to.equal(response)
       done()
     })
   })
