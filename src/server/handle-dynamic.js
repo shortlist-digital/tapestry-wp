@@ -7,7 +7,7 @@ import chalk from 'chalk'
 import RouteWrapper from '../shared/route-wrapper'
 import { renderHtml } from './render'
 import log from '../utilities/logger'
-import CacheManager, { normalizePath } from '../utilities/cache-manager'
+import CacheManager, { stripLeadingTrailingSlashes } from '../utilities/cache-manager'
 let cacheManager = new CacheManager()
 
 export default ({ server, config, assets }) => {
@@ -62,7 +62,7 @@ export default ({ server, config, assets }) => {
 
           const failApi = has(asyncProps.propsArray[0], 'data.data.status')
           const failRoute = renderProps.routes[1].path === '*'
-          const cacheKey = normalizePath(request.url.path)
+          const cacheKey = stripLeadingTrailingSlashes(request.url.path)
 
           if (failApi || failRoute)
             status = 404

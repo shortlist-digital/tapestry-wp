@@ -5,7 +5,7 @@ import log from '../utilities/logger'
 let internalCaches = []
 let instance = null
 
-export const normalizePath = path => {
+export const stripLeadingTrailingSlashes = path => {
   if (path !== '/') {
     return path.replace(/^\/+|\/+$/g, '')
   }

@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import fetch from 'isomorphic-fetch'
-import CacheManager, { normalizePath } from '../utilities/cache-manager'
+import CacheManager, { stripLeadingTrailingSlashes } from '../utilities/cache-manager'
 import log from '../utilities/logger'
 
 let cacheManager = new CacheManager()
@@ -15,10 +15,10 @@ export default ({ server, config }) => {
     path: '/api/v1/{query*}',
     handler: (req, reply) => {
 
-      const base = `${normalizePath(config.siteUrl)}/wp-json/wp/v2`
+      const base = `${stripLeadingTrailingSlashes(config.siteUrl)}/wp-json/wp/v2`
       const path = `${req.params.query}${req.url.search}`
       const remote = `${base}/${path}`
-      const cacheKey = normalizePath(path)
+      const cacheKey = stripLeadingTrailingSlashes(path)
 
       // Look for a cached response - maybe undefined
       const cacheRecord = cache.get(cacheKey)
