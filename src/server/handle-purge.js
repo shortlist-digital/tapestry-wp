@@ -1,5 +1,6 @@
 import chalk from 'chalk'
 import { match } from 'react-router'
+import HTTPStatus from 'http-status'
 import isFunction from 'lodash/isFunction'
 
 import RouteWrapper from '../shared/route-wrapper'
@@ -39,7 +40,7 @@ export default ({ server, config }) => {
 
         reply({
           status: `Purged ${request.params.path}`
-        }, 200)
+        }, HTTPStatus.OK)
       })
     }
   })

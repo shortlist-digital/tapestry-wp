@@ -2,6 +2,7 @@ import { match } from 'react-router'
 import { loadPropsOnServer } from 'async-props'
 import idx from 'idx'
 import chalk from 'chalk'
+import HTTPStatus from 'http-status'
 
 import RouteWrapper from '../shared/route-wrapper'
 import handleApiResponse from '../shared/handle-api-response'
@@ -28,7 +29,7 @@ export default ({ server, config, assets }) => {
         // 500 if error from Router
         if (err) {
           log.error(err)
-          return reply(err.message).code(500)
+          return reply(err.message).code(HTTPStatus.INTERNAL_SERVER_ERROR)
         }
 
         // define global deets for nested components
@@ -41,7 +42,7 @@ export default ({ server, config, assets }) => {
               loadContext,
               assets
             })
-          ).code(404)
+          ).code(HTTPStatus.NOT_FOUND)
         }
 
         // 301/2 if redirect
@@ -55,19 +56,17 @@ export default ({ server, config, assets }) => {
           // 500 if error from AsyncProps
           if (err) {
             log.error(err)
-            return reply(err).code(500)
+            return reply(err).code(HTTPStatus.INTERNAL_SERVER_ERROR)
           }
-
-          let status = 200
 
           const response = handleApiResponse(
             idx(asyncProps, _ => _.propsArray[0].data),
             renderProps.routes[1]
           )
 
-          if (!response) {
-            status = 404
-          }
+          const status = idx(response, _ => _.code) ?
+            response.code :
+            HTTPStatus.OK
 
           const cacheKey = stripLeadingTrailingSlashes(request.url.path)
 
