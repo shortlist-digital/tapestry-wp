@@ -1,11 +1,11 @@
 import { match } from 'react-router'
 import { loadPropsOnServer } from 'async-props'
-import has from 'lodash/has'
 import idx from 'idx'
 import chalk from 'chalk'
 
 import RouteWrapper from '../shared/route-wrapper'
-import { renderHtml } from './render'
+import handleApiResponse from '../shared/handle-api-response'
+import renderHtml from './render'
 import log from '../utilities/logger'
 import CacheManager, { stripLeadingTrailingSlashes } from '../utilities/cache-manager'
 let cacheManager = new CacheManager()
@@ -60,12 +60,16 @@ export default ({ server, config, assets }) => {
 
           let status = 200
 
-          const failApi = has(asyncProps.propsArray[0], 'data.data.status')
-          const failRoute = renderProps.routes[1].path === '*'
-          const cacheKey = stripLeadingTrailingSlashes(request.url.path)
+          const response = handleApiResponse(
+            idx(asyncProps, _ => _.propsArray[0].data),
+            renderProps.routes[1]
+          )
 
-          if (failApi || failRoute)
+          if (!response) {
             status = 404
+          }
+
+          const cacheKey = stripLeadingTrailingSlashes(request.url.path)
 
           // Find HTML based on path - might be undefined
           const cachedHTML = cache.get(cacheKey)

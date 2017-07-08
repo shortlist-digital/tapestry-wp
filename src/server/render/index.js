@@ -3,11 +3,11 @@ import { renderToStaticMarkup, renderToString } from 'react-dom/server'
 import Helmet from 'react-helmet'
 import AsyncProps from 'async-props'
 import { renderStaticOptimized } from 'glamor/server'
+
 import DefaultHTML from './default-html'
 import RenderError from '../../shared/render-error'
 
-
-export const renderHtml = ({
+export default ({
   renderProps = false,
   loadContext,
   asyncProps,

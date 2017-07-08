@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import AsyncProps from 'async-props'
-import has from 'lodash/has'
-import isArray from 'lodash/isArray'
-import isEmpty from 'lodash/isEmpty'
 import { generate as uid } from 'shortid'
 import fetchRouteData from './fetch-route-data'
 import RenderError from './render-error'
+import handleApiResponse from './handle-api-response'
 
 const fetchData = (TopLevelComponent, route) => {
 
@@ -41,30 +39,9 @@ const fetchData = (TopLevelComponent, route) => {
     }
 
     render() {
-      const response = this.props.data
-      const arrayResponse = isArray(response)
-      // to avoid React mangling the array to {'0':{},'1':{}}
-      // pass through as 'data'.
-      // TODO - update posts key to something more generic
-      const data = arrayResponse ?
-        { data: response } :
-        response
-      // should fail if an empty response?
-      // TODO - BLEAURGH, improve this.
-      const failIfEmpty = (
-        !arrayResponse ||
-        (
-          arrayResponse &&
-          !(has(route, 'options.allowEmptyResponse') && !route.options.allowEmptyResponse)
-        )
-      )
+      const response = handleApiResponse(this.props.data, this.props.route)
       // check data/component exists and isn't a server errored response
-      if (
-        !TopLevelComponent ||
-        !response ||
-        (isEmpty(response) && failIfEmpty) ||
-        has(response, 'data.status')
-      )  {
+      if (!TopLevelComponent || !response) {
         return (
           <RenderError
             data={response}
@@ -76,7 +53,7 @@ const fetchData = (TopLevelComponent, route) => {
       return (
         <TopLevelComponent
           key={uid()}
-          {...data}
+          {...response}
         />
       )
     }
