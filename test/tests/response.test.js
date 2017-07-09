@@ -29,10 +29,6 @@ describe('Handing server responses', () => {
       endpoint: 'pages?slug=empty-response',
       options: { allowEmptyResponse: true },
       component: () => <p>Hello</p>
-    }, {
-      path: '/404-array-response',
-      endpoint: ['posts?_embed', 'pages?slug=404-response'],
-      component: () => <p>Hello</p>
     }],
     siteUrl: 'http://dummy.api'
   }
@@ -104,12 +100,4 @@ describe('Handing server responses', () => {
         done()
       })
   })
-
-  // it('Route matched, API array 404, status code is 404', (done) => {
-  //   request
-  //     .get(`${uri}/404-array-response`, (err, res) => {
-  //       expect(res.statusCode).to.equal(404)
-  //       done()
-  //     })
-  // })
 })
