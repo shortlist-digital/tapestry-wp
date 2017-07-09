@@ -1,25 +1,29 @@
 import React from 'react'
+import idx from 'idx'
 import PropTypes from 'prop-types'
-import has from 'lodash/has'
 import DefaultError from './default-error'
 import MissingView from './missing-view'
 
-const RenderError = ({ config, data }) => {
+const RenderError = ({ config, response, missing }) => {
   // render custom error or default if custom error not declared
-  let ErrorView = has(config, 'components.CustomError') ?
+  let ErrorView = idx(config, _ => _.components.CustomError) ?
     config.components.CustomError :
     DefaultError
-  // always render missing view in development
-  if (__DEV__) {
-    ErrorView = () => MissingView(data)
+  // render missing component only in DEV
+  if (__DEV__ && missing) {
+    ErrorView = MissingView
+    response = {
+      message: 'Missing component'
+    }
   }
   // return one of the error views
-  return <ErrorView />
+  return <ErrorView {...response} />
 }
 
 RenderError.propTypes = {
   config: PropTypes.object,
-  data: PropTypes.any
+  missing: PropTypes.bool,
+  response: PropTypes.object
 }
 
 export default RenderError

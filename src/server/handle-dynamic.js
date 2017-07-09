@@ -82,6 +82,7 @@ export default ({ server, config, assets }) => {
             // No HTML found for this path, or cache expired
             // Regenerate HTML from scratch
             const html = renderHtml({
+              response,
               renderProps,
               loadContext,
               asyncProps,

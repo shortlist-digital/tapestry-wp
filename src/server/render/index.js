@@ -8,6 +8,7 @@ import DefaultHTML from './default-html'
 import RenderError from '../../shared/render-error'
 
 export default ({
+  response,
   renderProps = false,
   loadContext,
   asyncProps,
@@ -25,6 +26,7 @@ export default ({
             loadContext={loadContext}
           /> :
           <RenderError
+            response={response}
             config={loadContext}
           />
       )

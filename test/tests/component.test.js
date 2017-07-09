@@ -1,4 +1,5 @@
 import React from 'react'
+import HTTPStatus from 'http-status'
 import Helmet from 'react-helmet'
 import { expect } from 'chai'
 import request from 'request'
@@ -140,39 +141,26 @@ describe('Error view rendering', () => {
       .reply(200, dataPosts.data)
       .get('/wp-json/wp/v2/posts?slug=slug&_embed')
       .reply(200, dataPage)
+      .get('/wp-json/wp/v2/pages?slug=404-route&_embed')
+      .times(5)
+      .reply(404, { data: { status: 404 } })
     done()
   })
 
   afterEach(() => tapestry.server.stop())
 
-  it('CustomError missing in DEV, render Missing View', (done) => {
+  it('Show MissingView in DEV if component missing', (done) => {
     tapestry = bootServer(config)
     tapestry.server.on('start', () => {
       request
         .get(tapestry.server.info.uri, (err, res, body) => {
-          expect(body).to.contain('Missing Component')
+          expect(body).to.contain('Missing component')
           done()
         })
     })
   })
 
-  it('CustomError declared in DEV, render Missing View', (done) => {
-    tapestry = bootServer({
-      ...config,
-      components: {
-        CustomError: () => <p>Custom Error</p>
-      }
-    })
-    tapestry.server.on('start', () => {
-      request
-        .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res, body) => {
-          expect(body).to.contain('Missing Component')
-          done()
-        })
-    })
-  })
-
-  it('CustomError missing in PROD, render Default Error', (done) => {
+  it('Show DefaultError in PROD if component missing', (done) => {
     tapestry = bootServer(config, { __DEV__: false })
     tapestry.server.on('start', () => {
       request
@@ -183,17 +171,67 @@ describe('Error view rendering', () => {
     })
   })
 
-  it('CustomError declared in PROD, render CustomError', (done) => {
+  it('Show DefaultError if API 404', (done) => {
     tapestry = bootServer({
       ...config,
-      components: {
-        CustomError: () => <p>Custom Error</p>
-      }
-    }, { __DEV__: false })
+      components: { Page: () => <p>Hello</p> }
+    })
+    tapestry.server.on('start', () => {
+      request
+        .get(`${tapestry.server.info.uri}/404-route`, (err, res, body) => {
+          expect(body).to.contain(404)
+          expect(body).to.contain(HTTPStatus[404])
+          done()
+        })
+    })
+  })
+
+  it('Show DefaultError if route 404', (done) => {
+    tapestry = bootServer({
+      ...config,
+      components: { Page: () => <p>Hello</p> }
+    })
     tapestry.server.on('start', () => {
       request
         .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res, body) => {
+          expect(body).to.contain(404)
+          expect(body).to.contain(HTTPStatus[404])
+          done()
+        })
+    })
+  })
+
+  it('Show CustomError if defined', (done) => {
+    tapestry = bootServer({
+      ...config,
+      components: {
+        CustomError: () => <p>Custom Error</p>,
+        Page: () => <p>Hello</p>
+      }
+    })
+    tapestry.server.on('start', () => {
+      request
+        .get(`${tapestry.server.info.uri}/404-route`, (err, res, body) => {
           expect(body).to.contain('Custom Error')
+          done()
+        })
+    })
+  })
+
+  it('Status code and message are available to CustomError', (done) => {
+    tapestry = bootServer({
+      ...config,
+      components: {
+        CustomError: ({ code, message }) => <p>Custom Error {code} {message}</p>,
+        Page: () => <p>Hello</p>
+      }
+    })
+    tapestry.server.on('start', () => {
+      request
+        .get(`${tapestry.server.info.uri}/404-route`, (err, res, body) => {
+          expect(body).to.contain('Custom Error')
+          expect(body).to.contain('404')
+          expect(body).to.contain('Not Found')
           done()
         })
     })

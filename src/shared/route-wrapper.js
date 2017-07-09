@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route } from 'react-router'
 import { generate as uid } from 'shortid'
+import HTTPStatus from 'http-status'
 
 import defaultRoutes from './default-routes'
 import fetchData from './fetch-data'
@@ -16,8 +17,15 @@ const ComponentWrapper = (component, route) => {
 
 const RouteWrapper = (config) => {
   // if user routes have been defined, take those in preference to the defaults
+  const errorResponse = {
+    code: HTTPStatus.NOT_FOUND,
+    message: HTTPStatus[HTTPStatus.NOT_FOUND]
+  }
   const routes = config.routes || defaultRoutes(config.components)
-  const ErrorComponent = () => RenderError({ config })
+  const ErrorComponent = () => RenderError({
+    config,
+    response: errorResponse
+  })
   // loops over routes and return react-router <Route /> components
   return (
     <Route
