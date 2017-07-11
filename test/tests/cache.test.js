@@ -7,27 +7,34 @@ import CacheManager from '../../src/utilities/cache-manager'
 import { bootServer } from '../utils'
 import dataPost from '../mocks/post.json'
 import dataPosts from '../mocks/posts.json'
-
+import dataPage from '../mocks/page.json'
+import dataPages from '../mocks/pages.json'
 
 describe('Handling cache purges', () => {
 
   let tapestry = null
   let uri = null
   let config = {
-    components: {
-      FrontPage: () => <p>Hello</p>,
-      Post: () => <p>Hello</p>
-    },
+    routes: [{
+      path: 'string-endpoint',
+      endpoint: 'pages',
+      component: () => <p>Basic endpoint</p>
+    }, {
+      path: 'dynamic-string-endpoint/:custom',
+      endpoint: (params) => `pages?slug=${params.custom}`,
+      component: () => <p>Custom endpoint</p>
+    }],
     siteUrl: 'http://dummy.api'
   }
+  const cacheManager = new CacheManager()
 
   before(done => {
     // mock api response
     nock('http://dummy.api')
-      .get('/wp-json/wp/v2/posts?_embed')
-      .reply(200, dataPosts.data)
-      .get('/wp-json/wp/v2/posts?slug=test&_embed')
-      .reply(200, dataPost)
+      .get('/wp-json/wp/v2/pages')
+      .reply(200, dataPages.data)
+      .get('/wp-json/wp/v2/pages?slug=test')
+      .reply(200, dataPage)
     // boot tapestry server
     tapestry = bootServer(config)
     tapestry.server.on('start', () => {
@@ -38,32 +45,41 @@ describe('Handling cache purges', () => {
 
   after(() => tapestry.server.stop())
 
-  it('Homepage is purgeable', (done) => {
-    request.get(uri, (err, res, body) => {
-      expect(body).to.contain('Hello')
+  it('String endpoint is purgeable', (done) => {
+    const route = 'string-endpoint'
+    const purgeResp = { status: `Purged ${route}` }
+
+    request.get(`${uri}/${route}`, (err, res, body) => {
+      expect(body).to.contain('Basic endpoint')
       expect(res.statusCode).to.equal(200)
-      request
-        .get(`${uri}/purge//`, (err, res, body) => {
-          const purgeResponse = JSON.stringify({ status: 'Purged /' })
-          expect(body).to.contain(purgeResponse)
-          expect(res.statusCode).to.equal(200)
-          done()
-        })
+
+      request.get(`${uri}/purge/${route}`, (err, res, body) => {
+        const cacheApi = cacheManager.getCache('api')
+        expect(body).to.contain(JSON.stringify(purgeResp))
+        expect(res.statusCode).to.equal(200)
+        expect(cacheApi.keys()).to.not.contain('pages')
+
+        done()
+      })
     })
   })
 
-  it('Post is purgeable', (done) => {
-    const postRoute = '2017/12/01/test'
-    request.get(`${uri}/${postRoute}`, (err, res, body) => {
-      expect(body).to.contain('Hello')
+  it('Dynamic string endpoint is purgeable', (done) => {
+    const route = `dynamic-string-endpoint/test`
+    const purgeResp = { status: `Purged ${route}` }
+
+    request.get(`${uri}/${route}`, (err, res, body) => {
+      expect(body).to.contain('Custom endpoint')
       expect(res.statusCode).to.equal(200)
-      request
-        .get(`${uri}/purge/${postRoute}`, (err, res, body) => {
-          const purgeResponse = JSON.stringify({ status: `Purged ${postRoute}` })
-          expect(body).to.contain(purgeResponse)
-          expect(res.statusCode).to.equal(200)
-          done()
-        })
+
+      request.get(`${uri}/purge/${route}`, (err, res, body) => {
+        const cacheApi = cacheManager.getCache('api')
+        expect(body).to.contain(JSON.stringify(purgeResp))
+        expect(res.statusCode).to.equal(200)
+        expect(cacheApi.keys()).to.not.contain('pages?slug=test')
+
+        done()
+      })
     })
   })
 })

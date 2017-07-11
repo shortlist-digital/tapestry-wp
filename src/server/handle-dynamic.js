@@ -1,11 +1,12 @@
 import { match } from 'react-router'
 import { loadPropsOnServer } from 'async-props'
-import has from 'lodash/has'
 import idx from 'idx'
 import chalk from 'chalk'
+import HTTPStatus from 'http-status'
 
 import RouteWrapper from '../shared/route-wrapper'
-import { renderHtml } from './render'
+import handleApiResponse from '../shared/handle-api-response'
+import renderHtml from './render'
 import log from '../utilities/logger'
 import CacheManager, { stripLeadingTrailingSlashes } from '../utilities/cache-manager'
 let cacheManager = new CacheManager()
@@ -28,7 +29,7 @@ export default ({ server, config, assets }) => {
         // 500 if error from Router
         if (err) {
           log.error(err)
-          return reply(err.message).code(500)
+          return reply(err.message).code(HTTPStatus.INTERNAL_SERVER_ERROR)
         }
 
         // define global deets for nested components
@@ -41,7 +42,7 @@ export default ({ server, config, assets }) => {
               loadContext,
               assets
             })
-          ).code(404)
+          ).code(HTTPStatus.NOT_FOUND)
         }
 
         // 301/2 if redirect
@@ -55,17 +56,19 @@ export default ({ server, config, assets }) => {
           // 500 if error from AsyncProps
           if (err) {
             log.error(err)
-            return reply(err).code(500)
+            return reply(err).code(HTTPStatus.INTERNAL_SERVER_ERROR)
           }
 
-          let status = 200
+          const response = handleApiResponse(
+            idx(asyncProps, _ => _.propsArray[0].data),
+            renderProps.routes[1]
+          )
 
-          const failApi = has(asyncProps.propsArray[0], 'data.data.status')
-          const failRoute = renderProps.routes[1].path === '*'
+          const status = idx(response, _ => _.code) ?
+            response.code :
+            HTTPStatus.OK
+
           const cacheKey = stripLeadingTrailingSlashes(request.url.path)
-
-          if (failApi || failRoute)
-            status = 404
 
           // Find HTML based on path - might be undefined
           const cachedHTML = cache.get(cacheKey)
@@ -79,6 +82,7 @@ export default ({ server, config, assets }) => {
             // No HTML found for this path, or cache expired
             // Regenerate HTML from scratch
             const html = renderHtml({
+              response,
               renderProps,
               loadContext,
               asyncProps,

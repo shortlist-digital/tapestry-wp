@@ -13,10 +13,10 @@ export default ({ server, config }) => {
   server.route({
     method: 'GET',
     path: '/api/v1/{query*}',
-    handler: (req, reply) => {
+    handler: (request, reply) => {
 
       const base = `${stripLeadingTrailingSlashes(config.siteUrl)}/wp-json/wp/v2`
-      const path = `${req.params.query}${req.url.search}`
+      const path = `${request.params.query}${request.url.search}`
       const remote = `${base}/${path}`
       const cacheKey = stripLeadingTrailingSlashes(path)
 

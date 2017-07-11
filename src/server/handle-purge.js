@@ -1,43 +1,46 @@
 import chalk from 'chalk'
 import { match } from 'react-router'
+import HTTPStatus from 'http-status'
+import isFunction from 'lodash/isFunction'
+
 import RouteWrapper from '../shared/route-wrapper'
 import log from '../utilities/logger'
 import CacheManager from '../utilities/cache-manager'
+
 const cacheManager = new CacheManager()
 const purgePath = process.env.SECRET_PURGE_PATH || 'purge'
 
 export default ({ server, config }) => {
-  const calculateApiRoute = (path, cb) => {
-    match({
-      routes: RouteWrapper(config),
-      location: path
-    }, (err, redirectLocation, renderProps) => {
-      // The HOC data loader component is always at index [1] while there is progres bar
-      let endpoint = renderProps.components[1].endpoint
-      if (typeof endpoint == 'function') {
-        endpoint = endpoint(renderProps.params)
-      }
-      log.debug(`Purge request for endpoint ${chalk.green(endpoint)}`)
-      cb(endpoint)
-    })
-  }
 
   server.route({
     method: 'GET',
     path: `/${purgePath}/{path*}`,
     handler: (request, reply) => {
-      calculateApiRoute(request.params.path, (apiRoute) => {
 
-        log.debug(`Request: ${chalk.green(request.params.path)} mapped to API: ${apiRoute}`)
-        const remote = `${config.siteUrl}/wp-json/wp/v2/${apiRoute}`
+      match({
+        routes: RouteWrapper(config),
+        location: request.params.path
+      }, (err, redirectLocation, renderProps) => {
 
-        log.debug(`Directly clearing html cache for ${chalk.green(request.params.path)}`)
+        let endpoint = renderProps.components[1].endpoint
+        let pathToPurge = endpoint
+
+        // resolve function if required
+        if (isFunction(endpoint)) {
+          pathToPurge = endpoint(renderProps.params)
+        }
+
+        log.debug(`Purge path ${chalk.green(request.params.path)} mapped to ${chalk.green(pathToPurge)}`)
+
+        log.debug(`Cache clear ${chalk.green(pathToPurge)} in API`)
+        cacheManager.clearCache('api', pathToPurge)
+
+        log.debug(`Cache clear ${chalk.green(request.params.path)} in HTML`)
         cacheManager.clearCache('html', request.params.path)
 
-        log.debug(`Directly clearing api cache for ${chalk.green(remote)}`)
-        cacheManager.clearCache('api', remote)
-
-        reply({status: `Purged ${request.params.path}`}, 200)
+        reply({
+          status: `Purged ${request.params.path}`
+        }, HTTPStatus.OK)
       })
     }
   })

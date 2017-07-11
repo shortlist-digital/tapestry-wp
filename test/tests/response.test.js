@@ -12,9 +12,24 @@ describe('Handing server responses', () => {
   let tapestry = null
   let uri = null
   let config = {
-    components: {
-      FrontPage: () => <p>Hello</p>
-    },
+    routes: [{
+      path: '/',
+      endpoint: 'posts?_embed',
+      component: () => <p>Hello</p>
+    }, {
+      path: '/404-response',
+      endpoint: 'pages?slug=404-response',
+      component: () => <p>Hello</p>
+    }, {
+      path: '/empty-response',
+      endpoint: 'pages?slug=empty-response',
+      component: () => <p>Hello</p>
+    }, {
+      path: '/empty-allowed-response',
+      endpoint: 'pages?slug=empty-response',
+      options: { allowEmptyResponse: true },
+      component: () => <p>Hello</p>
+    }],
     siteUrl: 'http://dummy.api'
   }
 
@@ -24,8 +39,12 @@ describe('Handing server responses', () => {
       .get('/wp-json/wp/v2/posts?_embed')
       .times(5)
       .reply(200, dataPosts.data)
-      .get('/wp-json/wp/v2/pages?slug=page&_embed')
+      .get('/wp-json/wp/v2/pages?slug=404-response')
+      .times(5)
       .reply(404, { data: { status: 404 } })
+      .get('/wp-json/wp/v2/pages?slug=empty-response')
+      .times(5)
+      .reply(200, [])
     // boot tapestry server
     tapestry = bootServer(config)
     tapestry.server.on('start', () => {
@@ -58,10 +77,26 @@ describe('Handing server responses', () => {
       })
   })
 
-  it('Route matched but API 404, status code is 404', (done) => {
+  it('Route matched, API 404, status code is 404', (done) => {
     request
-      .get(`${uri}/about/page`, (err, res) => {
+      .get(`${uri}/404-response`, (err, res) => {
         expect(res.statusCode).to.equal(404)
+        done()
+      })
+  })
+
+  it('Route matched, API empty response, status code is 404', (done) => {
+    request
+      .get(`${uri}/empty-response`, (err, res) => {
+        expect(res.statusCode).to.equal(404)
+        done()
+      })
+  })
+
+  it('Route matched, API empty but allowed, status code is 200', (done) => {
+    request
+      .get(`${uri}/empty-allowed-response`, (err, res) => {
+        expect(res.statusCode).to.equal(200)
         done()
       })
   })
