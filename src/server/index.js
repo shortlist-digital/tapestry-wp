@@ -64,7 +64,13 @@ export default class Tapestry {
     const host = idx(this.config, _ => _.options.host)
     const port = idx(this.config, _ => _.options.port)
     // create new Hapi server and register required plugins
-    const server = new Server()
+    const server = new Server({
+      connections: {
+        routes: {
+          security: true
+        }
+      }
+    })
     server.register([h2o2, Inert])
     server.connection({
       host: host || '0.0.0.0',
