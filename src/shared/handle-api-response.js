@@ -7,7 +7,7 @@ export default (response, route) => {
   // WP returns single objects or arrays
   const arrayResp = isArray(response)
   const routes = idx(route, _ => _.config.routes)
-  let config = routes ? routes.filter(item => item.path === route.path) : null
+  let routeConfig = routes ? routes.filter(item => item.path === route.path) : null
   // 1: does it contain a status code? then it'll be an error response from WP
   // 2: is it an empty array and allowEmptyResponse is not true
   if (
@@ -16,7 +16,7 @@ export default (response, route) => {
     (
       arrayResp &&
       isEmpty(response) &&
-      !idx(config, _ => _[0].options.allowEmptyResponse)
+      !idx(routeConfig, _ => _[0].options.allowEmptyResponse)
     )
   ) {
     const status = idx(response, _ => _.data.status) || HTTPStatus.NOT_FOUND
