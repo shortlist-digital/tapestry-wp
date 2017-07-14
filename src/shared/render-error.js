@@ -1,8 +1,8 @@
 import React from 'react'
 import idx from 'idx'
 import PropTypes from 'prop-types'
-import DefaultError from './default-error'
-import MissingView from './missing-view'
+import DefaultError from './components/default-error'
+import MissingView from './components/missing-view'
 
 const RenderError = ({ config, response, missing }) => {
   // render custom error or default if custom error not declared
