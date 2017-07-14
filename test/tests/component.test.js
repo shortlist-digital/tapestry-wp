@@ -16,6 +16,9 @@ describe('Custom components rendering', () => {
   let tapestry = null
   let uri = null
   let config = {
+    options: {
+      progressBarColor: '#000'
+    },
     components: {
       Post: () => (
         <Helmet>
@@ -31,6 +34,7 @@ describe('Custom components rendering', () => {
     // mock api response
     nock('http://dummy.api')
       .get('/wp-json/wp/v2/posts?_embed')
+      .times(2)
       .reply(200, dataPosts.data)
       .get('/wp-json/wp/v2/posts?slug=slug&_embed')
       .reply(200, dataPage)
@@ -54,6 +58,13 @@ describe('Custom components rendering', () => {
   it('Custom head tags are rendered', (done) => {
     request.get(`${uri}/year/month/day/slug`, (err, res, body) => {
       expect(body).to.contain('Custom title')
+      done()
+    })
+  })
+
+  it('Custom progressBarColor is used', (done) => {
+    request.get(uri, (err, res, body) => {
+      expect(body).to.contain('background-color:#000;')
       done()
     })
   })
