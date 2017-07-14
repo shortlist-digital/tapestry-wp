@@ -16,6 +16,7 @@ class ProgressIndicator extends Component {
     this.initialPercentage = 15
     this.percentageIncrease = 3
     this.increaseInterval = 400
+    this.resetDelay = 800
     // set color if declared
     if (idx(props, _ => _.route.config.options.progressBarColor)) {
       this.progressBarColor = props.route.config.options.progressBarColor
@@ -57,7 +58,7 @@ class ProgressIndicator extends Component {
     setTimeout(() => {
       this.setState({ percent: 0 })
       this.percentageIncrease = 3
-    }, 800)
+    }, this.resetDelay)
   }
 
   updateWidth() {
