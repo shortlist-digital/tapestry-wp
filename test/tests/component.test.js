@@ -17,7 +17,7 @@ describe('Custom components rendering', () => {
   let uri = null
   let config = {
     options: {
-      progressBarColor: '#000'
+      progressBarColor: '#c0ffee'
     },
     components: {
       Post: () => (
@@ -64,7 +64,7 @@ describe('Custom components rendering', () => {
 
   it('Custom progressBarColor is used', (done) => {
     request.get(uri, (err, res, body) => {
-      expect(body).to.contain('background-color:#000;')
+      expect(body).to.contain('background-color:#c0ffee;')
       done()
     })
   })
