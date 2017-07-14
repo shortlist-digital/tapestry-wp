@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ObjectInspector from 'react-object-inspector'
-import DefaultError from './default-error'
+import DefaultError from '../default-error'
 
 const MissingView = (response) =>
   <DefaultError {...response}>

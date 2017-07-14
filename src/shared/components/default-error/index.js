@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import propTypes, { defaultProps } from './prop-types'
 
 const DefaultError = ({
   message,
@@ -41,13 +41,7 @@ const DefaultError = ({
     {children}
   </section>
 
-DefaultError.defaultProps = {
-  message: 'Application Error'
-}
-DefaultError.propTypes = {
-  message: PropTypes.string,
-  code: PropTypes.number,
-  children: PropTypes.node
-}
+DefaultError.defaultProps = defaultProps
+DefaultError.propTypes = propTypes
 
 export default DefaultError
