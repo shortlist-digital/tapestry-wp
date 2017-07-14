@@ -5,7 +5,7 @@ import HTTPStatus from 'http-status'
 
 import defaultRoutes from './default-routes'
 import fetchData from './fetch-data'
-import ProgressIndicator from './progress-indicator'
+import ProgressIndicator from './components/progress-indicator'
 import RenderError from './render-error'
 
 const ComponentWrapper = (component, route) => {
