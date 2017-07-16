@@ -1,12 +1,14 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { Router, match, browserHistory } from 'react-router'
+import { match, browserHistory } from 'react-router'
 import AsyncProps from 'async-props'
 import 'location-origin'
 import 'es6-promise/auto'
 import RouteWrapper from '../shared/route-wrapper'
 import config from 'tapestry.config.js'
 import mitt from 'mitt'
+import { AppContainer } from 'react-hot-loader'
+import Root from './root'
 
 if (window !== 'undefined') {
   window.tapestryEmitter = mitt()
@@ -24,11 +26,30 @@ const targetNode = document.getElementById('root')
 // run a router match (not sure why this is necessary)
 match({ routes, history }, (error, redirectLocation, renderProps) =>
   render(
-    <Router
-      render={renderAsyncProps}
-      routes={routes}
-      {...renderProps}
-    />,
+    <AppContainer>
+      <Root
+        renderAsyncProps={renderAsyncProps}
+        routes={routes}
+        renderProps={renderProps}
+      />
+    </AppContainer>,
     targetNode
   )
 )
+
+if (module.hot) {
+  module.hot.accept(() => {
+    match({ routes, history }, (error, redirectLocation, renderProps) =>
+      render(
+        <AppContainer>
+          <Root
+            renderAsyncProps={renderAsyncProps}
+            routes={routes}
+            renderProps={renderProps}
+          />
+        </AppContainer>,
+        targetNode
+      )
+    )
+  })
+}

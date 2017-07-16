@@ -7,6 +7,7 @@ const log = require('./logger').default
 const mergeConfigs = require('./merge-config').default
 const configClientDefault = require('../src/webpack/client.config')
 const configServerDefault = require('../src/webpack/server.config')
+const configDevDefault = require('../src/webpack/dev.config')
 
 module.exports = ({ cwd, env }) => {
 
@@ -43,9 +44,11 @@ module.exports = ({ cwd, env }) => {
 
   const serverCompiler = createCompiler(configServerDefault)
   const clientCompiler = createCompiler(configClientDefault)
+  const devCompiler = createCompiler(configDevDefault)
 
   return {
     serverCompiler,
-    clientCompiler
+    clientCompiler,
+    devCompiler
   }
 }

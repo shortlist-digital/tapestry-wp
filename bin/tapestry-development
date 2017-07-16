@@ -1,44 +1,61 @@
 #!/usr/bin/env node
+require('babel-register')
 
 const path = require('path')
+
+const Webpack = require('webpack')
+const WebpackDevServer = require('webpack-dev-server')
 const createCompilers = require('../dist/create-compilers')
-const log = require('../dist/logger')
-const notify = log.notify
-const winston = log.default
 const cwd = process.cwd()
 const env = 'development'
+const log = require('../dist/logger')
+const notify = log.notify
 
-notify(`Preparing Tapestry… \n`)
+notify('Starting Webpack Hot Reload Server\n')
+
+const indexFilePath = path.resolve(
+  __dirname,
+  '../',
+  'src',
+  'webpack',
+  'index.html'
+)
 
 // create webpack node compilers
 const {
-  serverCompiler,
-  clientCompiler
+  devCompiler
 } = createCompilers({ cwd, env })
 
-// set flag to track server status
-let serverBooted = false
+const cmsTarget = process.argv[2]
 
-// run server webpack build
-serverCompiler.run(err => {
-  if (err) {
-    winston.error(err)
-    process.exit(0)
+if (!cmsTarget) {
+  return console.error('Usage: tapestry http://cms.url.com')
+}
+
+const server = new WebpackDevServer(devCompiler, {
+	stats: {
+		colors: true
+  },
+  hot: true,
+  publicPath: '/_scripts/',
+  proxy: {
+    '/api/v1/**': {
+      target: cmsTarget,
+      changeOrigin: true,
+      secure: false,
+      pathRewrite: {
+        '^/api/v1': '/wp-json/wp/v2'
+      }
+    }
+  },
+  setup: (app) => {
+    app.get('/',(req, res) => {
+      res.sendFile(indexFilePath)
+    })
   }
-  // run client webpack build when complete as a watch command
-  clientCompiler.watch({}, err => {
-    if (err) {
-      winston.error(err)
-      process.exit(0)
-    }
-    // boot server if not already running
-    if (!serverBooted) {
-      // server path relative to root
-      const serverPath = path.resolve(cwd, '.tapestry/server.js')
-      // require server and boot
-      const server = require(serverPath).default
-      server({ cwd, env })
-      serverBooted = true
-    }
-  })
 })
+
+server.listen(8080, '127.0.0.1',() => {
+	console.log('Tapestry Hot Dev Server started on http://localhost:8080')
+})
+
