@@ -1,8 +1,5 @@
 #!/usr/bin/env node
-require('babel-register')
-
 const path = require('path')
-
 const Webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 const createCompilers = require('../dist/create-compilers')
