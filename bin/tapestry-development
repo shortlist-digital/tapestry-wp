@@ -26,7 +26,7 @@ const {
 const cmsTarget = process.argv[2]
 
 if (!cmsTarget) {
-  return console.error('Usage: tapestry http://cms.url.com')
+  return console.error('FAILED: No CMS endpoint provided - [Usage: tapestry http://cms.url.com]')
 }
 
 const server = new WebpackDevServer(devCompiler, {
