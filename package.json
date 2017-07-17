@@ -7,7 +7,8 @@
     "bin/",
     "bootstrap/",
     "dist/",
-    "src/"
+    "src/",
+    "logo/favicon.ico"
   ],
   "repository": "shortlist-digital/tapestry-wp",
   "scripts": {
