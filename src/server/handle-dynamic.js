@@ -7,7 +7,7 @@ import HTTPStatus from 'http-status'
 import RouteWrapper from '../shared/route-wrapper'
 import handleApiResponse from '../shared/handle-api-response'
 import renderHtml from './render'
-import log from '../utilities/logger'
+import { log } from '../utilities/logger'
 import CacheManager, { stripLeadingTrailingSlashes } from '../utilities/cache-manager'
 let cacheManager = new CacheManager()
 

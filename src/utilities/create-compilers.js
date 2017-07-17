@@ -4,9 +4,9 @@ const webpack = require('webpack')
 const chalk = require('chalk')
 const log = require('./logger').default
 
-const mergeConfigs = require('./merge-config').default
-const configClientDefault = require('../src/webpack/client.config')
-const configServerDefault = require('../src/webpack/server.config')
+const mergeConfigs = require('./merge-config')
+const configClientDefault = require('../webpack/client.config')
+const configServerDefault = require('../webpack/server.config')
 
 module.exports = ({ cwd, env }) => {
 

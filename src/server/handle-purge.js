@@ -4,7 +4,7 @@ import HTTPStatus from 'http-status'
 import isFunction from 'lodash/isFunction'
 
 import RouteWrapper from '../shared/route-wrapper'
-import log from '../utilities/logger'
+import { log } from '../utilities/logger'
 import CacheManager from '../utilities/cache-manager'
 
 const cacheManager = new CacheManager()
