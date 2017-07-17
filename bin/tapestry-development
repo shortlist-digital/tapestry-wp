@@ -49,7 +49,7 @@ const server = new WebpackDevServer(devCompiler, {
     }
   },
   setup: (app) => {
-    app.get('/',(req, res) => {
+    app.get(/^(?!\/api\/|\/public\/|\/_scripts\/).+/, (req, res) => {
       res.sendFile(indexFilePath)
     })
   }
