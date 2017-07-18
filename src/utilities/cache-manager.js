@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import LRU from 'lru-cache'
-import log from '../utilities/logger'
+import { log } from '../utilities/logger'
 
 let internalCaches = []
 let instance = null

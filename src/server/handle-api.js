@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import fetch from 'isomorphic-fetch'
 import CacheManager, { stripLeadingTrailingSlashes } from '../utilities/cache-manager'
-import log from '../utilities/logger'
+import { log } from '../utilities/logger'
 
 let cacheManager = new CacheManager()
 

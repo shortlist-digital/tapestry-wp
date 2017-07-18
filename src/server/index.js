@@ -4,7 +4,7 @@ import Inert from 'inert'
 import idx from 'idx'
 import chalk from 'chalk'
 
-import log, { notify } from '../utilities/logger'
+import { log, notify } from '../utilities/logger'
 import handleApi from './handle-api'
 import handleDynamic from './handle-dynamic'
 import handlePreview from './handle-preview'
