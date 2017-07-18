@@ -8,6 +8,7 @@ import { Router } from 'react-router'
 // Patch a load of rubbish React Router errors
 if (module.hot) {
   Router.prototype.componentWillReceiveProps = function(nextProps) {
+    console.log('Next props:', nextProps)
     let components = []
     function grabComponents(element) {
       // This only works for JSX routes, adjust accordingly for plain JS config
