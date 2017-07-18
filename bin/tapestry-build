@@ -3,7 +3,7 @@
 const createCompilers = require('../src/utilities/create-compilers')
 const log = require('../src/utilities/logger')
 const notify = log.notify
-const winston = log.default
+const winston = log.log
 const cwd = process.cwd()
 const env = 'production'
 
