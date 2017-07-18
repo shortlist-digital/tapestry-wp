@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const webpack = require('webpack')
 const chalk = require('chalk')
-const log = require('./logger').default
+const log = require('./logger').log
 
 const mergeConfigs = require('./merge-config')
 const configClientDefault = require('../webpack/client.config')

@@ -1,5 +1,5 @@
 import joi from 'joi'
-const log = require('./logger').default
+const log = require('./logger').log
 
 const options = {
   abortEarly: false, // we want all the errors, not just the first
