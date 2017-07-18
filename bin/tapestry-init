@@ -2,7 +2,7 @@
 
 const fs = require('fs-extra')
 const path = require('path')
-const log = require('../dist/logger')
+const log = require('../src/utilities/logger')
 const notify = log.notify
 const cwd = process.cwd()
 

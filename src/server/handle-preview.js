@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import fetch from 'isomorphic-fetch'
-import log from '../utilities/logger'
+import { log } from '../utilities/logger'
 import { stripLeadingTrailingSlashes } from '../utilities/cache-manager'
 
 export default ({ server, config }) => {

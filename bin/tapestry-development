@@ -3,10 +3,10 @@ const path = require('path')
 const fs = require('fs')
 const Webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
-const createCompilers = require('../dist/create-compilers')
+const createCompilers = require('../src/utilities/create-compilers')
 const cwd = process.cwd()
 const env = 'development'
-const log = require('../dist/logger')
+const log = require('../src/utilities/logger')
 const notify = log.notify
 
 notify('Starting Webpack Hot Reload Server\n')

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const createCompilers = require('../dist/create-compilers')
-const log = require('../dist/logger')
+const createCompilers = require('../src/utilities/create-compilers')
+const log = require('../src/utilities/logger')
 const notify = log.notify
 const winston = log.default
 const cwd = process.cwd()
