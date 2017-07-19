@@ -13,7 +13,7 @@ describe('Handling redirects', () => {
   let uri = null
   let config = {
     redirectPaths: {
-      '/redirect/from/this-path': '/page',
+      '/redirect/from/this-path': '/page'
     },
     siteUrl: 'http://dummy.api',
     components: {
