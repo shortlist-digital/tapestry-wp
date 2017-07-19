@@ -2,11 +2,18 @@
 
 const path = require('path')
 const createCompilers = require('../src/utilities/create-compilers')
+<<<<<<< HEAD
 const log = require('../src/utilities/logger')
 const notify = log.notify
 const winston = log.default
 const cwd = process.cwd()
 const env = 'development'
+=======
+const cwd = process.cwd()
+const env = 'development'
+const notify = require('../src/utilities/logger').notify
+
+>>>>>>> 65c3dfe... Fix import references
 
 notify(`Preparing Tapestry… \n`)
 
