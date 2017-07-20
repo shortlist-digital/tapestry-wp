@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-const setRedirects = (server, redirects ) => {
+const setRedirects = (server, redirects) => {
   Object
     .keys(redirects)
     .forEach(fromPath => {
