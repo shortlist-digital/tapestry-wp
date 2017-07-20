@@ -66,6 +66,9 @@ export default class Tapestry {
     // create new Hapi server and register required plugins
     const server = new Server({
       connections: {
+        router: {
+          stripTrailingSlash: true
+        },
         routes: {
           security: true
         }
