@@ -1,17 +1,30 @@
+import fs from 'fs'
+import path from 'path'
 
-export default ({ server, config }) => {
-  if (!config.redirectPaths) return
-
-  Object.keys(config.redirectPaths).forEach(fromPath => {
+const setRedirects = (server, redirects ) => {
+  Object.keys(redirects).forEach(fromPath => {
     server.route({
       method: 'GET',
       path: `${fromPath}`,
       handler: (request, reply) => {
         reply
-          .redirect(config.redirectPaths[fromPath])
+          .redirect(redirects[fromPath])
           .permanent()
           .rewritable(false)
       }
     })
   })
+}
+
+export default ({ server, config }) => {
+  // Handle legacy redirect paths
+  if (config.redirectPaths) {
+    setRedirects(server, config.redirectPaths)
+  }
+  // Handle redirects.json
+  const redirectsFile = path.resolve(process.cwd(), 'redirects.json')
+  if (fs.existsSync(redirectsFile)) {
+    const redirectsFromFile = JSON.parse(fs.readFileSync(redirectsFile, 'utf8'))
+    setRedirects(server, redirectsFromFile)
+  }
 }
