@@ -2,8 +2,7 @@
 
 const fs = require('fs-extra')
 const path = require('path')
-const log = require('../src/utilities/logger')
-const notify = log.notify
+const notify = require('../src/utilities/logger').notify
 const cwd = process.cwd()
 
 notify('Adding some sensible defaults…\n')
