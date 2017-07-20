@@ -13,7 +13,8 @@ describe('Handling redirects', () => {
   let uri = null
   let config = {
     redirectPaths: {
-      '/redirect/from/this-path': '/page'
+      '/redirect/from/this-path': '/page',
+      '/redirect/with/query': '/page'
     },
     siteUrl: 'http://dummy.api',
     components: {
@@ -25,6 +26,7 @@ describe('Handling redirects', () => {
     // mock api response
     nock('http://dummy.api')
       .get('/wp-json/wp/v2/pages?slug=page&_embed')
+      .times(2)
       .reply(200, dataPage)
     // boot tapestry server
     tapestry = bootServer(config)
@@ -47,6 +49,14 @@ describe('Handling redirects', () => {
     request.get(`${uri}/redirect/from/this-path`, (err, res, body) => {
       expect(body).to.contain('Redirected component')
       expect(res.statusCode).to.equal(200)
+      done()
+    })
+  })
+
+  it('Redirect path contains querystring', (done) => {
+    const query = '?querystring=something'
+    request.get(`${uri}/redirect/with/query${query}`, (err, res, body) => {
+      expect(res.req.path).to.contain(`/page${query}`)
       done()
     })
   })
