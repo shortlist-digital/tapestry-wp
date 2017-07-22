@@ -2479,6 +2479,10 @@ h2o2@^5.4.0:
     joi "9.X.X"
     wreck "9.X.X"
 
+hapi-require-https@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/hapi-require-https/-/hapi-require-https-2.1.0.tgz#440e364cd42e979e02df05e91adfd9da03b4aa72"
+
 hapi@~16.4.3:
   version "16.4.3"
   resolved "https://registry.yarnpkg.com/hapi/-/hapi-16.4.3.tgz#be4daaf2dcdbee97957ce503061b09765078aa05"

@@ -1,6 +1,7 @@
 import { Server } from 'hapi'
 import h2o2 from 'h2o2'
 import Inert from 'inert'
+import HapiRequireHttps from 'hapi-require-https'
 import idx from 'idx'
 import chalk from 'chalk'
 
@@ -20,11 +21,8 @@ export default class Tapestry {
 
   constructor ({ config, assets = {}, env }) {
 
-    // allow access from class
     this.config = config
     this.env = env
-
-    // create server instance
     this.server = this.bootServer()
 
     // Important bit:
@@ -40,7 +38,6 @@ export default class Tapestry {
     this.server.event('reset-cache')
     // Clear all caches on reset-cache event
 
-    // handle server routing
     const data = {
       server: this.server,
       config: this.config,
@@ -56,14 +53,24 @@ export default class Tapestry {
 
     this.server.on('reset-cache', cacheManager.clearAll)
 
-    // kick off server
     this.startServer()
   }
 
   bootServer () {
+
     const host = idx(this.config, _ => _.options.host)
     const port = idx(this.config, _ => _.options.port)
-    // create new Hapi server and register required plugins
+    const forceHttps = idx(this.config, _ => _.options.forceHttps)
+    const plugins = [h2o2, Inert]
+
+    if (forceHttps) {
+      log.debug('Registering hapi-require-https plugin')
+      plugins.push({
+        register: HapiRequireHttps,
+        options: { proxy: false }
+      })
+    }
+
     const server = new Server({
       connections: {
         router: {
@@ -74,16 +81,23 @@ export default class Tapestry {
         }
       }
     })
-    server.register([h2o2, Inert])
+
     server.connection({
       host: host || '0.0.0.0',
       port: process.env.PORT || port || 3030
     })
+
+    server.register(plugins, err => {
+      if (err) {
+        log.error(err)
+      }
+    })
+
     this.config.serverUri = server.info.uri
+
     return server
   }
   startServer () {
-    // run server
     this.server.start(err => {
       if (err) {
         log.error(err)
