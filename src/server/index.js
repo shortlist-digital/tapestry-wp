@@ -74,7 +74,8 @@ export default class Tapestry {
     const server = new Server({
       connections: {
         router: {
-          stripTrailingSlash: true
+          stripTrailingSlash: true,
+          isCaseSensitive: false
         },
         routes: {
           security: true
