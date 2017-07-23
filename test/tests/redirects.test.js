@@ -26,11 +26,11 @@ describe('Handling redirects', () => {
   }
 
   before(done => {
-    // create redirects file
+    // create redirects file sync to prevent race condition
     fs.writeFileSync(
-      redirectsFilePath,
-      JSON.stringify({'/redirect/from/file': '/page' }),
-      'utf8'
+      redirectsFilePath, // file name
+      JSON.stringify({'/redirect/from/file': '/page' }), // create dummy file
+      'utf8' // encoding
     )
     // mock api response
     nock('http://dummy.api')
@@ -46,7 +46,7 @@ describe('Handling redirects', () => {
   })
 
   after(() => {
-    fs.unlink(redirectsFilePath)
+    fs.unlink(redirectsFilePath) // tidy up redirects.json asynchronously
     tapestry.server.stop()
   })
 
