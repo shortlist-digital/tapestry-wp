@@ -1,3 +1,6 @@
+import fs from 'fs'
+import path from 'path'
+
 import React from 'react'
 import { expect } from 'chai'
 import request from 'request'
@@ -5,10 +8,6 @@ import nock from 'nock'
 
 import { bootServer } from '../utils'
 import dataPage from '../mocks/page.json'
-
-import fs from 'fs'
-import path from 'path'
-
 
 describe('Handling redirects', () => {
 
