@@ -6,9 +6,13 @@ import nock from 'nock'
 import { bootServer } from '../utils'
 import dataPage from '../mocks/page.json'
 
+import fs from 'fs'
+import path from 'path'
+
 
 describe('Handling redirects', () => {
 
+  let redirectsFilePath = path.resolve(process.cwd(), 'redirects.json')
   let tapestry = null
   let uri = null
   let config = {
@@ -23,10 +27,16 @@ describe('Handling redirects', () => {
   }
 
   before(done => {
+    // create redirects file
+    fs.writeFileSync(
+      redirectsFilePath,
+      JSON.stringify({'/redirect/from/file': '/page' }),
+      'utf8'
+    )
     // mock api response
     nock('http://dummy.api')
       .get('/wp-json/wp/v2/pages?slug=page&_embed')
-      .times(2)
+      .times(3)
       .reply(200, dataPage)
     // boot tapestry server
     tapestry = bootServer(config)
@@ -36,7 +46,10 @@ describe('Handling redirects', () => {
     })
   })
 
-  after(() => tapestry.server.stop())
+  after(() => {
+    fs.unlink(redirectsFilePath)
+    tapestry.server.stop()
+  })
 
   it('Redirect returns 308 status', (done) => {
     tapestry.server.inject(`${uri}/redirect/from/this-path`, (res) => {
@@ -57,6 +70,14 @@ describe('Handling redirects', () => {
     const query = '?querystring=something'
     request.get(`${uri}/redirect/with/query${query}`, (err, res, body) => {
       expect(res.req.path).to.contain(`/page${query}`)
+      done()
+    })
+  })
+
+  it('Redirect path loaded from `redirects.json` file', (done) => {
+    request.get(`${uri}/redirect/from/file`, (err, res, body) => {
+      expect(body).to.contain('Redirected component')
+      expect(res.statusCode).to.equal(200)
       done()
     })
   })
