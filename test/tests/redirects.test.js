@@ -64,7 +64,6 @@ describe('Handling redirects', () => {
 
   it('Redirect path redirects correctly', (done) => {
     request.get(`${uri}/redirect/from/this-path`, (err, res, body) => {
-      console.log(res.statusCode, body)
       expect(body).to.contain('Redirected component')
       expect(res.statusCode).to.equal(200)
       done()
