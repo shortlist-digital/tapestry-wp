@@ -16,6 +16,10 @@ describe('Handling cache purges', () => {
   let uri = null
   let config = {
     routes: [{
+      path: '/',
+      endpoint: 'pages',
+      component: () => <p>Basic endpoint</p>
+    }, {
       path: 'string-endpoint',
       endpoint: 'pages',
       component: () => <p>Basic endpoint</p>
@@ -32,6 +36,7 @@ describe('Handling cache purges', () => {
     // mock api response
     nock('http://dummy.api')
       .get('/wp-json/wp/v2/pages')
+      .times(2)
       .reply(200, dataPages.data)
       .get('/wp-json/wp/v2/pages?slug=test')
       .reply(200, dataPage)
@@ -77,6 +82,25 @@ describe('Handling cache purges', () => {
         expect(body).to.contain(JSON.stringify(purgeResp))
         expect(res.statusCode).to.equal(200)
         expect(cacheApi.keys()).to.not.contain('pages?slug=test')
+
+        done()
+      })
+    })
+  })
+
+  it('Home route is purgeable', (done) => {
+    const route = '/'
+    const purgeResp = { status: `Purged ${route}` }
+
+    request.get(`${uri}`, (err, res, body) => {
+      expect(body).to.contain('Basic endpoint')
+      expect(res.statusCode).to.equal(200)
+
+      request.get(`${uri}/purge/${route}`, (err, res, body) => {
+        const cacheApi = cacheManager.getCache('api')
+        expect(body).to.contain(JSON.stringify(purgeResp))
+        expect(res.statusCode).to.equal(200)
+        expect(cacheApi.keys()).to.not.contain('pages')
 
         done()
       })
