@@ -19,7 +19,16 @@ export default (response, route) => {
       !idx(routeConfig, _ => _[0].options.allowEmptyResponse)
     )
   ) {
-    const status = idx(response, _ => _.data.status) || HTTPStatus.NOT_FOUND
+    // Assign status
+    let status = idx(response, _ => _.data.status) || HTTPStatus.NOT_FOUND
+
+    // Check for static routes with no endpoint
+    const routeExistsWithNoEndpoint = idx(routeConfig, _ => _[0].path) &&
+      !idx(routeConfig, _ => _[0].endpoint)
+
+    // If the route is registered but has no endpoint, assume 200
+    status = routeExistsWithNoEndpoint ? HTTPStatus.OK : status
+
     return {
       code: status,
       message: HTTPStatus[status]
