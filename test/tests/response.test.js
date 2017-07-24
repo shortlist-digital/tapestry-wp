@@ -5,6 +5,7 @@ import nock from 'nock'
 
 import { bootServer } from '../utils'
 import dataPosts from '../mocks/posts.json'
+import dataPages from '../mocks/posts.json'
 
 
 describe('Handing server responses', () => {
@@ -29,13 +30,30 @@ describe('Handing server responses', () => {
       endpoint: 'pages?slug=empty-response',
       options: { allowEmptyResponse: true },
       component: () => <p>Hello</p>
-    }],
+    }, {
+      path: '/object-endpoint',
+      endpoint: {
+        pages: 'pages',
+        posts: 'posts'
+      },
+      component: () => <p>Custom endpoint</p>
+    }, {
+      path: '/static-endpoint',
+      component: () => <p>Static endpoint</p>
+    }
+  ],
     siteUrl: 'http://dummy.api'
   }
 
   before(done => {
     // mock api response
     nock('http://dummy.api')
+      .get('/wp-json/wp/v2/pages')
+      .times(1)
+      .reply(200, dataPages.data)
+      .get('/wp-json/wp/v2/posts')
+      .times(1)
+      .reply(200, dataPosts.data)
       .get('/wp-json/wp/v2/posts?_embed')
       .times(5)
       .reply(200, dataPosts.data)
@@ -96,6 +114,22 @@ describe('Handing server responses', () => {
   it('Route matched, API empty but allowed, status code is 200', (done) => {
     request
       .get(`${uri}/empty-allowed-response`, (err, res) => {
+        expect(res.statusCode).to.equal(200)
+        done()
+      })
+  })
+
+   it('Route matched, multiple API requests, status code is 200', (done) => {
+    request
+      .get(`${uri}/object-endpoint`, (err, res) => {
+        expect(res.statusCode).to.equal(200)
+        done()
+      })
+  })
+
+  it('Static route matched, no data loaded, status code is 200', (done) => {
+    request
+      .get(`${uri}/static-endpoint`, (err, res) => {
         expect(res.statusCode).to.equal(200)
         done()
       })
