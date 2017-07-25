@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import fetch from 'isomorphic-fetch'
+import { log } from '../utilities/logger'
 
 const setRedirects = (server, redirects) => {
   Object
@@ -37,5 +38,6 @@ export default ({ server, config }) => {
       .then(data => {
         setRedirects(server, data)
       })
+      .catch(err => log.error(`Redirects Endpoint FAILED: ${JSON.stringify(err)}`))
   }
 }
