@@ -72,7 +72,7 @@ export default ({ server, config, assets }) => {
 
           // Find HTML based on path - might be undefined
           const cachedHTML = cache.get(cacheKey)
-          log.debug(`Cache attempting to access ${chalk.green(cacheKey)} in HTML: ${Boolean(cachedHTML)}`)
+          log.debug(`Cache contains ${chalk.green(cacheKey)} in html: ${Boolean(cachedHTML)}`)
 
           // respond with HTML from cache if not undefined
           if (cachedHTML) {
@@ -98,9 +98,9 @@ export default ({ server, config, assets }) => {
             const isPreview = idx(renderProps, _ => _.location.query.tapestry_hash)
 
             if (!isPreview) {
-              log.debug(`Cache set ${chalk.green(cacheKey)} in HTML`)
+              log.debug(`Cache set ${chalk.green(cacheKey)} in html`)
               cache.set(cacheKey, html)
-              log.debug(`Cache has ${chalk.green(cache.keys())} in HTML`)
+              log.silly(cache.keys())
             }
           }
         })
