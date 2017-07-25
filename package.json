@@ -11,7 +11,7 @@
   "repository": "shortlist-digital/tapestry-wp",
   "scripts": {
     "lint": "eslint . --fix --cache",
-    "test": "mocha 'test/**/*.test.js' --require test/babel-register --bail",
+    "test": "LOG_LEVEL=silent mocha 'test/**/*.test.js' --require test/babel-register --bail",
     "pre-commit-msg": "echo \"Performing pre-commit checks...\" && exit 0",
     "lint-staged": "lint-staged",
     "preversion": "npm run lint && npm run test",
