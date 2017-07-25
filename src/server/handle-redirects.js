@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import fetch from 'isomorphic-fetch'
 
 const setRedirects = (server, redirects) => {
   Object
@@ -28,5 +29,12 @@ export default ({ server, config }) => {
   if (fs.existsSync(redirectsFile)) {
     const redirectsFromFile = JSON.parse(fs.readFileSync(redirectsFile, 'utf8'))
     setRedirects(server, redirectsFromFile)
+  }
+  if (config.redirectsEndpoint) {
+    fetch(config.redirectsEndpoint)
+      .then(resp => resp.json())
+      .then(data => {
+        setRedirects(server, data)
+      })
   }
 }

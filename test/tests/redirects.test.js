@@ -23,6 +23,7 @@ describe('Handling redirects', () => {
       '/redirect/from/this-path': '/page',
       '/redirect/with/query': '/page'
     },
+    redirectsEndpoint: 'http://dummy.api/web/app/uploads/redirects.json',
     siteUrl: 'http://dummy.api'
   }
 
@@ -33,6 +34,11 @@ describe('Handling redirects', () => {
       JSON.stringify({'/redirect/from/file': '/page' }), // create dummy file
       'utf8' // encoding
     )
+
+     nock('http://dummy.api')
+      .get('/web/app/uploads/redirects.json')
+      .times(1)
+      .reply(200, {'/redirect/from/endpoint': '/page'})
 
     // boot tapestry server
     tapestry = bootServer(config)
@@ -72,6 +78,14 @@ describe('Handling redirects', () => {
 
   it('Redirect path loaded from `redirects.json` file', (done) => {
     request.get(`${uri}/redirect/from/file`, (err, res, body) => {
+      expect(body).to.contain('Redirected component')
+      expect(res.statusCode).to.equal(200)
+      done()
+    })
+  })
+
+   it('Redirect path loaded from redirect endpoint', (done) => {
+    request.get(`${uri}/redirect/from/endpoint`, (err, res, body) => {
       expect(body).to.contain('Redirected component')
       expect(res.statusCode).to.equal(200)
       done()
