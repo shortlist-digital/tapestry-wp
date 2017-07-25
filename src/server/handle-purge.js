@@ -17,10 +17,17 @@ export default ({ server, config }) => {
     path: `/${purgePath}/{path*}`,
     handler: (request, reply) => {
 
+      // as hapi strips the trailing slash
+      const path = request.params.path || '/'
+
       match({
         routes: RouteWrapper(config),
-        location: request.params.path
+        location: path
       }, (err, redirectLocation, renderProps) => {
+
+        if (err) {
+          return log.error(err)
+        }
 
         let endpoint = renderProps.components[1].endpoint
         let pathToPurge = endpoint
@@ -30,16 +37,16 @@ export default ({ server, config }) => {
           pathToPurge = endpoint(renderProps.params)
         }
 
-        log.debug(`Purge path ${chalk.green(request.params.path)} mapped to ${chalk.green(pathToPurge)}`)
+        log.debug(`Purge path ${chalk.green(path)} mapped to ${chalk.green(pathToPurge)}`)
 
         log.debug(`Cache clear ${chalk.green(pathToPurge)} in API`)
         cacheManager.clearCache('api', pathToPurge)
 
-        log.debug(`Cache clear ${chalk.green(request.params.path)} in HTML`)
-        cacheManager.clearCache('html', request.params.path)
+        log.debug(`Cache clear ${chalk.green(path)} in HTML`)
+        cacheManager.clearCache('html', path)
 
         reply({
-          status: `Purged ${request.params.path}`
+          status: `Purged ${path}`
         }, HTTPStatus.OK)
       })
     }
