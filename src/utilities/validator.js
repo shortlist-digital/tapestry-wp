@@ -47,7 +47,7 @@ const schema = joi.object({
   ),
   // optional array of proxy paths e.g. ['path', 'another/path']
   proxyPaths: joi.array().items(joi.string()),
-  // optional object of redirects e.g. { 'path': 'to-redirct' }
+  // optional object of redirects e.g. { 'path': 'to-redirect' }
   redirectPaths: joi.object().pattern(/.*/, joi.string()),
   // optional endpoint to load redirects.json from
   redirectsEndpoint: joi.string().uri(),
