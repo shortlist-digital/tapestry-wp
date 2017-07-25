@@ -23,6 +23,7 @@ describe('Handling redirects', () => {
       '/redirect/from/this-path': '/page',
       '/redirect/with/query': '/page'
     },
+    redirectsEndpoint: 'http://dummy.api/web/app/uploads/redirects.json',
     siteUrl: 'http://dummy.api'
   }
 
@@ -33,6 +34,11 @@ describe('Handling redirects', () => {
       JSON.stringify({'/redirect/from/file': '/page' }), // create dummy file
       'utf8' // encoding
     )
+
+    nock('http://dummy.api')
+      .get('/web/app/uploads/redirects.json')
+      .times(1)
+      .reply(200, {'/redirect/from/endpoint': '/page'})
 
     // boot tapestry server
     tapestry = bootServer(config)
@@ -77,4 +83,81 @@ describe('Handling redirects', () => {
       done()
     })
   })
+
+})
+
+describe('Handling endpoint redirects', () => {
+  let tapestry = null
+  let uri = null
+  let config = {
+    routes: [{
+      path: 'page',
+      component: () => <p>Redirected component</p>
+    }],
+    redirectsEndpoint: 'http://dummy.api/web/app/uploads/redirects.json',
+    siteUrl: 'http://dummy.api'
+  }
+
+  afterEach(() => {
+    tapestry.server.stop()
+  })
+
+  it('Redirect path loaded from redirects endpoint', (done) => {
+
+    nock('http://dummy.api')
+      .get('/web/app/uploads/redirects.json')
+      .times(1)
+      .reply(200, {'/redirect/from/endpoint': '/page'})
+
+    // boot tapestry server
+    tapestry = bootServer(config)
+
+    tapestry.server.on('start', () => {
+      uri = tapestry.server.info.uri
+      request.get(`${uri}/redirect/from/endpoint`, (err, res, body) => {
+        expect(body).to.contain('Redirected component')
+        expect(res.statusCode).to.equal(200)
+        done()
+      })
+    })
+  })
+
+  it('Server handles 404 gracefully', (done) => {
+
+    nock('http://dummy.api')
+      .get('/web/app/uploads/redirects.json')
+      .reply(404)
+
+    // boot tapestry server
+    tapestry = bootServer(config)
+
+    tapestry.server.on('start', () => {
+      uri = tapestry.server.info.uri
+      request.get(`${uri}/page`, (err, res, body) => {
+        expect(body).to.contain('Redirected component')
+        expect(res.statusCode).to.equal(200)
+        done()
+      })
+    })
+  })
+
+   it('Server handles invalid data gracefully', (done) => {
+
+    nock('http://dummy.api')
+      .get('/web/app/uploads/redirects.json')
+      .reply(200, 'Error: <p>Something went wrong')
+
+    // boot tapestry server
+    tapestry = bootServer(config)
+
+    tapestry.server.on('start', () => {
+      uri = tapestry.server.info.uri
+      request.get(`${uri}/page`, (err, res, body) => {
+        expect(body).to.contain('Redirected component')
+        expect(res.statusCode).to.equal(200)
+        done()
+      })
+    })
+  })
+
 })
