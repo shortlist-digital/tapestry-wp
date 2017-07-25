@@ -30,6 +30,7 @@ export default ({ server, config }) => {
     const redirectsFromFile = JSON.parse(fs.readFileSync(redirectsFile, 'utf8'))
     setRedirects(server, redirectsFromFile)
   }
+  // Set redirects from a dynamic endpoint
   if (config.redirectsEndpoint) {
     fetch(config.redirectsEndpoint)
       .then(resp => resp.json())
