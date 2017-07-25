@@ -39,15 +39,10 @@ export default ({ server, config }) => {
 
         log.debug(`Purge path ${chalk.green(path)} mapped to ${chalk.green(pathToPurge)}`)
 
-        log.debug(`Cache clear ${chalk.green(pathToPurge)} in API`)
         cacheManager.clearCache('api', pathToPurge)
-
-        log.debug(`Cache clear ${chalk.green(path)} in HTML`)
         cacheManager.clearCache('html', path)
 
-        reply({
-          status: `Purged ${path}`
-        }, HTTPStatus.OK)
+        reply({ status: `Purged ${path}` }, HTTPStatus.OK)
       })
     }
   })

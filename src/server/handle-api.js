@@ -22,7 +22,7 @@ export default ({ server, config }) => {
 
       // Look for a cached response - maybe undefined
       const cacheRecord = cache.get(cacheKey)
-      log.debug(`Cache attempting to access ${chalk.green(cacheKey)} in API: ${Boolean(cacheRecord)}`)
+      log.debug(`Cache contains ${chalk.green(cacheKey)} in api: ${Boolean(cacheRecord)}`)
 
       // If we find a response in the cache send it back
       if (cacheRecord) {
@@ -41,9 +41,9 @@ export default ({ server, config }) => {
 
             // We can only get here if there's nothing cached
             // Put the response into the cache using the request path as a key
-            log.debug(`Cache set ${chalk.green(cacheKey)} in API`)
+            log.debug(`Cache set ${chalk.green(cacheKey)} in api`)
             cache.set(cacheKey, { response: resp })
-            log.debug(`Cache has ${chalk.green(cache.keys())} in API`)
+            log.silly(cache.keys())
           })
           .catch(error => log.error(error))
       }
