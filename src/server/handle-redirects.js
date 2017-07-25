@@ -1,5 +1,7 @@
 import fs from 'fs'
 import path from 'path'
+import fetch from 'isomorphic-fetch'
+import { log } from '../utilities/logger'
 
 const setRedirects = (server, redirects) => {
   Object
@@ -28,5 +30,25 @@ export default ({ server, config }) => {
   if (fs.existsSync(redirectsFile)) {
     const redirectsFromFile = JSON.parse(fs.readFileSync(redirectsFile, 'utf8'))
     setRedirects(server, redirectsFromFile)
+  }
+  // Set redirects from a dynamic endpoint
+  if (config.redirectsEndpoint) {
+    fetch(config.redirectsEndpoint)
+      .then(resp => {
+        if (resp.status === 200) {
+          return resp.json()
+        } else {
+          // Mimic fetch error API
+          throw {
+            name: 'FetchError',
+            message: `Non 200 response ${resp.status}`,
+            type: 'http-error'
+          }
+        }
+      })
+      .then(data => {
+        setRedirects(server, data)
+      })
+      .catch(err => log.error(`Redirects Endpoint FAILED: ${JSON.stringify(err)}`))
   }
 }
