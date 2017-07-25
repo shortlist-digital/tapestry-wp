@@ -84,7 +84,7 @@ describe('Handling redirects', () => {
     })
   })
 
-   it('Redirect path loaded from redirect endpoint', (done) => {
+   it('Redirect path loaded from redirects endpoint', (done) => {
     request.get(`${uri}/redirect/from/endpoint`, (err, res, body) => {
       expect(body).to.contain('Redirected component')
       expect(res.statusCode).to.equal(200)
