@@ -34,7 +34,18 @@ export default ({ server, config }) => {
   // Set redirects from a dynamic endpoint
   if (config.redirectsEndpoint) {
     fetch(config.redirectsEndpoint)
-      .then(resp => resp.json())
+      .then(resp => {
+        if (resp.status === 200) {
+          return resp.json()
+        } else {
+          // Mimic fetch error API
+          throw {
+            name: 'FetchError',
+            message: `Non 200 response ${resp.status}`,
+            type: 'http-error'
+          }
+        }
+      })
       .then(data => {
         setRedirects(server, data)
       })
