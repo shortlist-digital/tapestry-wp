@@ -126,7 +126,6 @@ describe('Handling endpoint redirects', () => {
 
     nock('http://dummy.api')
       .get('/web/app/uploads/redirects.json')
-      .times(1)
       .reply(404)
 
     // boot tapestry server
@@ -146,7 +145,6 @@ describe('Handling endpoint redirects', () => {
 
     nock('http://dummy.api')
       .get('/web/app/uploads/redirects.json')
-      .times(1)
       .reply(200, 'Error: <p>Something went wrong')
 
     // boot tapestry server
