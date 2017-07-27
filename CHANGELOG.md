@@ -1,45 +1,33 @@
-### v1.5.4
-* Added executable permissions to `tapestry-init` command
+#### 2.0.0-19
+* Internal Hapi server now uses 301 redirects instead of 308 in order to support IE10/11
 
-### v1.4.7
-* Removed `lodash` `once` dependency
+#### 2.0.0-18
+* Pinned Glamor version exactly to prevent regression around `attr()`
 
-### v1.4.6
-* `tapestry dev` now listens for file changes and re-compiles the client, the server re-requires the latest project component tree and will update on page-reload.
+#### 2.0.0-17
+* Upgraded to webpack 3.4.0
+* Rewrote cache logs, updated some `debug` calls to `silly`
+* Fixed homepage caching that was caused by stripping trailing slash from routes
+* Implemented `redirectsEndpoint` functionality, add a path to a `redirects.json` and Hapi will fetch the file and set all redirects
 
-### v1.4.5
-* Improved `tapestry build` script removing the `exec` call and replacing it with the `babel` Node API 
+#### 2.0.0-16
+* Added `forceHttps` option to register `hapi-require-https` plugin
+* Updated redirect to retain `request.url.search`
+* Added year long cache for static assets served from `_scripts`
+* Removed case sensitivity from Hapi routes
+* Fixed static routes (without an endpoint) returning a `404` when they should return `200`
 
-### v1.4.4
-* Fixed a `tapestry build` incorrect directory issue when deploying on Heroku
+#### 2.0.0-15
+* Stripping trailing slash from routes
 
-### v1.4.3
-* Fixed missing dependency in `package.json`
-* Fixed inexplicit `babel` reference in `tapestry build` command
-* Added `npm` version badge to `README.md`
-
-### v1.4.1
-* Added a set of basic server tests to check responses, proxies and output HTML
-* Renamed the `Home` component to `FrontPage` to increase the Wordpressy-ness
-* Fixed the `engines` version range in `package.json`
-* Added a `tapestry init` command to bootstrap a simple Tapestry project. This includes a `tapestry.config.js` and the `Post` and `Page` components
-
-### v1.4.0
-* Changed configuration filename to `tapestry.config.js`
-* Incorporated a `logger.js` and normalised logging through the server
-* Improved and normalised error handling throughout the app
-
-### v1.3.0
-* Changed output directory for transpiled project to `.tapestry`
-* Changed output directory for the client bundle to `_scripts` to avoid a clash with the `public` directory for project specific files
-* Added relevant plugins/settings to `webpack.config` to output a much smaller build when building for production
-* Upgraded `webpack` to v2, `webpack.config` updated to match new schema
-* Reverted the CLI to `commander` and split out the commands for ease of development
-
-### < v1.3.0
-* Switched the glamor method to renderStaticOptimized
-* Added `engines` to `package.json` for deployment environments
-* Outputting `stats.json` to project root
-* Fix undeclared custom-loaders error
-* Added location-origin polyfill
-* Added `onPageUpdate` method that fires on React Routers `onUpdate` method
+#### 2.0.0-14
+* Removed `babel` utility build step, all files are now `node 6` compatible
+* Implemented `http-status` lib for correct status code/messages
+* Improved log consistency
+* Added ability to read redirects from a `redirects.json` file in the root of the project
+* Added default security option to Hapi https://hapijs.com/api#route-configuration
+* Returning response data to `customError` component when available
+* Normalised API response and error handling between client and server
+* Updated error view to show `Missing` only when the component is missing, if `CustomError` is declared then that will always show
+* Removed `tapestry-log.log` output from Winston as the implementation was buggy and unfinished
+* Improved how `progressIndicator` handles long loading times, increased height to `3px`

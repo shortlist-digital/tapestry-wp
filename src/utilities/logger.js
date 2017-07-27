@@ -1,20 +1,25 @@
-import chalk from 'chalk'
+const chalk = require('chalk')
+const winston = require('winston')
 
-// log message to console and optionally cancel current process
-const log = (message, quit) => {
-  console.log(message) // eslint-disable-line
-  if (quit)
-    // exit(0) avoids the irrelevant npm errors
-    process.exit(0)
+const tsFormat = () => (new Date()).toLocaleTimeString()
+
+const log = new (winston.Logger)({
+  level: process.env.LOG_LEVEL || 'info',
+  transports: [
+    new (winston.transports.Console)({
+      timestamp: tsFormat,
+      colorize: true,
+      prettyPrint: true
+    })
+  ]
+})
+
+log.cli()
+
+// instance of Winston logger for debug/error/silly logs
+module.exports.log = log
+
+// console log for terminal messages
+module.exports.notify = (str) => {
+  console.log(`${chalk.green('→')} ${chalk.white(str)}`) // eslint-disable-line
 }
-
-// wrappers to visually change message
-// info: white text
-export const info = (str) =>
-  log(chalk.white(str))
-// success: green arrow, white text
-export const success = (str, quit = false) =>
-  log(`${chalk.green('→')} ${chalk.white(str)}`, quit)
-// error: red text with 'Error:'
-export const error = (str, quit = true) =>
-  log(`${chalk.bold.red('Error:')} ${chalk.red(str)}\n`, quit)

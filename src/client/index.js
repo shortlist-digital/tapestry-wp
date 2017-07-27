@@ -1,64 +1,34 @@
-import webpack from 'webpack'
-import bytes from 'pretty-bytes'
+import React from 'react'
+import { render } from 'react-dom'
+import { Router, match, browserHistory } from 'react-router'
+import AsyncProps from 'async-props'
+import 'location-origin'
+import 'es6-promise/auto'
+import RouteWrapper from '../shared/route-wrapper'
+import config from 'tapestry.config.js'
+import mitt from 'mitt'
 
-import configDefault from '../webpack/client.config'
-import { success, error } from '../utilities/logger'
-import mergeConfigs from '../utilities/merge-config'
-
-
-export default class Client {
-
-  constructor ({ cwd, env, configCustom, onComplete }) {
-    // allow class access
-    this.onComplete = onComplete
-    this.devNotified = false
-    // combine default/user webpack config
-    const webpackConfig = mergeConfigs({
-      configCustom,
-      configDefault,
-      options: { cwd, env },
-      webpack
-    })
-    // kick off webpack compilation
-    this.compiler = webpack(webpackConfig)
-    // run once if production, watch if development
-    if (env !== 'development') {
-      this.compiler.run((err, stats) => this.run(err, stats))
-    } else {
-      this.compiler.watch({}, this.watch.bind(this))
-    }
-  }
-
-  run (err, stats) {
-    // handle error
-    if (err) error(err)
-    // log complete
-    this.complete(stats)
-  }
-  watch (err, stats) {
-    // handle error
-    if (err) error(err)
-    // log complete
-    if (!this.devNotified) {
-      this.complete(stats)
-      this.devNotified = true
-    }
-  }
-  complete (stats) {
-    // got some assets? cool, log em out
-    const jsonStats = stats.toJson()
-    if (jsonStats.assets.length)
-      success(`Client built: ${this.logAssets(jsonStats)}`)
-    // run callback
-    if (typeof this.onComplete === 'function')
-      this.onComplete()
-  }
-
-  logAssets (stats) {
-    // return line-break and indented
-    // stats.json shouldn't be shared with user
-    return stats.assets
-      .filter(asset => !asset.name.includes('stats.json'))
-      .map(asset => `\n    ${asset.name} ${bytes(asset.size)}`)
-  }
+if (window !== 'undefined') {
+  window.tapestryEmitter = mitt()
 }
+
+// methods in use on the <Router />
+const renderAsyncProps = props =>
+  <AsyncProps loadContext={config} {...props} />
+
+// define routes/history for react-router
+const routes = RouteWrapper(config)
+const history = browserHistory
+const targetNode = document.getElementById('root')
+
+// run a router match (not sure why this is necessary)
+match({ routes, history }, (error, redirectLocation, renderProps) =>
+  render(
+    <Router
+      render={renderAsyncProps}
+      routes={routes}
+      {...renderProps}
+    />,
+    targetNode
+  )
+)

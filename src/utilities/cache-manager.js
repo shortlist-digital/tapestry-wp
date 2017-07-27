@@ -1,10 +1,30 @@
+import chalk from 'chalk'
 import LRU from 'lru-cache'
+import { log } from '../utilities/logger'
 
-const internalCaches = []
+let internalCaches = []
+let instance = null
+
+export const stripLeadingTrailingSlashes = path => {
+  if (path !== '/') {
+    return path.replace(/^\/+|\/+$/g, '')
+  }
+  return path
+}
 
 export default class CacheManager {
 
-  static createCache (name) {
+
+  constructor() {
+    if (instance) {
+      return instance
+    }
+    this.clearAll = this.clearAll.bind(this)
+    this.createCache = this.createCache.bind(this)
+    this.instance = this
+  }
+
+  createCache(name) {
     internalCaches[name] = LRU({
       max: 100,
       maxAge: (process.env.NODE_ENV === 'production') ?
@@ -13,9 +33,23 @@ export default class CacheManager {
     return internalCaches[name]
   }
 
-  static clearAll () {
-    internalCaches.forEach(cache =>
-      cache.reset()
-    )
+  clearAll() {
+    if (internalCaches) {
+      internalCaches.forEach(cache =>
+        cache.reset()
+      )
+    }
+  }
+
+  getCache(name) {
+    return internalCaches[name]
+  }
+
+  clearCache(cacheName, keyName) {
+
+    log.debug(`Cache cleared ${chalk.green(keyName)} in ${chalk.green(cacheName)}`)
+    log.silly(JSON.stringify(internalCaches, null, 2))
+
+    internalCaches[cacheName].del(keyName)
   }
 }

@@ -1,0 +1,25 @@
+{
+  "data": [{
+    "id": 2,
+    "slug": "sample-post",
+    "type": "post",
+    "link": "http://dummy.api/sample-post",
+    "title": {
+      "rendered": "Sample Post"
+    },
+    "content": {
+      "rendered": "<p>This is an example post.</p>"
+    }
+  }, {
+    "id": 2,
+    "slug": "sample-post",
+    "type": "post",
+    "link": "http://dummy.api/sample-post",
+    "title": {
+      "rendered": "Sample Post"
+    },
+    "content": {
+      "rendered": "<p>This is an example post.</p>"
+    }
+  }]
+}

@@ -54,6 +54,9 @@ export default {
 * `port`: The port Tapestry is assigned to. e.g. `3030`
 * `onPageUpdate`: A function called on React-router `route` event
 
+### Plugins
+If running WordPress 4.7 or later, the [Rest Filter WordPress plugin](https://github.com/WP-API/rest-filter) will need to be installed to run `tapestry-wp`.
+
 ## Roadmap
 Tapestry has a long list of features that we are looking to implement, including confirmed and super speculative features.
 - [x] Server render React component tree

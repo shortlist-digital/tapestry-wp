@@ -1,20 +1,21 @@
-import path from 'path'
-import webpack from 'webpack'
-import CleanPlugin from 'clean-webpack-plugin'
-import AssetsPlugin from 'assets-webpack-plugin'
-import StatsPlugin from 'stats-webpack-plugin'
-import { module } from './shared'
+const path = require('path')
+const webpack = require('webpack')
+const CleanPlugin = require('clean-webpack-plugin')
+const AssetsPlugin = require('assets-webpack-plugin')
+const StatsPlugin = require('stats-webpack-plugin')
+const sharedModules = require('./shared')
 
 // exporting function to allow process.cwd() and environment to get passed through
-export default ({ cwd, env }) => {
-
+module.exports = ({ cwd, env, babelrc }) => {
+  // expose environment to user
+  const __DEV__ = env === 'development'
   const config = {
     // target the browser as runtime
     target: 'web',
     // enable sourcemap
     devtool: 'source-map',
     entry: {
-      bundle: 'tapestry-wp/src/client/webpack.entry.js'
+      bundle: 'tapestry-wp/src/client/index.js'
     },
     // output bundle to _scripts, no caching required in dev mode so bundle.js is sufficient
     output: {
@@ -30,8 +31,10 @@ export default ({ cwd, env }) => {
       }
     },
     // share module rules with server config
-    module: module,
+    module: sharedModules(babelrc),
     plugins: [
+      // expose environment to user
+      new webpack.DefinePlugin({ __DEV__ }),
       // output public path data for each bundle
       new AssetsPlugin({
         filename: 'assets.json',
@@ -44,6 +47,17 @@ export default ({ cwd, env }) => {
         verbose: false
       })
     ]
+  }
+
+  // development specific config
+  if (env === 'development') {
+    // config.plugins already defined so lets push any extras
+    config.plugins.push(
+      // output chunk stats (path is relative to output path)
+      new StatsPlugin('../.tapestry/stats.json', {
+        chunkModules: true
+      })
+    )
   }
 
   // production specific config
@@ -78,10 +92,6 @@ export default ({ cwd, env }) => {
       new webpack.LoaderOptionsPlugin({
         minimize: true,
         debug: false
-      }),
-      // output chunk stats (path is relative to output path)
-      new StatsPlugin('../.tapestry/stats.json', {
-        chunkModules: true
       }),
       // minify/optimize output bundle, screw_ie8 a bunch
       new webpack.optimize.UglifyJsPlugin({

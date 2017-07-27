@@ -1,4 +1,4 @@
-export default ({
+module.exports = ({
   configCustom, configDefault, options, webpack
 }) => {
   // return finalised tapestry config
