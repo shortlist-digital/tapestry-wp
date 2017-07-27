@@ -1,3 +1,6 @@
+#### 2.0.0-18
+* Pinned Glamor version exactly to prevent regression around `attr()`
+
 #### 2.0.0-17
 * Upgraded to webpack 3.4.0
 * Rewrote cache logs, updated some `debug` calls to `silly`
