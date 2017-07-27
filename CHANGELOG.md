@@ -1,3 +1,6 @@
+#### 2.0.0-19
+* Internal Hapi server now uses 301 redirects instead of 308 in order to support IE10/11
+
 #### 2.0.0-18
 * Pinned Glamor version exactly to prevent regression around `attr()`
 
