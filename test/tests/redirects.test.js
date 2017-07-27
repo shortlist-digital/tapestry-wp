@@ -53,9 +53,9 @@ describe('Handling redirects', () => {
     tapestry.server.stop()
   })
 
-  it('Redirect returns 308 status', (done) => {
+  it('Redirect returns 301 status', (done) => {
     tapestry.server.inject(`${uri}/redirect/from/this-path`, (res) => {
-      expect(res.statusCode).to.equal(308)
+      expect(res.statusCode).to.equal(301)
       done()
     })
   })
