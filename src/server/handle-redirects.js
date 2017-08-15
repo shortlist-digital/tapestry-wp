@@ -14,7 +14,7 @@ const setRedirects = (server, redirects) => {
           reply
             .redirect(`${redirects[fromPath]}${request.url.search}`)
             .permanent()
-            .rewritable(false)
+            .rewritable(true)
         }
       })
     })
