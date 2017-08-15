@@ -57,7 +57,7 @@ const RouteWrapper = (config) => {
               window.scrollTo(0, 0)
               // run project callback
               if (typeof config.onPageUpdate === 'function') {
-                config.onPageUpdate()
+                config.onPageUpdate(null)
               }
             }
           }

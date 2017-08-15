@@ -35,7 +35,9 @@ const fetchData = (TopLevelComponent, route) => {
       window.scrollTo(0, 0)
       // wrapped in setTimeout to clear call stack (blocks progress indicator)
       if (typeof onPageUpdate === 'function') {
-        setTimeout(onPageUpdate, 0)
+        // return response data if available
+        const response = handleApiResponse(this.props.data, this.props.route)
+        setTimeout(() => onPageUpdate(response), 0)
       }
     }
 
