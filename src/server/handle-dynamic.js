@@ -1,5 +1,5 @@
 import { match } from 'react-router'
-import { loadPropsOnServer } from 'async-props'
+import { loadPropsOnServer } from '../shared/third-party/async-props'
 import idx from 'idx'
 import chalk from 'chalk'
 import HTTPStatus from 'http-status'

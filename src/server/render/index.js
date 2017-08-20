@@ -1,9 +1,9 @@
 import React from 'react'
 import { renderToStaticMarkup, renderToString } from 'react-dom/server'
 import Helmet from 'react-helmet'
-import AsyncProps from 'async-props'
 import { renderStaticOptimized } from 'glamor/server'
 
+import AsyncProps from '../../shared/third-party/async-props'
 import DefaultHTML from './default-html'
 import RenderError from '../../shared/render-error'
 

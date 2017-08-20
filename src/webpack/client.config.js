@@ -74,7 +74,6 @@ module.exports = ({ cwd, env, babelrc }) => {
     // react-helmet/glamor aren't required by Tapestry on the client, but they're very likely be put to use by the user so including it in the vendor file
     config.entry.vendor = [
       'core-js/modules/es6.symbol',
-      'async-props',
       'glamor',
       'react-dom',
       'react-helmet',
