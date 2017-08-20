@@ -10,6 +10,7 @@ mitt()
 let query = null
 let origin = null
 let preview = false
+let fetchRequests = []
 
 const fetchJSON = (endpoint) => {
   // set default JSON source
@@ -38,12 +39,19 @@ const mapArrayToObject = (arr, obj) => {
 }
 
 // handle promise resolution
-const handleResolve = (resp, cb) => {
-  emitEvent('dataStop', 'stop')
+const handleResolve = (endpoint, resp, cb) => {
+  // if this request is not the latest (i.e. the last item in the array) ignore
+  if (fetchRequests[fetchRequests.length - 1] !== endpoint) {
+    return
+  }
+  // otherwise treat it as the request we need to render
+  emitEvent('dataStop')
   cb(null, { data: resp })
+  // reset queued requests
+  fetchRequests = []
 }
 const handleReject = (err, cb) => {
-  emitEvent('dataStop', 'stop')
+  emitEvent('dataStop')
   cb(err)
 }
 
@@ -58,7 +66,12 @@ export default ({
   origin = loadContext.serverUri || window.location.origin
   preview = idx(loadContext, _ => _.location.query.tapestry_hash)
   // kick off progress loader
-  emitEvent('dataStart', 'start')
+  if (fetchRequests.length > 1) {
+    // dataReset required to reset loader before starting again
+    emitEvent('dataReset')
+  } else {
+    emitEvent('dataStart')
+  }
   // resolve function if required
   if (isFunction(loadFrom)) {
     loadFrom = loadFrom(params)
@@ -71,9 +84,11 @@ export default ({
     const endpoints = loadFrom.map(
       endpoint => fetchJSON(endpoint)
     )
+    // save reference of API request
+    fetchRequests.push(endpoints)
     return Promise
       .all(endpoints)
-      .then(resp => handleResolve(resp, cb))
+      .then(resp => handleResolve(endpoints, resp, cb))
       .catch(err => handleReject(err, cb))
   } else if (isPlainObject(loadFrom)) {
     // map out endpoints by object keys, fetch each endpoint
@@ -81,16 +96,20 @@ export default ({
     const endpoints = Object.keys(loadFrom).map(
       i => fetchJSON(loadFrom[i])
     )
+    // save reference of API request
+    fetchRequests.push(endpoints)
     return Promise
       .all(endpoints)
       .then(resp => mapArrayToObject(resp, loadFrom))
-      .then(resp => handleResolve(resp, cb))
+      .then(resp => handleResolve(endpoints, resp, cb))
       .catch(err => handleReject(err, cb))
   } else {
+    // save reference of API request
+    fetchRequests.push(loadFrom)
     // handle endpoint as a function
     // then fetch single endpoint and handle response
     return fetchJSON(loadFrom)
-      .then(resp => handleResolve(resp, cb))
+      .then(resp => handleResolve(loadFrom, resp, cb))
       .catch(err => handleReject(err, cb))
   }
 }
