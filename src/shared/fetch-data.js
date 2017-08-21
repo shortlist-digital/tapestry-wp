@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import AsyncProps from 'async-props'
 import idx from 'idx'
 import { generate as uid } from 'shortid'
+
+import AsyncProps from './third-party/async-props'
 import fetchRouteData from './fetch-route-data'
 import RenderError from './render-error'
 import handleApiResponse from './handle-api-response'
@@ -43,7 +44,6 @@ const fetchData = (TopLevelComponent, route) => {
 
     render() {
       const response = handleApiResponse(this.props.data, this.props.route)
-
       // check data/component exists and isn't a server errored response
       if (!TopLevelComponent || idx(response, _ => _.code)) {
         return (
