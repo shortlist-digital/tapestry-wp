@@ -8,7 +8,7 @@ import dataPosts from '../mocks/posts.json'
 import dataPages from '../mocks/posts.json'
 
 
-describe('Handing server responses', () => {
+describe('Handling server responses', () => {
 
   let tapestry = null
   let uri = null
