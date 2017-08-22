@@ -15,7 +15,7 @@ export default ({ server, config }) => {
     path: '/api/v1/{query*}',
     config: {
       cache: {
-        expiresIn: 60 * 1000, // 1 Minute
+        expiresIn: (process.env.CACHE_CONTROL_MAX_AGE || 0) * 1000, // 1 Minute
         privacy: 'public'
       }
     },

@@ -62,7 +62,9 @@ const schema = joi.object({
     // theme color for progress bar
     progressBarColor: joi.string(),
     // registers https Hapi plugin
-    forceHttps: joi.boolean()
+    forceHttps: joi.boolean(),
+    // Cache max cache age for HTTP responses in seconds
+    cacheControlMaxAge: joi.number()
   })
 })
 
