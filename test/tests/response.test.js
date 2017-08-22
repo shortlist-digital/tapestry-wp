@@ -8,7 +8,7 @@ import dataPosts from '../mocks/posts.json'
 import dataPages from '../mocks/posts.json'
 
 
-describe('Handing server responses', () => {
+describe('Handling server responses', () => {
 
   let tapestry = null
   let uri = null
@@ -64,6 +64,7 @@ describe('Handing server responses', () => {
       .times(5)
       .reply(200, [])
     // boot tapestry server
+    process.env.CACHE_CONTROL_MAX_AGE=60
     tapestry = bootServer(config)
     tapestry.server.on('start', () => {
       uri = tapestry.server.info.uri
@@ -71,7 +72,10 @@ describe('Handing server responses', () => {
     })
   })
 
-  after(() => tapestry.server.stop())
+  after(() => {
+    tapestry.server.stop()
+    delete process.env.CACHE_CONTROL_MAX_AGE
+  })
 
   it('Route matched, status code is 200', (done) => {
     request.get(uri, (err, res) => {
@@ -83,6 +87,7 @@ describe('Handing server responses', () => {
   it('Route matched, has correct headers', (done) => {
     request.get(uri, (err, res) => {
       expect(res.headers['content-type']).to.equal('text/html; charset=utf-8')
+      expect(res.headers['cache-control']).to.equal('max-age=60, must-revalidate, public')
       done()
     })
   })
