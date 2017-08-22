@@ -17,6 +17,12 @@ export default ({ server, config, assets }) => {
   const cache = cacheManager.createCache('html')
 
   server.route({
+    config: {
+      cache: {
+        expiresIn: 60 * 1000, // 1 Minute
+        privacy: 'public'
+      }
+    },
     method: 'GET',
     path: '/{path*}',
     handler: (request, reply) => {

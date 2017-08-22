@@ -83,6 +83,7 @@ describe('Handing server responses', () => {
   it('Route matched, has correct headers', (done) => {
     request.get(uri, (err, res) => {
       expect(res.headers['content-type']).to.equal('text/html; charset=utf-8')
+      expect(res.headers['cache-control']).to.equal('max-age=60, must-revalidate, public')
       done()
     })
   })
