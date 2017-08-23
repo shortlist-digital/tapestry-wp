@@ -161,6 +161,7 @@ describe('Handling cache set/get', () => {
     request.get(`${uri}/2017/12/01/query-test?utm_source=stop-it`, (err, res, body) => {
       const cacheHtml = cacheManager.getCache('html')
       expect(cacheHtml.keys()).to.include('2017/12/01/query-test')
+      expect(cacheHtml.keys()).to.not.include('2017/12/01/query-test?utm_source=stop-it')
       done()
     })
   })
