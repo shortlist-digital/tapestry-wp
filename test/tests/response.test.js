@@ -17,7 +17,12 @@ describe('Handling server responses', () => {
       path: '/',
       endpoint: 'posts?_embed',
       component: () => <p>Hello</p>
-    }, {
+    },
+    {
+      path: '/:cat/:subcat/:id',
+      component: () => <p>Hello</p>
+    },
+    {
       path: '/404-response',
       endpoint: 'pages?slug=404-response',
       component: () => <p>Hello</p>
@@ -48,6 +53,9 @@ describe('Handling server responses', () => {
   before(done => {
     // mock api response
     nock('http://dummy.api')
+      .get('/wp-json/wp/v2/posts/571')
+      .times(1)
+      .reply(200, dataPages.data)
       .get('/wp-json/wp/v2/pages')
       .times(1)
       .reply(200, dataPages.data)
@@ -88,6 +96,14 @@ describe('Handling server responses', () => {
     request.get(uri, (err, res) => {
       expect(res.headers['content-type']).to.equal('text/html; charset=utf-8')
       expect(res.headers['cache-control']).to.equal('max-age=60, must-revalidate, public')
+      done()
+    })
+  })
+
+  it('Preview routes send no-cache headers', (done) => {
+    request.get(`${uri}/foo/bar/571?tapestry_hash=somesortofhash&p=571`, (err, res) => {
+      expect(res.headers['content-type']).to.equal('text/html; charset=utf-8')
+      expect(res.headers['cache-control']).to.equal('no-cache')
       done()
     })
   })
