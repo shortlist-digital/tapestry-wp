@@ -75,7 +75,7 @@ export default ({ server, config, assets }) => {
             response.code :
             HTTPStatus.OK
 
-          const cacheKey = stripLeadingTrailingSlashes(request.url.path)
+          const cacheKey = stripLeadingTrailingSlashes(request.url.pathname)
 
           // Find HTML based on path - might be undefined
           const cachedHTML = cache.get(cacheKey)

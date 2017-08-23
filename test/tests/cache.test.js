@@ -131,6 +131,8 @@ describe('Handling cache set/get', () => {
       .reply(200, dataPosts.data)
       .get('/wp-json/wp/v2/posts?slug=test&_embed')
       .reply(200, dataPost)
+      .get('/wp-json/wp/v2/posts?slug=query-test&_embed')
+      .reply(200, dataPost)
     // boot tapestry server
     tapestry = bootServer(config, { __DEV__: false })
     tapestry.server.on('start', () => {
@@ -151,6 +153,14 @@ describe('Handling cache set/get', () => {
       const cacheHtml = cacheManager.getCache('html')
       expect(cacheApi.keys()).to.include('posts?_embed')
       expect(cacheHtml.keys()).to.include('/')
+      done()
+    })
+  })
+
+  it('Sets API/HTML cache items without query string', done => {
+    request.get(`${uri}/2017/12/01/query-test?utm_source=stop-it`, (err, res, body) => {
+      const cacheHtml = cacheManager.getCache('html')
+      expect(cacheHtml.keys()).to.include('2017/12/01/query-test')
       done()
     })
   })
