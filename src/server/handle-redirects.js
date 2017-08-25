@@ -7,6 +7,9 @@ const setRedirects = (server, redirects) => {
   Object
     .keys(redirects)
     .forEach(fromPath => {
+
+      log.silly('Setting redirect route from:', fromPath)
+
       server.route({
         method: 'GET',
         path: `${fromPath}`,
