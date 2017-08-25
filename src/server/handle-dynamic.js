@@ -16,11 +16,18 @@ export default ({ server, config, assets }) => {
   // Create a new cache
   const cache = cacheManager.createCache('html')
 
+
   server.route({
+    config: {
+      cache: {
+        expiresIn: (process.env.CACHE_CONTROL_MAX_AGE || 0) * 1000, // 1 Minute
+        privacy: 'public'
+      }
+    },
     method: 'GET',
     path: '/{path*}',
     handler: (request, reply) => {
-
+      const isPreview = idx(request, _ => _.query.tapestry_hash)
       match({
         routes: RouteWrapper(config),
         location: request.url.path
@@ -68,7 +75,7 @@ export default ({ server, config, assets }) => {
             response.code :
             HTTPStatus.OK
 
-          const cacheKey = stripLeadingTrailingSlashes(request.url.path)
+          const cacheKey = stripLeadingTrailingSlashes(request.url.pathname)
 
           // Find HTML based on path - might be undefined
           const cachedHTML = cache.get(cacheKey)
@@ -91,11 +98,14 @@ export default ({ server, config, assets }) => {
 
             // 200 with rendered HTML
             log.debug(`HTML rendered from scratch for ${chalk.green(cacheKey)}`)
-            reply(html).code(status)
+            if (isPreview) {
+              reply(html).header('cache-control', 'no-cache')
+            } else {
+              reply(html).code(status)
+            }
 
             // We can only get here if there's nothing cached for this URL path
             // Bung the HTML into the cache, if not a preview link
-            const isPreview = idx(renderProps, _ => _.location.query.tapestry_hash)
 
             if (!isPreview) {
               log.debug(`Cache set ${chalk.green(cacheKey)} in html`)

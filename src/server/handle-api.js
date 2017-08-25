@@ -13,6 +13,12 @@ export default ({ server, config }) => {
   server.route({
     method: 'GET',
     path: '/api/v1/{query*}',
+    config: {
+      cache: {
+        expiresIn: (process.env.CACHE_CONTROL_MAX_AGE || 0) * 1000, // 1 Minute
+        privacy: 'public'
+      }
+    },
     handler: (request, reply) => {
 
       const base = `${stripLeadingTrailingSlashes(config.siteUrl)}/wp-json/wp/v2`

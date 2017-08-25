@@ -4,9 +4,7 @@ export default ({ server }) => {
   const cacheConfig = {
     // cache static assets for 1 year
     privacy: 'public',
-    expiresIn: process.env.NODE_ENV === 'production' ?
-      31557600000 :
-      1
+    expiresIn: process.env.NODE_ENV === 'production' ? 31557600000 : 1
   }
 
   // Default favicon redirect
