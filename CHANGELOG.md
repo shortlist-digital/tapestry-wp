@@ -1,3 +1,7 @@
+#### 2.0.0
+* Homegenise how `ENV` variables are used
+* Add `wordpress.com` site support
+
 #### 2.0.0-26
 * Rewrite of how redirects are handled - improves boot time with a large number of redirects
 
