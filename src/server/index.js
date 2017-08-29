@@ -43,6 +43,7 @@ export default class Tapestry {
       config: this.config,
       assets
     }
+
     handleRedirects(data)
     handleStatic(data)
     handlePurge(data)
