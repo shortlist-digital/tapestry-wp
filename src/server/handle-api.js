@@ -2,11 +2,12 @@ import chalk from 'chalk'
 import fetch from 'isomorphic-fetch'
 import CacheManager, { stripLeadingTrailingSlashes } from '../utilities/cache-manager'
 import { log } from '../utilities/logger'
+import idx from 'idx'
 
 let cacheManager = new CacheManager()
 
 const buildBaseUrl = config => {
-  if (config.options && config.options.wordpressDotComHosting) {
+  if (idx(config, _ => _.options.wordpressDotComHosting)) {
     // Remove protocol
     const noProtocolSiteUrl = config.siteUrl.replace(/^https?:\/\//i, "")
     const siteUrl = stripLeadingTrailingSlashes(noProtocolSiteUrl)
