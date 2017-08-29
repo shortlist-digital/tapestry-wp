@@ -16,6 +16,10 @@ describe('Handling cache purges', () => {
   let uri = null
   let config = {
     routes: [{
+      path: '/',
+      endpoint: 'pages',
+      component: () => <p>Basic endpoint</p>
+    }, {
       path: 'string-endpoint',
       endpoint: 'pages',
       component: () => <p>Basic endpoint</p>
@@ -32,6 +36,7 @@ describe('Handling cache purges', () => {
     // mock api response
     nock('http://dummy.api')
       .get('/wp-json/wp/v2/pages')
+      .times(2)
       .reply(200, dataPages.data)
       .get('/wp-json/wp/v2/pages?slug=test')
       .reply(200, dataPage)
@@ -82,6 +87,25 @@ describe('Handling cache purges', () => {
       })
     })
   })
+
+  it('Home route is purgeable', (done) => {
+    const route = '/'
+    const purgeResp = { status: `Purged ${route}` }
+
+    request.get(`${uri}`, (err, res, body) => {
+      expect(body).to.contain('Basic endpoint')
+      expect(res.statusCode).to.equal(200)
+
+      request.get(`${uri}/purge/${route}`, (err, res, body) => {
+        const cacheApi = cacheManager.getCache('api')
+        expect(body).to.contain(JSON.stringify(purgeResp))
+        expect(res.statusCode).to.equal(200)
+        expect(cacheApi.keys()).to.not.contain('pages')
+
+        done()
+      })
+    })
+  })
 })
 
 describe('Handling cache set/get', () => {
@@ -98,14 +122,15 @@ describe('Handling cache set/get', () => {
   const cacheManager = new CacheManager()
 
   before(done => {
-    // sorry for this
-    process.env.NODE_ENV = 'production'
+    process.env.CACHE_MAX_AGE = 60*1000
     // mock api response
     nock('http://dummy.api')
       .get('/wp-json/wp/v2/posts?_embed')
       .times(2)
       .reply(200, dataPosts.data)
       .get('/wp-json/wp/v2/posts?slug=test&_embed')
+      .reply(200, dataPost)
+      .get('/wp-json/wp/v2/posts?slug=query-test&_embed')
       .reply(200, dataPost)
     // boot tapestry server
     tapestry = bootServer(config, { __DEV__: false })
@@ -116,8 +141,7 @@ describe('Handling cache set/get', () => {
   })
 
   after(() => {
-    // sorry for this
-    process.env.NODE_ENV = ''
+    delete process.env.CACHE_MAX_AGE
     tapestry.server.stop()
   })
 
@@ -127,6 +151,15 @@ describe('Handling cache set/get', () => {
       const cacheHtml = cacheManager.getCache('html')
       expect(cacheApi.keys()).to.include('posts?_embed')
       expect(cacheHtml.keys()).to.include('/')
+      done()
+    })
+  })
+
+  it('Sets API/HTML cache items without query string', done => {
+    request.get(`${uri}/2017/12/01/query-test?utm_source=stop-it`, (err, res, body) => {
+      const cacheHtml = cacheManager.getCache('html')
+      expect(cacheHtml.keys()).to.include('2017/12/01/query-test')
+      expect(cacheHtml.keys()).to.not.include('2017/12/01/query-test?utm_source=stop-it')
       done()
     })
   })

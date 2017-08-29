@@ -2,8 +2,20 @@ import chalk from 'chalk'
 import fetch from 'isomorphic-fetch'
 import CacheManager, { stripLeadingTrailingSlashes } from '../utilities/cache-manager'
 import { log } from '../utilities/logger'
+import idx from 'idx'
 
 let cacheManager = new CacheManager()
+
+const buildBaseUrl = config => {
+  if (idx(config, _ => _.options.wordpressDotComHosting)) {
+    // Remove protocol
+    const noProtocolSiteUrl = config.siteUrl.replace(/^https?:\/\//i, "")
+    const siteUrl = stripLeadingTrailingSlashes(noProtocolSiteUrl)
+    return `https://public-api.wordpress.com/wp/v2/sites/${siteUrl}`
+  } else {
+    return `${stripLeadingTrailingSlashes(config.siteUrl)}/wp-json/wp/v2`
+  }
+}
 
 export default ({ server, config }) => {
 
@@ -13,16 +25,22 @@ export default ({ server, config }) => {
   server.route({
     method: 'GET',
     path: '/api/v1/{query*}',
+    config: {
+      cache: {
+        expiresIn: (process.env.CACHE_CONTROL_MAX_AGE || 0) * 1000, // 1 Minute
+        privacy: 'public'
+      }
+    },
     handler: (request, reply) => {
 
-      const base = `${stripLeadingTrailingSlashes(config.siteUrl)}/wp-json/wp/v2`
+      const base = buildBaseUrl(config)
       const path = `${request.params.query}${request.url.search}`
       const remote = `${base}/${path}`
       const cacheKey = stripLeadingTrailingSlashes(path)
 
       // Look for a cached response - maybe undefined
       const cacheRecord = cache.get(cacheKey)
-      log.debug(`Cache attempting to access ${chalk.green(cacheKey)} in API: ${Boolean(cacheRecord)}`)
+      log.debug(`Cache contains ${chalk.green(cacheKey)} in api: ${Boolean(cacheRecord)}`)
 
       // If we find a response in the cache send it back
       if (cacheRecord) {
@@ -41,9 +59,9 @@ export default ({ server, config }) => {
 
             // We can only get here if there's nothing cached
             // Put the response into the cache using the request path as a key
-            log.debug(`Cache set ${chalk.green(cacheKey)} in API`)
+            log.debug(`Cache set ${chalk.green(cacheKey)} in api`)
             cache.set(cacheKey, { response: resp })
-            log.debug(`Cache has ${chalk.green(cache.keys())} in API`)
+            log.silly(cache.keys())
           })
           .catch(error => log.error(error))
       }

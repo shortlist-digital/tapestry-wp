@@ -51,6 +51,10 @@ module.exports = ({ cwd, env, babelrc }) => {
 
   // development specific config
   if (env === 'development') {
+    config.entry.bundle = [
+      'core-js/modules/es6.symbol', // added this polyfill here
+      config.entry.bundle
+    ]
     // config.plugins already defined so lets push any extras
     config.plugins.push(
       // output chunk stats (path is relative to output path)
@@ -69,7 +73,7 @@ module.exports = ({ cwd, env, babelrc }) => {
     // non-changing vendor packages to combine in a vendor bundle
     // react-helmet/glamor aren't required by Tapestry on the client, but they're very likely be put to use by the user so including it in the vendor file
     config.entry.vendor = [
-      'async-props',
+      'core-js/modules/es6.symbol',
       'glamor',
       'react-dom',
       'react-helmet',
@@ -80,7 +84,7 @@ module.exports = ({ cwd, env, babelrc }) => {
     config.plugins.push(
       // production flag for React/others to minify correctly
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify('production')
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
       }),
       // output common chunks into a vendor bundle
       new webpack.optimize.CommonsChunkPlugin({

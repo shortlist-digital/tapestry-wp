@@ -27,8 +27,7 @@ export default class CacheManager {
   createCache(name) {
     internalCaches[name] = LRU({
       max: 100,
-      maxAge: (process.env.NODE_ENV === 'production') ?
-        (process.env.CACHE_MAX_AGE || 1000*60*2) : 1
+      maxAge: process.env.CACHE_MAX_AGE || 1
     })
     return internalCaches[name]
   }
@@ -46,9 +45,10 @@ export default class CacheManager {
   }
 
   clearCache(cacheName, keyName) {
-    log.debug(`purging ${chalk.green(keyName)} from cache: ${chalk.green(cacheName)}`)
+
+    log.debug(`Cache cleared ${chalk.green(keyName)} in ${chalk.green(cacheName)}`)
     log.silly(JSON.stringify(internalCaches, null, 2))
-    const cacheStatus = internalCaches[cacheName].del(keyName) || 'not found'
-    log.debug(`Clear status for \`${chalk.green(keyName)}\`:`, cacheStatus)
+
+    internalCaches[cacheName].del(keyName)
   }
 }

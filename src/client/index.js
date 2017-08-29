@@ -1,12 +1,14 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { match, browserHistory } from 'react-router'
-import AsyncProps from 'async-props'
+import mitt from 'mitt'
 import 'location-origin'
 import 'es6-promise/auto'
+
+import AsyncProps from '../shared/third-party/async-props'
 import RouteWrapper from '../shared/route-wrapper'
+
 import config from 'tapestry.config.js'
-import mitt from 'mitt'
 import { AppContainer } from 'react-hot-loader'
 import Root from './root'
 
