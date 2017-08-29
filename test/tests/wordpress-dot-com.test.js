@@ -8,7 +8,7 @@ import dataPosts from '../mocks/posts.json'
 import dataPages from '../mocks/posts.json'
 
 
-describe('Handling server responses', () => {
+describe('Handling server responses using Wordpress.com API', () => {
 
   let tapestry = null
   let uri = null
@@ -88,30 +88,14 @@ describe('Handling server responses', () => {
     delete process.env.CACHE_CONTROL_MAX_AGE
   })
 
-  it('Route matched, status code is 200', (done) => {
+  it('WP.com Route matched, status code is 200', (done) => {
     request.get(uri, (err, res) => {
       expect(res.statusCode).to.equal(200)
       done()
     })
   })
 
-  it('Route matched, has correct headers', (done) => {
-    request.get(uri, (err, res) => {
-      expect(res.headers['content-type']).to.equal('text/html; charset=utf-8')
-      expect(res.headers['cache-control']).to.equal('max-age=60, must-revalidate, public')
-      done()
-    })
-  })
-
-  it('Preview routes send no-cache headers', (done) => {
-    request.get(`${uri}/foo/bar/571?tapestry_hash=somesortofhash&p=571`, (err, res) => {
-      expect(res.headers['content-type']).to.equal('text/html; charset=utf-8')
-      expect(res.headers['cache-control']).to.equal('no-cache')
-      done()
-    })
-  })
-
-  it('Route not matched, status code is 404', (done) => {
+  it('WP.com Route not matched, status code is 404', (done) => {
     request
       .get(`${uri}/route/not/matched/in/any/way`, (err, res) => {
         expect(res.statusCode).to.equal(404)
@@ -119,7 +103,7 @@ describe('Handling server responses', () => {
       })
   })
 
-  it('Route matched, API 404, status code is 404', (done) => {
+  it('WP.com Route matched, API 404, status code is 404', (done) => {
     request
       .get(`${uri}/404-response`, (err, res) => {
         expect(res.statusCode).to.equal(404)
@@ -127,7 +111,7 @@ describe('Handling server responses', () => {
       })
   })
 
-  it('Route matched, API empty response, status code is 404', (done) => {
+  it('WP.com Route matched, API empty response, status code is 404', (done) => {
     request
       .get(`${uri}/empty-response`, (err, res) => {
         expect(res.statusCode).to.equal(404)
@@ -135,7 +119,7 @@ describe('Handling server responses', () => {
       })
   })
 
-  it('Route matched, API empty but allowed, status code is 200', (done) => {
+  it('WP.com Route matched, API empty but allowed, status code is 200', (done) => {
     request
       .get(`${uri}/empty-allowed-response`, (err, res) => {
         expect(res.statusCode).to.equal(200)
