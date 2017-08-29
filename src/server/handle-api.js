@@ -2,8 +2,20 @@ import chalk from 'chalk'
 import fetch from 'isomorphic-fetch'
 import CacheManager, { stripLeadingTrailingSlashes } from '../utilities/cache-manager'
 import { log } from '../utilities/logger'
+import idx from 'idx'
 
 let cacheManager = new CacheManager()
+
+const buildBaseUrl = config => {
+  if (idx(config, _ => _.options.wordpressDotComHosting)) {
+    // Remove protocol
+    const noProtocolSiteUrl = config.siteUrl.replace(/^https?:\/\//i, "")
+    const siteUrl = stripLeadingTrailingSlashes(noProtocolSiteUrl)
+    return `https://public-api.wordpress.com/wp/v2/sites/${siteUrl}`
+  } else {
+    return `${stripLeadingTrailingSlashes(config.siteUrl)}/wp-json/wp/v2`
+  }
+}
 
 export default ({ server, config }) => {
 
@@ -21,7 +33,7 @@ export default ({ server, config }) => {
     },
     handler: (request, reply) => {
 
-      const base = `${stripLeadingTrailingSlashes(config.siteUrl)}/wp-json/wp/v2`
+      const base = buildBaseUrl(config)
       const path = `${request.params.query}${request.url.search}`
       const remote = `${base}/${path}`
       const cacheKey = stripLeadingTrailingSlashes(path)

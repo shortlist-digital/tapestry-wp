@@ -62,7 +62,9 @@ const schema = joi.object({
     // theme color for progress bar
     progressBarColor: joi.string(),
     // registers https Hapi plugin
-    forceHttps: joi.boolean()
+    forceHttps: joi.boolean(),
+    // Wordpress.com hosting configuration
+    wordpressDotComHosting: joi.boolean()
   })
 })
 
