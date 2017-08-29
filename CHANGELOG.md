@@ -1,3 +1,6 @@
+#### 2.0.0-26
+* Rewrite of how redirects are handled - improves boot time with a large number of redirects
+
 #### 2.0.0-25
 * Fixed missing rendering of Hapi redirect errors
 
