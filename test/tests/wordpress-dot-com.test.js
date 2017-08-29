@@ -47,7 +47,7 @@ describe('Handling server responses', () => {
       component: () => <p>Static endpoint</p>
     }
   ],
-    siteUrl: 'https://dummy.site.wordpress.com',
+    siteUrl: 'http://dummy.site.wordpress.com',
     options: {
       wordpressDotComHosting: true
     }
@@ -55,7 +55,7 @@ describe('Handling server responses', () => {
 
   before(done => {
     // mock api response
-    nock('http://public-api.wordpress.com')
+    nock('https://public-api.wordpress.com')
       .get('/wp/v2/sites/dummy.site.wordpress.com/posts/571')
       .times(1)
       .reply(200, dataPages.data)

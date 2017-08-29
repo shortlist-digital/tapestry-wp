@@ -7,7 +7,9 @@ let cacheManager = new CacheManager()
 
 const buildBaseUrl = config => {
   if (config.options && config.options.wordpressDotComHosting) {
-    const siteUrl = stripLeadingTrailingSlashes(config.siteUrl)
+    // Remove protocol
+    const noProtocolSiteUrl = config.siteUrl.replace(/^https?:\/\//i, "")
+    const siteUrl = stripLeadingTrailingSlashes(noProtocolSiteUrl)
     return `https://public-api.wordpress.com/wp/v2/sites/${siteUrl}`
   } else {
     return `${stripLeadingTrailingSlashes(config.siteUrl)}/wp-json/wp/v2`
