@@ -5,6 +5,15 @@ import { log } from '../utilities/logger'
 
 let cacheManager = new CacheManager()
 
+const buildBaseUrl = config => {
+  if (config.options && config.options.wordpressDotComHosting) {
+    const siteUrl = stripLeadingTrailingSlashes(config.siteUrl)
+    return `https://public-api.wordpress.com/wp/v2/sites/${siteUrl}`
+  } else {
+    return `${stripLeadingTrailingSlashes(config.siteUrl)}/wp-json/wp/v2`
+  }
+}
+
 export default ({ server, config }) => {
 
   // Create a new cache | 100 requests only, expire after 2 minutes
@@ -21,7 +30,7 @@ export default ({ server, config }) => {
     },
     handler: (request, reply) => {
 
-      const base = `${stripLeadingTrailingSlashes(config.siteUrl)}/wp-json/wp/v2`
+      const base = buildBaseUrl(config)
       const path = `${request.params.query}${request.url.search}`
       const remote = `${base}/${path}`
       const cacheKey = stripLeadingTrailingSlashes(path)
