@@ -84,7 +84,7 @@ module.exports = ({ cwd, env, babelrc }) => {
     config.plugins.push(
       // production flag for React/others to minify correctly
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify('production')
+        'process.env.NODE_ENV': process.env.NODE_ENV
       }),
       // output common chunks into a vendor bundle
       new webpack.optimize.CommonsChunkPlugin({
