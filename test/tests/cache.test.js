@@ -122,7 +122,7 @@ describe('Handling cache set/get', () => {
   const cacheManager = new CacheManager()
 
   before(done => {
-    process.env.CACHE_MAX_AGE = 10
+    process.env.CACHE_MAX_AGE = 60*1000
     // mock api response
     nock('http://dummy.api')
       .get('/wp-json/wp/v2/posts?_embed')
