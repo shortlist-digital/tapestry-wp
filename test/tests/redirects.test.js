@@ -8,6 +8,7 @@ import nock from 'nock'
 
 import { bootServer } from '../utils'
 import dataPage from '../mocks/page.json'
+import dataRedirects from '../mocks/redirects.json'
 
 describe('Handling redirects', () => {
 
@@ -16,7 +17,7 @@ describe('Handling redirects', () => {
   let uri = null
   let config = {
     routes: [{
-      path: 'page',
+      path: '/page',
       component: () => <p>Redirected component</p>
     }],
     redirectPaths: {
@@ -31,7 +32,7 @@ describe('Handling redirects', () => {
     // create redirects file sync to prevent race condition
     fs.writeFileSync(
       redirectsFilePath, // file name
-      JSON.stringify({'/redirect/from/file': '/page' }), // create dummy file
+      JSON.stringify(dataRedirects), // create dummy file
       'utf8' // encoding
     )
 
@@ -77,7 +78,7 @@ describe('Handling redirects', () => {
   })
 
   it('Redirect path loaded from `redirects.json` file', (done) => {
-    request.get(`${uri}/redirect/from/file`, (err, res, body) => {
+    request.get(`${uri}/redirect/from/this`, (err, res, body) => {
       expect(body).to.contain('Redirected component')
       expect(res.statusCode).to.equal(200)
       done()

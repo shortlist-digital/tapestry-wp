@@ -4,34 +4,35 @@ import fetch from 'isomorphic-fetch'
 import { log } from '../utilities/logger'
 
 const setRedirects = (server, redirects) => {
-  Object
-    .keys(redirects)
-    .forEach(fromPath => {
-      server.route({
-        method: 'GET',
-        path: `${fromPath}`,
-        handler: (request, reply) => {
-          reply
-            .redirect(`${redirects[fromPath]}${request.url.search}`)
-            .permanent()
-            .rewritable(true)
-        }
-      })
-    })
+  server.ext('onPostHandler', (request, reply) => {
+    const status = reply.request.response.statusCode
+    if (
+      (status == 404)
+      && redirects
+      && (request.url.pathname in redirects)
+    ) {
+      return reply
+        .redirect(`${redirects[request.url.pathname]}${request.url.search}`)
+        .permanent()
+        .rewritable(true)
+    } else {
+      reply.continue()
+    }
+  })
 }
 
 export default ({ server, config }) => {
-  // Handle legacy redirect paths
-  if (config.redirectPaths) {
-    setRedirects(server, config.redirectPaths)
-  }
-  // Handle redirects.json
+
+  // Handle legacy redirects
+  let redirects  = config.redirectPaths || {}
+
   const redirectsFile = path.resolve(process.cwd(), 'redirects.json')
+
   if (fs.existsSync(redirectsFile)) {
     const redirectsFromFile = JSON.parse(fs.readFileSync(redirectsFile, 'utf8'))
-    setRedirects(server, redirectsFromFile)
+    setRedirects(server, Object.assign({}, redirects, redirectsFromFile))
   }
-  // Set redirects from a dynamic endpoint
+
   if (config.redirectsEndpoint) {
     fetch(config.redirectsEndpoint)
       .then(resp => {
