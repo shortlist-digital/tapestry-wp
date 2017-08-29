@@ -108,14 +108,14 @@ describe('Handling endpoint redirects', () => {
     nock('http://dummy.api')
       .get('/web/app/uploads/redirects.json')
       .times(1)
-      .reply(200, {'/redirect/from/endpoint': '/page'})
+      .reply(200, dataRedirects)
 
     // boot tapestry server
     tapestry = bootServer(config)
 
     tapestry.server.on('start', () => {
       uri = tapestry.server.info.uri
-      request.get(`${uri}/redirect/from/endpoint`, (err, res, body) => {
+      request.get(`${uri}/redirect/from/this`, (err, res, body) => {
         expect(body).to.contain('Redirected component')
         expect(res.statusCode).to.equal(200)
         done()
