@@ -20,38 +20,34 @@ if (window !== 'undefined') {
 const renderAsyncProps = props =>
   <AsyncProps loadContext={config} {...props} />
 
-// define routes/history for react-router
-const routes = RouteWrapper(config)
-const history = browserHistory
-const targetNode = document.getElementById('root')
+const renderApp = config => {
 
-// run a router match (not sure why this is necessary)
-match({ routes, history }, (error, redirectLocation, renderProps) =>
-  render(
-    <AppContainer>
-      <Root
-        renderAsyncProps={renderAsyncProps}
-        routes={routes}
-        renderProps={renderProps}
-      />
-    </AppContainer>,
-    targetNode
+  // define routes/history for react-router
+  const routes = RouteWrapper(config)
+  const history = browserHistory
+  const targetNode = document.getElementById('root')
+
+
+  // run a router match (not sure why this is necessary)
+  match({ routes, history }, (error, redirectLocation, renderProps) =>
+    render(
+      <AppContainer key={Math.random()}>
+        <Root
+          renderAsyncProps={renderAsyncProps}
+          routes={routes}
+          renderProps={renderProps}
+        />
+      </AppContainer>,
+      targetNode
+    )
   )
-)
+}
+
+renderApp(config)
 
 if (module.hot) {
-  module.hot.accept(() => {
-    match({ routes, history }, (error, redirectLocation, renderProps) =>
-      render(
-        <AppContainer>
-          <Root
-            renderAsyncProps={renderAsyncProps}
-            routes={routes}
-            renderProps={renderProps}
-          />
-        </AppContainer>,
-        targetNode
-      )
-    )
+  module.hot.accept('tapestry.config.js', () => {
+    const newConfig = require('tapestry.config.js').default
+    renderApp(newConfig)
   })
 }
