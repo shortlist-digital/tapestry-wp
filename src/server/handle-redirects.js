@@ -7,7 +7,7 @@ const setRedirects = (server, redirects) => {
   server.ext('onPostHandler', (request, reply) => {
     const status = reply.request.response.statusCode
     if (
-      (status == 404)
+      (status === 404)
       && redirects
       && (request.url.pathname in redirects)
     ) {
