@@ -1,79 +1,44 @@
 #!/usr/bin/env node
+
 const path = require('path')
-const fs = require('fs')
-const Webpack = require('webpack')
-const WebpackDevServer = require('webpack-dev-server')
 const createCompilers = require('../src/utilities/create-compilers')
+const log = require('../src/utilities/logger')
+const notify = log.notify
+const winston = log.default
 const cwd = process.cwd()
 const env = 'development'
-const notify = require('../src/utilities/logger').notify
 
-
-notify('Starting Webpack Hot Reload Server\n')
-
-const indexFilePath = path.resolve(
-  __dirname,
-  '../',
-  'src',
-  'webpack',
-  'index.html'
-)
-
-const tapestryFaviconFilePath = path.resolve(
-  __dirname,
-  '../',
-  'logo',
-  'favicon.ico'
-)
-
-const projectFaviconFilePath = path.resolve(
-  cwd,
-  'public',
-  'favicon.ico'
-)
-
+notify(`Preparing Tapestry… \n`)
 
 // create webpack node compilers
 const {
-  devCompiler
+  serverCompiler,
+  clientCompiler
 } = createCompilers({ cwd, env })
 
-const cmsTarget = process.argv[2]
+// set flag to track server status
+let serverBooted = false
 
-if (!cmsTarget) {
-  return console.error('FAILED: No CMS endpoint provided - [Usage: tapestry http://cms.url.com]')
-}
-
-const server = new WebpackDevServer(devCompiler, {
-	stats: {
-		colors: true
-  },
-  hot: true,
-  publicPath: '/_scripts/',
-  proxy: {
-    '/api/v1/**': {
-      target: cmsTarget,
-      changeOrigin: true,
-      secure: false,
-      pathRewrite: {
-        '^/api/v1': '/wp-json/wp/v2'
-      }
-    }
-  },
-  setup: (app) => {
-    app.get('/favicon.ico', (req, res) => {
-      if (!fs.existsSync(projectFaviconFilePath)) {
-        res.sendFile(tapestryFaviconFilePath)
-      } else {
-        res.redirect('/public/favicon.ico')
-      }
-    })
-    app.get(/^(?!\/api\/|\/public\/|\/_scripts\/).+/, (req, res) => {
-      res.sendFile(indexFilePath)
-    })
+// run server webpack build
+serverCompiler.run(err => {
+  if (err) {
+    winston.error(err)
+    process.exit(0)
   }
-})
-
-server.listen(8080, '127.0.0.1',() => {
-	console.log('Tapestry Hot Dev Server started on http://localhost:8080')
+  // run client webpack build when complete as a watch command
+  clientCompiler.watch({}, err => {
+    if (err) {
+      winston.error(err)
+      process.exit(0)
+    }
+    // boot server if not already running
+    if (!serverBooted) {
+      // server path relative to root
+      const serverPath = path.resolve(cwd, '.tapestry/server.js')
+      // require server and boot
+      const server = require(serverPath).default
+      server({ cwd, env })
+      serverBooted = true
+    }
+  })
 })

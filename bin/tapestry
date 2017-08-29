@@ -13,5 +13,6 @@ program
   .command('init', 'Add some useful defaults to your Tapestry website')
   .command('build', 'Build server and client scripts in production mode')
   .command('start', 'Run a Tapestry website in production mode')
+  .command('hot', 'Run a Tapestry website in hot reload mode (Experimental)')
 
 program.parse(process.argv)
