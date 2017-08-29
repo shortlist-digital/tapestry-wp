@@ -1,3 +1,6 @@
+#### 2.1.0
+* Add `tapestry hot` command for live reloading of client
+
 #### 2.0.0
 * Homegenise how `ENV` variables are used
 * Add `wordpress.com` site support

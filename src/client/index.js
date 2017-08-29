@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { Router, match, browserHistory } from 'react-router'
+import { match, browserHistory } from 'react-router'
 import mitt from 'mitt'
 import 'location-origin'
 import 'es6-promise/auto'
@@ -9,6 +9,8 @@ import AsyncProps from '../shared/third-party/async-props'
 import RouteWrapper from '../shared/route-wrapper'
 
 import config from 'tapestry.config.js'
+import { AppContainer } from 'react-hot-loader'
+import Root from './root'
 
 if (window !== 'undefined') {
   window.tapestryEmitter = mitt()
@@ -18,19 +20,34 @@ if (window !== 'undefined') {
 const renderAsyncProps = props =>
   <AsyncProps loadContext={config} {...props} />
 
-// define routes/history for react-router
-const routes = RouteWrapper(config)
-const history = browserHistory
-const targetNode = document.getElementById('root')
+const renderApp = config => {
 
-// run a router match (not sure why this is necessary)
-match({ routes, history }, (error, redirectLocation, renderProps) =>
-  render(
-    <Router
-      render={renderAsyncProps}
-      routes={routes}
-      {...renderProps}
-    />,
-    targetNode
+  // define routes/history for react-router
+  const routes = RouteWrapper(config)
+  const history = browserHistory
+  const targetNode = document.getElementById('root')
+
+
+  // run a router match (not sure why this is necessary)
+  match({ routes, history }, (error, redirectLocation, renderProps) =>
+    render(
+      <AppContainer key={Math.random()}>
+        <Root
+          renderAsyncProps={renderAsyncProps}
+          routes={routes}
+          renderProps={renderProps}
+        />
+      </AppContainer>,
+      targetNode
+    )
   )
-)
+}
+
+renderApp(config)
+
+if (module.hot) {
+  module.hot.accept('tapestry.config.js', () => {
+    const newConfig = require('tapestry.config.js').default
+    renderApp(newConfig)
+  })
+}
