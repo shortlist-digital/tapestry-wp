@@ -7,7 +7,6 @@ import { bootServer } from '../utils'
 import dataPosts from '../mocks/posts.json'
 import dataPages from '../mocks/posts.json'
 
-
 describe('Handling server responses using Wordpress.com API', () => {
 
   let tapestry = null
