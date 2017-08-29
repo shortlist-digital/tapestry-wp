@@ -27,8 +27,7 @@ export default class CacheManager {
   createCache(name) {
     internalCaches[name] = LRU({
       max: 100,
-      maxAge: (process.env.NODE_ENV === 'production') ?
-        (process.env.CACHE_MAX_AGE || 1000*60*2) : 1
+      maxAge: process.env.CACHE_MAX_AGE || 1
     })
     return internalCaches[name]
   }

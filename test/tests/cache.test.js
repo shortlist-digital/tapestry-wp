@@ -122,8 +122,7 @@ describe('Handling cache set/get', () => {
   const cacheManager = new CacheManager()
 
   before(done => {
-    // sorry for this
-    process.env.NODE_ENV = 'production'
+    process.env.CACHE_MAX_AGE = 60*1000
     // mock api response
     nock('http://dummy.api')
       .get('/wp-json/wp/v2/posts?_embed')
@@ -142,8 +141,7 @@ describe('Handling cache set/get', () => {
   })
 
   after(() => {
-    // sorry for this
-    process.env.NODE_ENV = ''
+    delete process.env.CACHE_MAX_AGE
     tapestry.server.stop()
   })
 
