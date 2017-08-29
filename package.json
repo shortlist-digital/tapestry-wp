@@ -1,6 +1,6 @@
 {
   "name": "tapestry-wp",
-  "version": "2.0.0-24",
+  "version": "2.0.0-25",
   "description": "Wordpress API Universal React Renderer",
   "main": "./src/index.js",
   "files": [

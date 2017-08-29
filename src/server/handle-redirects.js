@@ -50,6 +50,8 @@ export default ({ server, config }) => {
       .then(data => {
         setRedirects(server, data)
       })
-      .catch(err => log.error(`Redirects Endpoint FAILED: ${JSON.stringify(err)}`))
+      .catch(err => {
+        log.error(`Redirects Endpoint FAILED: `, err)
+      })
   }
 }
