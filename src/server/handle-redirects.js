@@ -9,7 +9,7 @@ const setRedirects = (server, redirects) => {
     if (
       (status === 404)
       && redirects
-      && (request.url.pathname in redirects)
+      && (typeof redirects[request.url.pathname] !== "undefined")
     ) {
       return reply
         .redirect(`${redirects[request.url.pathname]}${request.url.search}`)
