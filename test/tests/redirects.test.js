@@ -38,6 +38,7 @@ describe('Handling redirects', () => {
 
     nock('http://dummy.api')
       .get('/web/app/uploads/redirects.json')
+      .query(true)
       .times(1)
       .reply(200, {'/redirect/from/endpoint': '/page'})
 
@@ -107,6 +108,7 @@ describe('Handling endpoint redirects', () => {
 
     nock('http://dummy.api')
       .get('/web/app/uploads/redirects.json')
+      .query(true)
       .times(1)
       .reply(200, dataRedirects)
 
@@ -127,6 +129,7 @@ describe('Handling endpoint redirects', () => {
 
     nock('http://dummy.api')
       .get('/web/app/uploads/redirects.json')
+      .query(true)
       .reply(404)
 
     // boot tapestry server
@@ -146,6 +149,7 @@ describe('Handling endpoint redirects', () => {
 
     nock('http://dummy.api')
       .get('/web/app/uploads/redirects.json')
+      .query(true)
       .reply(200, 'Error: <p>Something went wrong')
 
     // boot tapestry server
