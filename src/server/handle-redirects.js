@@ -34,7 +34,7 @@ export default ({ server, config }) => {
   }
 
   if (config.redirectsEndpoint) {
-    fetch(config.redirectsEndpoint)
+    fetch(`${config.redirectsEndpoint}?cacheBust=${Date.now()}`)
       .then(resp => {
         if (resp.status === 200) {
           return resp.json()

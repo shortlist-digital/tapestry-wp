@@ -1,3 +1,6 @@
+#### 2.2.0
+* Add cachebust param to redirects json request
+
 #### 2.1.0
 * Add `tapestry hot` command for live reloading of client
 
