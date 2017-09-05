@@ -123,12 +123,19 @@ describe('Handling cache set/get', () => {
 
   before(done => {
     process.env.CACHE_MAX_AGE = 60*1000
+    process.env.CACHE_MAX_ITEM_COUNT = 2
     // mock api response
     nock('http://dummy.api')
       .get('/wp-json/wp/v2/posts?_embed')
       .times(2)
       .reply(200, dataPosts.data)
       .get('/wp-json/wp/v2/posts?slug=test&_embed')
+      .reply(200, dataPost)
+      .get('/wp-json/wp/v2/posts?slug=one-item&_embed')
+      .reply(200, dataPost)
+      .get('/wp-json/wp/v2/posts?slug=another-item&_embed')
+      .reply(200, dataPost)
+      .get('/wp-json/wp/v2/posts?slug=another-another-item&_embed')
       .reply(200, dataPost)
       .get('/wp-json/wp/v2/posts?slug=query-test&_embed')
       .reply(200, dataPost)
@@ -142,6 +149,7 @@ describe('Handling cache set/get', () => {
 
   after(() => {
     delete process.env.CACHE_MAX_AGE
+    delete process.env.CACHE_MAX_ITEM_COUNT
     tapestry.server.stop()
   })
 
@@ -182,6 +190,24 @@ describe('Handling cache set/get', () => {
     request.get(uri, (err, res, body) => {
       expect(body).to.equal(response)
       done()
+    })
+  })
+
+  it('Sets max cache items correctly', done => {
+
+    const cacheHtml = cacheManager.getCache('html')
+    cacheHtml.reset()
+
+    request.get(`${uri}/2017/12/01/one-item`, () => {
+      expect(cacheHtml.keys()).to.have.length(1)
+      request.get(`${uri}/2017/12/01/another-item`, () => {
+        expect(cacheHtml.keys()).to.have.length(2)
+        request.get(`${uri}/2017/12/01/another-another-item`, () => {
+          expect(cacheHtml.keys()).to.have.length(2)
+          expect(cacheHtml.keys()).to.not.include('2017/12/01/one-item')
+          done()
+        })
+      })
     })
   })
 })
