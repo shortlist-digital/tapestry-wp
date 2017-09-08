@@ -1,3 +1,6 @@
+#### 2.3.0
+* Add CACHE_MAX_ITEM_COUNT var to increase cache size
+
 #### 2.2.0
 * Add cachebust param to redirects json request
 
