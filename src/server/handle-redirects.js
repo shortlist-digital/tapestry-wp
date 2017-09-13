@@ -9,7 +9,8 @@ const setRedirects = (server, redirects) => {
     if (
       (status === 404)
       && redirects
-      && (typeof redirects[request.url.pathname] !== "undefined")
+      // Tapestry only handles lowercase URLs
+      && (typeof redirects[request.url.pathname.toLowerCase()] !== "undefined")
     ) {
       return reply
         .redirect(`${redirects[request.url.pathname]}${request.url.search}`)
