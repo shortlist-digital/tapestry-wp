@@ -1,3 +1,6 @@
+#### 2.3.1
+* Redirects are case insensitive
+
 #### 2.3.0
 * Add CACHE_MAX_ITEM_COUNT var to increase cache size
 

@@ -62,6 +62,13 @@ describe('Handling redirects', () => {
     })
   })
 
+  it('Redirect returns 301 status insensitive to case', (done) => {
+    tapestry.server.inject(`${uri}/reDirect/From/tHis-path`, (res) => {
+      expect(res.statusCode).to.equal(301)
+      done()
+    })
+  })
+
  it('Redirect path contains querystring', (done) => {
     const query = '?querystring=something'
     request.get(`${uri}/redirect/with/query${query}`, (err, res, body) => {
