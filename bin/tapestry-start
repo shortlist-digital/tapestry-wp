@@ -2,6 +2,7 @@
 
 const fs = require('fs-extra')
 const path = require('path')
+const cluster = require('cluster')
 const log = require('../src/utilities/logger').log
 const cwd = process.cwd()
 const env = 'production'
@@ -14,4 +15,21 @@ if (!fs.existsSync(serverPath)) {
 }
 // require server and boot
 const server = require(serverPath).default
-server({ cwd, env })
+if (process.env.ENABLE_CLUSTER && cluster.isMaster) {
+  const numWorkers = require('os').cpus().length;
+  for(let i = 0; i < numWorkers; i++) {
+    cluster.fork()
+  }
+
+  cluster.on('online', function(worker) {
+    console.log('Tapestry Worker ' + worker.process.pid + ' is online')
+  })
+
+  cluster.on('exit', function(worker, code, signal) {
+    console.log('Tapestry Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal)
+    console.log('Starting a new worker')
+    cluster.fork()
+  })
+} else {
+  server({ cwd, env })
+}
