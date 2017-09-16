@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const idx = require('idx')
 const nodeExternals = require('webpack-node-externals')
 const sharedModules = require('./shared')
 
@@ -13,7 +14,7 @@ module.exports = ({ cwd, env, babelrc }) => {
   // expose environment to user
   const __DEV__ = env === 'development'
   // return webpack config
-  return {
+  let serverConfig = {
     // target node as runtime
     target: 'node',
     // enable sourcemaps
@@ -56,4 +57,25 @@ module.exports = ({ cwd, env, babelrc }) => {
       })
     ]
   }
+
+  // Always ignore server files using async await
+
+  const ignoreAwaitFiles = [
+    "node_modules/tapestry-wp/src/utilities/cache-manager.js",
+    "node_modules/tapestry-wp/src/server/handle-api.js",
+    "node_modules/tapestry-wp/src/server/handle-daynamic"
+  ]
+
+  let babelConfig = serverConfig.module
+
+  const isIgnoreSet = idx(babelConfig, _ =>  _.rules[0].use[0].options.ignore)
+
+  if (isIgnoreSet) {
+    babelConfig.rules[0].use[0].options.ignore.push(ignoreAwaitFiles)
+  } else {
+    babelConfig.rules[0].use[0].options.ignore = ignoreAwaitFiles
+  }
+  serverConfig.module = babelConfig
+
+  return serverConfig
 }
