@@ -31,7 +31,7 @@ export default ({ server, config }) => {
         privacy: 'public'
       }
     },
-    handler: (request, reply) => {
+    handler: async (request, reply) => {
 
       const base = buildBaseUrl(config)
       const path = `${request.params.query}${request.url.search}`
@@ -39,7 +39,7 @@ export default ({ server, config }) => {
       const cacheKey = stripLeadingTrailingSlashes(path)
 
       // Look for a cached response - maybe undefined
-      const cacheRecord = cache.get(cacheKey)
+      const cacheRecord = await cache.get(cacheKey)
       log.debug(`Cache contains ${chalk.green(cacheKey)} in api: ${Boolean(cacheRecord)}`)
 
       // If we find a response in the cache send it back
