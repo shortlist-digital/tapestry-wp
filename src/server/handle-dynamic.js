@@ -59,7 +59,7 @@ export default ({ server, config, assets }) => {
         loadContext.location = renderProps.location
 
         // get all the props yo
-        loadPropsOnServer(renderProps, loadContext, (err, asyncProps) => {
+        loadPropsOnServer(renderProps, loadContext, async (err, asyncProps) => {
           // 500 if error from AsyncProps
           if (err) {
             log.error(err)
@@ -78,7 +78,7 @@ export default ({ server, config, assets }) => {
           const cacheKey = stripLeadingTrailingSlashes(request.url.pathname)
 
           // Find HTML based on path - might be undefined
-          const cachedHTML = cache.get(cacheKey)
+          const cachedHTML = await cache.get(cacheKey)
           log.debug(`Cache contains ${chalk.green(cacheKey)} in html: ${Boolean(cachedHTML)}`)
 
           // respond with HTML from cache if not undefined

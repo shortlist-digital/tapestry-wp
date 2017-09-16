@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import LRU from 'lru-cache'
+import NCM from 'cache-manager'
 import { log } from '../utilities/logger'
 
 let internalCaches = []
@@ -25,17 +25,20 @@ export default class CacheManager {
   }
 
   createCache(name) {
-    internalCaches[name] = LRU({
-      max: parseInt(process.env.CACHE_MAX_ITEM_COUNT, 10) || 100,
-      maxAge: parseInt(process.env.CACHE_MAX_AGE, 10) || 1
+    const count = parseInt(process.env.CACHE_MAX_ITEM_COUNT, 10) || 100
+    const maxAge = parseInt(process.env.CACHE_MAX_AGE, 10) || 1
+    internalCaches[name] = NCM.caching({
+      store: 'memory',
+      max: count,
+      ttl: maxAge
     })
     return internalCaches[name]
   }
 
   clearAll() {
     if (internalCaches) {
-      internalCaches.forEach(cache =>
-        cache.reset()
+      internalCaches.forEach(async (cache) =>
+        await cache.reset()
       )
     }
   }
@@ -44,11 +47,11 @@ export default class CacheManager {
     return internalCaches[name]
   }
 
-  clearCache(cacheName, keyName) {
+  async clearCache(cacheName, keyName) {
 
     log.debug(`Cache cleared ${chalk.green(keyName)} in ${chalk.green(cacheName)}`)
     log.silly(JSON.stringify(internalCaches, null, 2))
 
-    internalCaches[cacheName].del(keyName)
+    await internalCaches[cacheName].del(keyName)
   }
 }
