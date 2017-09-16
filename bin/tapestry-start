@@ -2,6 +2,7 @@
 
 const fs = require('fs-extra')
 const path = require('path')
+const throng = require('throng')
 const log = require('../src/utilities/logger').log
 const cwd = process.cwd()
 const env = 'production'
@@ -14,4 +15,9 @@ if (!fs.existsSync(serverPath)) {
 }
 // require server and boot
 const server = require(serverPath).default
-server({ cwd, env })
+if (process.env.ENABLE_CONCURRENCY) {
+  const WORKERS = process.env.WEB_CONCURRENCY || require('os').cpus().length || 1
+  throng(WORKERS, () => server({ cwd, env }))
+} else {
+  server({ cwd, env })
+}
