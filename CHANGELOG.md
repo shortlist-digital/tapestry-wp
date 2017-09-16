@@ -1,3 +1,6 @@
+#### 3.0.0-1
+* Configurable Redis Cache 
+
 #### 3.0.0-0
 * Cluster management
 
