@@ -63,7 +63,7 @@ describe('Handling cache purges', () => {
         expect(body).to.contain(JSON.stringify(purgeResp))
         expect(res.statusCode).to.equal(200)
         const result = await cacheApi.get('pages')
-        expect(result).to.be.undefined
+        expect(result).to.not.exist
         done()
       })
     })
@@ -82,7 +82,7 @@ describe('Handling cache purges', () => {
         expect(body).to.contain(JSON.stringify(purgeResp))
         expect(res.statusCode).to.equal(200)
         const result = await cacheApi.get('pages?slug=test')
-        expect(result).to.be.undefined
+        expect(result).to.not.exist
         done()
       })
     })
@@ -101,7 +101,7 @@ describe('Handling cache purges', () => {
         expect(body).to.contain(JSON.stringify(purgeResp))
         expect(res.statusCode).to.equal(200)
         const result = await cacheApi.get('pages')
-        expect(result).to.be.undefined
+        expect(result).to.not.exist
 
         done()
       })
@@ -132,11 +132,11 @@ describe('Handling cache set/get', () => {
       .reply(200, dataPosts.data)
       .get('/wp-json/wp/v2/posts?slug=test&_embed')
       .reply(200, dataPost)
-      .get('/wp-json/wp/v2/posts?slug=one-item&_embed')
+      .get('/wp-json/wp/v2/posts?slug=item-one&_embed')
       .reply(200, dataPost)
-      .get('/wp-json/wp/v2/posts?slug=another-item&_embed')
+      .get('/wp-json/wp/v2/posts?slug=item-two&_embed')
       .reply(200, dataPost)
-      .get('/wp-json/wp/v2/posts?slug=another-another-item&_embed')
+      .get('/wp-json/wp/v2/posts?slug=item-three&_embed')
       .reply(200, dataPost)
       .get('/wp-json/wp/v2/posts?slug=query-test&_embed')
       .reply(200, dataPost)
@@ -172,7 +172,7 @@ describe('Handling cache set/get', () => {
       const shouldCache = await cacheHtml.get('2017/12/01/query-test')
       const shouldNotCache = await cacheHtml.get('2017/12/01/query-test?utm_source=stop-it')
       expect(shouldCache).to.be.a('string').that.includes('doctype')
-      expect(shouldNotCache).to.be.undefined
+      expect(shouldNotCache).to.not.exist
       done()
     })
   })
@@ -198,21 +198,25 @@ describe('Handling cache set/get', () => {
     })
   })
 
-  it('Sets max cache items correctly', done => {
+  // Redis doens't have a max items limit
+  if (!process.env.REDIS_URL) {
+    it('Sets max cache items correctly', done => {
 
-    const cacheHtml = cacheManager.getCache('html')
-    cacheHtml.reset()
+      const cacheHtml = cacheManager.getCache('html')
+      cacheHtml.reset()
 
-    request.get(`${uri}/2017/12/01/one-item`, async () => {
-      expect(await cacheHtml.keys()).to.have.length(1)
-      request.get(`${uri}/2017/12/01/another-item`, async () => {
-        expect(await cacheHtml.keys()).to.have.length(2)
-        request.get(`${uri}/2017/12/01/another-another-item`, async () => {
+      request.get(`${uri}/2017/12/01/item-one`, async () => {
+        expect(await cacheHtml.keys()).to.have.length(1)
+        request.get(`${uri}/2017/12/01/item-two`, async () => {
           expect(await cacheHtml.keys()).to.have.length(2)
-          expect(await cacheHtml.keys()).to.not.include('2017/12/01/one-item')
-          done()
+          request.get(`${uri}/2017/12/01/item-three`, async () => {
+            console.log(await cacheHtml.keys())
+            expect(await cacheHtml.keys()).to.have.length(2)
+            expect(await cacheHtml.keys()).to.not.include('2017/12/01/one-item')
+            done()
+          })
         })
       })
     })
-  })
+  }
 })

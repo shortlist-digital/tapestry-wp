@@ -1,9 +1,11 @@
 import chalk from 'chalk'
 import NCM from 'cache-manager'
+import redisStore from 'cache-manager-ioredis'
 import { log } from '../utilities/logger'
 
 let internalCaches = []
 let instance = null
+let cacheConfig
 
 export const stripLeadingTrailingSlashes = path => {
   if (path !== '/') {
@@ -25,13 +27,21 @@ export default class CacheManager {
   }
 
   createCache(name) {
-    const count = parseInt(process.env.CACHE_MAX_ITEM_COUNT, 10) || 100
-    const maxAge = parseInt(process.env.CACHE_MAX_AGE, 10) || 1
-    internalCaches[name] = NCM.caching({
+
+    cacheConfig = {
       store: 'memory',
-      max: count,
-      ttl: maxAge
-    })
+      max: parseInt(process.env.CACHE_MAX_ITEM_COUNT, 10) || 100,
+      ttl: parseInt(process.env.CACHE_MAX_AGE, 10) || 1
+    }
+
+    if (process.env.REDIS_URL) {
+      cacheConfig = {
+        store: redisStore,
+        url: process.env.REDIS_URL
+      }
+    }
+
+    internalCaches[name] = NCM.caching(cacheConfig)
     return internalCaches[name]
   }
 
