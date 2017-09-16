@@ -36,8 +36,9 @@
   "bin": {
     "tapestry": "./bin/tapestry"
   },
+  "engineStrict": true,
   "engines": {
-    "node": ">= 7.10.0",
+    "node": ">= 7.0.0",
     "npm": ">= 4.2.0"
   },
   "dependencies": {
