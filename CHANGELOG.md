@@ -1,3 +1,6 @@
+#### 3.0.0-0
+* Cluster management
+
 #### 2.3.1
 * Redirects are case insensitive
 
