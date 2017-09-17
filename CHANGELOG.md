@@ -1,4 +1,4 @@
-#### 3.0.0-4
+#### 3.0.0-5
 
 * Add fetcher shared file to allow for connection pooling on the server
 
