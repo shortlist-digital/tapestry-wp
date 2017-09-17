@@ -1,9 +1,9 @@
 import idx from 'idx'
-import fetch from 'isomorphic-fetch'
 import mitt from 'mitt'
 import isArray from 'lodash/isArray'
 import isPlainObject from 'lodash/isPlainObject'
 import isFunction from 'lodash/isFunction'
+import fetcher from './fetcher'
 
 mitt()
 
@@ -22,7 +22,7 @@ const fetchJSON = (endpoint) => {
     url = `${origin}/api/preview/v1/${endpoint}${queryPrefix}${queryParams}`
   }
   // return fetch as promise
-  return fetch(url)
+  return fetcher(url)
     .then(resp => resp.json())
 }
 const emitEvent = (event, data) => {
