@@ -3,6 +3,7 @@ import fetch from 'isomorphic-fetch'
 import CacheManager, { stripLeadingTrailingSlashes } from '../utilities/cache-manager'
 import { log } from '../utilities/logger'
 import idx from 'idx'
+import fetchOptions from '../shared/fetch-options'
 
 let cacheManager = new CacheManager()
 
@@ -50,7 +51,7 @@ export default ({ server, config }) => {
 
       } else {
 
-        fetch(remote)
+        fetch(remote, fetchOptions)
           .then(resp => resp.json())
           .then(resp => {
 
