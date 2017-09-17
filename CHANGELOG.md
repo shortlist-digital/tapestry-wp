@@ -1,3 +1,7 @@
+#### 3.0.0-4
+
+* Add fetcher shared file to allow for connection pooling on the server
+
 #### 3.0.0-1
 * Configurable Redis Cache 
 
