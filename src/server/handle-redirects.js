@@ -1,8 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import fetch from 'isomorphic-fetch'
+import fetcher from '../shared/fetcher'
 import { log } from '../utilities/logger'
-import fetchOptions from '../shared/fetch-options'
 
 const setRedirects = (server, redirects) => {
   server.ext('onPostHandler', (request, reply) => {
@@ -36,7 +35,7 @@ export default ({ server, config }) => {
   }
 
   if (config.redirectsEndpoint) {
-    fetch(`${config.redirectsEndpoint}?cacheBust=${Date.now()}`, fetchOptions)
+    fetcher(`${config.redirectsEndpoint}?cacheBust=${Date.now()}`)
       .then(resp => {
         if (resp.status === 200) {
           return resp.json()

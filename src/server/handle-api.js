@@ -1,9 +1,8 @@
 import chalk from 'chalk'
-import fetch from 'isomorphic-fetch'
 import CacheManager, { stripLeadingTrailingSlashes } from '../utilities/cache-manager'
 import { log } from '../utilities/logger'
 import idx from 'idx'
-import fetchOptions from '../shared/fetch-options'
+import fetcher from '../shared/fetcher'
 
 let cacheManager = new CacheManager()
 
@@ -51,7 +50,7 @@ export default ({ server, config }) => {
 
       } else {
 
-        fetch(remote, fetchOptions)
+        fetcher(remote)
           .then(resp => resp.json())
           .then(resp => {
 
