@@ -2,6 +2,7 @@ import chalk from 'chalk'
 import fetch from 'isomorphic-fetch'
 import { log } from '../utilities/logger'
 import { stripLeadingTrailingSlashes } from '../utilities/cache-manager'
+import fetchOptions from '../shared/fetch-options'
 
 export default ({ server, config }) => {
 
@@ -14,7 +15,7 @@ export default ({ server, config }) => {
       const path = `${request.params.query}${request.url.search}`
       const remote = `${base}/${path}`
 
-      fetch(remote)
+      fetch(remote, fetchOptions)
         .then(resp => resp.json())
         .then(resp => {
 

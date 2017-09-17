@@ -4,6 +4,7 @@ import mitt from 'mitt'
 import isArray from 'lodash/isArray'
 import isPlainObject from 'lodash/isPlainObject'
 import isFunction from 'lodash/isFunction'
+import fetchOptions from './fetch-options'
 
 mitt()
 
@@ -22,7 +23,7 @@ const fetchJSON = (endpoint) => {
     url = `${origin}/api/preview/v1/${endpoint}${queryPrefix}${queryParams}`
   }
   // return fetch as promise
-  return fetch(url)
+  return fetch(url, fetchOptions)
     .then(resp => resp.json())
 }
 const emitEvent = (event, data) => {
