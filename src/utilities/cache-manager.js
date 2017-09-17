@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import NCM from 'cache-manager'
-import redisStore from 'cache-manager-ioredis'
+import redisStore from 'cache-manager-redis-store'
 import { log } from '../utilities/logger'
 
 let internalCaches = []
