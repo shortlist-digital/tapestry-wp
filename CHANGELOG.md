@@ -1,3 +1,7 @@
+#### 3.0.0-6
+
+* Increase keepalive timeout, extend request timeout
+
 #### 3.0.0-5
 
 * Add fetcher shared file to allow for connection pooling on the server
