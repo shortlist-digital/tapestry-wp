@@ -24,7 +24,9 @@
     "docs:prepare": "gitbook install",
     "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book [skip ci]' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && npm run docs:git-push",
     "docs:rename-apple-icon": "cp _book/gitbook/images/favicon-152.png _book/gitbook/images/apple-touch-icon-precomposed-152.png",
-    "docs:watch": "npm run docs:prepare && gitbook serve"
+    "docs:watch": "npm run docs:prepare && gitbook serve",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "contributors": [
     "Elliot Coad <elliot.coad@shortlist.com>",
@@ -92,7 +94,8 @@
     "webpack": "^3.0.0",
     "webpack-dev-server": "^2.5.1",
     "webpack-node-externals": "^1.5.4",
-    "winston": "^2.3.1"
+    "winston": "^2.3.1",
+    "snyk": "^1.41.1"
   },
   "devDependencies": {
     "chai": "^4.0.2",
@@ -114,5 +117,6 @@
   "pre-commit": [
     "pre-commit-msg",
     "lint-staged"
-  ]
+  ],
+  "snyk": true
 }
