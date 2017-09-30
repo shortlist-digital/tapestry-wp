@@ -79,7 +79,7 @@ export default ({ server, config }) => {
             log.silly(cache.keys())
           })
           .catch(error => {
-            log.error(`Handle API is replying with error:\n`, error)
+            log.debug(`Handle API is replying with HTTP error:\n`, error)
             reply(error).code(error.status)
           })
       }
