@@ -210,7 +210,6 @@ describe('Handling cache set/get', () => {
         request.get(`${uri}/2017/12/01/item-two`, async () => {
           expect(await cacheHtml.keys()).to.have.length(2)
           request.get(`${uri}/2017/12/01/item-three`, async () => {
-            console.log(await cacheHtml.keys())
             expect(await cacheHtml.keys()).to.have.length(2)
             expect(await cacheHtml.keys()).to.not.include('2017/12/01/one-item')
             done()
