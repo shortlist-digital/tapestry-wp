@@ -91,7 +91,6 @@ export default ({ server, config, assets }) => {
           } else {
             // No HTML found for this path, or cache expired
             // Regenerate HTML from scratch
-            log.silly(`Dynamic will render asyncProps`, asyncProps)
             const html = renderHtml({
               response,
               renderProps,
