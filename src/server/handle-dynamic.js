@@ -62,8 +62,8 @@ export default ({ server, config, assets }) => {
         loadPropsOnServer(renderProps, loadContext, async (err, asyncProps) => {
           // 500 if error from AsyncProps
           if (err) {
-            log.error(err)
-            return reply(err).code(HTTPStatus.INTERNAL_SERVER_ERROR)
+            log.error({err})
+            return reply(err, HTTPStatus.INTERNAL_SERVER_ERROR)
           }
 
           const response = handleApiResponse(
@@ -88,6 +88,7 @@ export default ({ server, config, assets }) => {
           } else {
             // No HTML found for this path, or cache expired
             // Regenerate HTML from scratch
+            log.silly(`Dynamic will render asyncProps`, asyncProps)
             const html = renderHtml({
               response,
               renderProps,
