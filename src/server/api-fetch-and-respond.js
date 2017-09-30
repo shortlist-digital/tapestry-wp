@@ -42,7 +42,7 @@ const AFAR = (url, serverReplyObject, cacheKey = false) => {
       }
     })
     .catch(error => {
-      log.debug(`Handle API is replying with HTTP error:\n`, error)
+      log.debug(`AFAR is replying with HTTP error:\n`, error, `\nError was just handled for ${url}`)
       reply(error).code(error.status)
     })
 }

@@ -46,7 +46,6 @@ export default ({ server, config }) => {
       // If we find a response in the cache send it back
       if (cacheRecord) {
         log.debug(`API response via cache for ${chalk.green(cacheKey)}`)
-        log.silly(`Retreived cache record: `, cacheRecord)
         reply(cacheRecord.response)
 
       } else {
