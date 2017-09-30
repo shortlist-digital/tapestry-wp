@@ -37,6 +37,7 @@ export default ({ server, config }) => {
       const path = `${request.params.query}${request.url.search}`
       const remote = `${base}/${path}`
       const cacheKey = stripLeadingTrailingSlashes(path)
+      log.silly(`API request with cacheKey ${cacheKey}`)
 
       // Look for a cached response - maybe undefined
       const cacheRecord = await cache.get(cacheKey)
@@ -44,13 +45,26 @@ export default ({ server, config }) => {
 
       // If we find a response in the cache send it back
       if (cacheRecord) {
-
         log.debug(`API response via cache for ${chalk.green(cacheKey)}`)
+        log.silly(`Retreived cache record: `, cacheRecord)
         reply(cacheRecord.response)
 
       } else {
 
         fetcher(remote)
+          .then(resp => {
+            if (!resp.ok) {
+              throw {
+                name: 'FetchError',
+                type: 'http-error',
+                code: resp.status,
+                status: resp.status,
+                message: resp.statusText
+              }
+            } else {
+              return resp
+            }
+          })
           .then(resp => resp.json())
           .then(resp => {
 
@@ -60,10 +74,14 @@ export default ({ server, config }) => {
             // We can only get here if there's nothing cached
             // Put the response into the cache using the request path as a key
             log.debug(`Cache set ${chalk.green(cacheKey)} in api`)
+            log.silly(`Cache set for ${cacheKey}`, resp)
             cache.set(cacheKey, { response: resp })
             log.silly(cache.keys())
           })
-          .catch(error => log.error(error))
+          .catch(error => {
+            log.error(`Handle API is replying with error:\n`, error)
+            reply(error).code(error.status)
+          })
       }
     }
   })

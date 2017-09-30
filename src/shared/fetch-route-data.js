@@ -23,7 +23,6 @@ const fetchJSON = (endpoint) => {
   }
   // return fetch as promise
   return fetcher(url)
-    .then(resp => resp.json())
 }
 const emitEvent = (event, data) => {
   if (typeof window !== 'undefined') {
@@ -88,6 +87,7 @@ export default ({
     fetchRequests.push(endpoints)
     return Promise
       .all(endpoints)
+      .then(allResponses =>  Promise.all(allResponses.map(resp => resp.json())))
       .then(resp => handleResolve(endpoints, resp, cb))
       .catch(err => handleReject(err, cb))
   } else if (isPlainObject(loadFrom)) {
@@ -100,6 +100,7 @@ export default ({
     fetchRequests.push(endpoints)
     return Promise
       .all(endpoints)
+      .then(allResponses =>  Promise.all(allResponses.map(resp => resp.json())))
       .then(resp => mapArrayToObject(resp, loadFrom))
       .then(resp => handleResolve(endpoints, resp, cb))
       .catch(err => handleReject(err, cb))
@@ -109,6 +110,7 @@ export default ({
     // handle endpoint as a function
     // then fetch single endpoint and handle response
     return fetchJSON(loadFrom)
+      .then(resp => resp.json())
       .then(resp => handleResolve(loadFrom, resp, cb))
       .catch(err => handleReject(err, cb))
   }
