@@ -1,6 +1,8 @@
+#### 3.0.0-10
+#### 3.0.0-9
 #### 3.0.0-8
 
-* Remove over-zealous loggin
+* Remove over-zealous logging
 
 #### 3.0.0-8
 
