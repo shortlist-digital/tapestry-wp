@@ -10,7 +10,6 @@ export default ({ server, config }) => {
       const base = `${stripLeadingTrailingSlashes(config.siteUrl)}/wp-json/revision/v1`
       const path = `${request.params.query}${request.url.search}`
       const remote = `${base}/${path}`
-
       AFAR(remote, reply)
     }
   })
