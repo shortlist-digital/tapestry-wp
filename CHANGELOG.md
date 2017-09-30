@@ -1,3 +1,7 @@
+#### 3.0.0-8
+
+* Remove giant asyncProps log
+
 #### 3.0.0-7
 
 * Refactor proxy handlers to prevent timeout errors on non 2xx requests
