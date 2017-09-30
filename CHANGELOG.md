@@ -1,5 +1,9 @@
 #### 3.0.0-8
 
+* Remove over-zealous loggin
+
+#### 3.0.0-8
+
 * Remove giant asyncProps log
 
 #### 3.0.0-7
