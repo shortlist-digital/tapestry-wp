@@ -28,7 +28,7 @@ const AFAR = (url, serverReplyObject, cacheKey = false) => {
     .then(resp => resp.json())
     .then(resp => {
 
-      log.debug(`API response via HTTP for ${chalk.green(cacheKey)}`)
+      log.debug(`API response via HTTP for ${chalk.green(url)}`)
       reply(resp)
 
       // We can only get here if there's nothing cached
@@ -36,7 +36,7 @@ const AFAR = (url, serverReplyObject, cacheKey = false) => {
       if (cacheKey) {
         const cache = cacheManager.getCache('api')
         log.debug(`Cache set ${chalk.green(cacheKey)} in api`)
-        log.silly(`Cache set for ${cacheKey}`, resp)
+        log.silly(`Cache set for ${cacheKey}`)
         cache.set(cacheKey, { response: resp })
         log.silly(cache.keys())
       }
