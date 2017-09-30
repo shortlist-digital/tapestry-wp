@@ -1,3 +1,8 @@
+#### 3.0.0-7
+
+* Refactor proxy handlers to prevent timeout errors on non 2xx requests
+* Skip cache if preview (even though there shouldn't be anything in the cache)
+
 #### 3.0.0-6
 
 * Increase keepalive timeout, extend request timeout
