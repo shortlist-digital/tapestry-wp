@@ -82,7 +82,10 @@ export default ({ server, config, assets }) => {
           log.debug(`Cache contains ${chalk.green(cacheKey)} in html: ${Boolean(cachedHTML)}`)
 
           // respond with HTML from cache if not undefined
-          if (cachedHTML) {
+          if (cachedHTML && isPreview) {
+            log.silly(`HTML is in cache but skipped for preview ${chalk.green(cacheKey)}`)
+          }
+          if (cachedHTML && !isPreview) {
             log.debug(`HTML rendered from cache for ${chalk.green(cacheKey)}`)
             reply(cachedHTML).code(status)
           } else {
