@@ -55,11 +55,15 @@ export default ({ server, config }) => {
           .then(resp => {
             if (!resp.ok) {
               throw {
+                // Fetch library properties
                 name: 'FetchError',
                 type: 'http-error',
-                code: resp.status,
+                // Traditional request properties
                 status: resp.status,
-                message: resp.statusText
+                statusText: resp.statusText,
+                // Tapestry properties
+                message: resp.statusText,
+                code: resp.status
               }
             } else {
               return resp
