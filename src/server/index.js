@@ -21,6 +21,9 @@ export default class Tapestry {
 
   constructor ({ config, assets = {}, env }) {
 
+    // provide more info about Promise rejection
+    process.on('unhandledRejection', err => log.error(err))
+
     this.config = config
     this.env = env
     this.server = this.bootServer()
