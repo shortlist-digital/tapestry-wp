@@ -21,14 +21,18 @@ export default class Tapestry {
 
   constructor ({ config, assets = {}, env }) {
 
+    // provide more info about Promise rejection
+    process.on('unhandledRejection', err => log.error(err))
+
     this.config = config
     this.env = env
     this.server = this.bootServer()
 
     // Important bit:
     this.server.ext('onPreResponse', (request, reply) => {
-      request.response.headers &&
-        (request.response.headers['X-Powered-By'] = 'Tapestry')
+      if (request.response.headers) {
+        request.response.headers['X-Powered-By'] = 'Tapestry'
+      }
       reply.continue()
     })
 
@@ -75,11 +79,17 @@ export default class Tapestry {
     const server = new Server({
       connections: {
         router: {
-          stripTrailingSlash: true,
-          isCaseSensitive: false
+          isCaseSensitive: false,
+          stripTrailingSlash: true
         },
         routes: {
-          security: true
+          security: {
+            hsts: true,
+            noOpen: true,
+            noSniff: true,
+            xframe: false,
+            xss: true
+          }
         }
       }
     })

@@ -22,7 +22,8 @@ describe('Handling redirects', () => {
     }],
     redirectPaths: {
       '/redirect/from/this-path': '/page',
-      '/redirect/with/query': '/page'
+      '/redirect/with/query': '/page',
+      '/test()what£]cool': '/page'
     },
     redirectsEndpoint: 'http://dummy.api/web/app/uploads/redirects.json',
     siteUrl: 'http://dummy.api'
@@ -57,6 +58,13 @@ describe('Handling redirects', () => {
 
   it('Redirect returns 301 status', (done) => {
     tapestry.server.inject(`${uri}/redirect/from/this-path`, (res) => {
+      expect(res.statusCode).to.equal(301)
+      done()
+    })
+  })
+
+  it('Redirect returns 301 with strange characters', (done) => {
+    tapestry.server.inject(`${uri}/test()what£]cool`, (res) => {
       expect(res.statusCode).to.equal(301)
       done()
     })

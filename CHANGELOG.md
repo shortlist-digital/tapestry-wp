@@ -1,3 +1,36 @@
+#### 3.0.0
+
+* Release 🎉
+
+#### 3.0.0-10
+#### 3.0.0-9
+#### 3.0.0-8
+
+* Remove over-zealous logging
+
+#### 3.0.0-8
+
+* Remove giant asyncProps log
+
+#### 3.0.0-7
+
+* Refactor proxy handlers to prevent timeout errors on non 2xx requests
+* Skip cache if preview (even though there shouldn't be anything in the cache)
+
+#### 3.0.0-6
+
+* Increase keepalive timeout, extend request timeout
+
+#### 3.0.0-5
+
+* Add fetcher shared file to allow for connection pooling on the server
+
+#### 3.0.0-1
+* Configurable Redis Cache 
+
+#### 3.0.0-0
+* Cluster management
+
 #### 2.3.1
 * Redirects are case insensitive
 

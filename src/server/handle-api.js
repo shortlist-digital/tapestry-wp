@@ -1,8 +1,8 @@
 import chalk from 'chalk'
-import fetch from 'isomorphic-fetch'
 import CacheManager, { stripLeadingTrailingSlashes } from '../utilities/cache-manager'
 import { log } from '../utilities/logger'
 import idx from 'idx'
+import AFAR from './api-fetch-and-respond'
 
 let cacheManager = new CacheManager()
 
@@ -31,39 +31,25 @@ export default ({ server, config }) => {
         privacy: 'public'
       }
     },
-    handler: (request, reply) => {
+    handler: async (request, reply) => {
 
       const base = buildBaseUrl(config)
       const path = `${request.params.query}${request.url.search}`
       const remote = `${base}/${path}`
       const cacheKey = stripLeadingTrailingSlashes(path)
+      log.silly(`API request with cacheKey ${cacheKey}`)
 
       // Look for a cached response - maybe undefined
-      const cacheRecord = cache.get(cacheKey)
+      const cacheRecord = await cache.get(cacheKey)
       log.debug(`Cache contains ${chalk.green(cacheKey)} in api: ${Boolean(cacheRecord)}`)
 
       // If we find a response in the cache send it back
       if (cacheRecord) {
-
         log.debug(`API response via cache for ${chalk.green(cacheKey)}`)
         reply(cacheRecord.response)
 
       } else {
-
-        fetch(remote)
-          .then(resp => resp.json())
-          .then(resp => {
-
-            log.debug(`API response via HTTP for ${chalk.green(path)}`)
-            reply(resp)
-
-            // We can only get here if there's nothing cached
-            // Put the response into the cache using the request path as a key
-            log.debug(`Cache set ${chalk.green(cacheKey)} in api`)
-            cache.set(cacheKey, { response: resp })
-            log.silly(cache.keys())
-          })
-          .catch(error => log.error(error))
+        AFAR(remote, reply, cacheKey)
       }
     }
   })
