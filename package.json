@@ -68,7 +68,7 @@
     "hapi": "~16.5.2",
     "hapi-require-https": "^2.1.0",
     "http-status": "^1.0.1",
-    "idx": "^1.5.0",
+    "idx": "^2.1.0",
     "inert": "^4.2.0",
     "isomorphic-fetch": "^2.2.1",
     "joi": "^10.4.1",
