@@ -2,7 +2,6 @@ import React from 'react'
 import idx from 'idx'
 import PropTypes from 'prop-types'
 import DefaultError from './components/default-error'
-import MissingView from './components/missing-view'
 
 const RenderError = ({ config, response, missing }) => {
   // render custom error or default if custom error not declared
@@ -11,7 +10,7 @@ const RenderError = ({ config, response, missing }) => {
     DefaultError
   // render missing component only in DEV
   if (__DEV__ && missing) {
-    ErrorView = MissingView
+    ErrorView = require('./components/missing-view')
     response = {
       message: 'Missing component'
     }
