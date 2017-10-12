@@ -1,11 +1,10 @@
 import idx from 'idx'
 import HTTPStatus from 'http-status'
-import isArray from 'lodash/isArray'
-import isEmpty from 'lodash/isEmpty'
+import isEmpty from 'lodash.isempty'
 
 export default (response, route) => {
   // WP returns single objects or arrays
-  const arrayResp = isArray(response)
+  const arrayResp = Array.isArray(response)
   const routes = idx(route, _ => _.config.routes)
   let routeConfig = routes ? routes.filter(item => item.path === route.path) : null
   // 1: is it a falsey value

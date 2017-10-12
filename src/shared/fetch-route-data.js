@@ -1,8 +1,7 @@
 import idx from 'idx'
 import mitt from 'mitt'
-import isArray from 'lodash/isArray'
-import isPlainObject from 'lodash/isPlainObject'
-import isFunction from 'lodash/isFunction'
+import isPlainObject from 'lodash.isplainobject'
+import isFunction from 'lodash.isfunction'
 import fetcher from './fetcher'
 
 mitt()
@@ -78,7 +77,7 @@ export default ({
   }
   // handle endpoint configurations
   // can be one of Array, Object, String
-  if (isArray(loadFrom)) {
+  if (Array.isArray(loadFrom)) {
     // map out all endpoints in array, fetch each endpoint
     // wait for all to resolve then handle response
     const endpoints = loadFrom.map(
