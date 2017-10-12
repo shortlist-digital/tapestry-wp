@@ -10,7 +10,7 @@ const RenderError = ({ config, response, missing }) => {
     DefaultError
   // render missing component only in DEV
   if (__DEV__ && missing) {
-    ErrorView = require('./components/missing-view')
+    ErrorView = require('./components/missing-view').default
     response = {
       message: 'Missing component'
     }
