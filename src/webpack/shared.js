@@ -13,7 +13,7 @@ module.exports = (babelrc) => ({
         plugins: [
           'transform-object-rest-spread',
           'syntax-dynamic-import',
-          'idx'
+          'babel-plugin-idx'
         ]
       }
     }]
