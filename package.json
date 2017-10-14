@@ -71,7 +71,7 @@
     "idx": "^1.5.0",
     "inert": "^4.2.0",
     "isomorphic-fetch": "^2.2.1",
-    "joi": "^10.4.1",
+    "joi": "^11.4.0",
     "location-origin": "^1.1.4",
     "lodash": "^4.17.4",
     "lodash.startswith": "^4.2.1",
