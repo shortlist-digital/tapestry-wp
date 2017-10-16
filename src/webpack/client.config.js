@@ -9,6 +9,7 @@ const sharedModules = require('./shared')
 module.exports = ({ cwd, env, babelrc }) => {
   // expose environment to user
   const __DEV__ = env === 'development'
+  const __SERVER__ = false
   const config = {
     // target the browser as runtime
     target: 'web',
@@ -34,7 +35,7 @@ module.exports = ({ cwd, env, babelrc }) => {
     module: sharedModules(babelrc),
     plugins: [
       // expose environment to user
-      new webpack.DefinePlugin({ __DEV__ }),
+      new webpack.DefinePlugin({ __DEV__, __SERVER__ }),
       // output public path data for each bundle
       new AssetsPlugin({
         filename: 'assets.json',
@@ -45,6 +46,10 @@ module.exports = ({ cwd, env, babelrc }) => {
       new CleanPlugin(['_scripts'], {
         root: cwd,
         verbose: false
+      }),
+      // output chunk stats (path is relative to output path)
+      new StatsPlugin('../.tapestry/stats.json', {
+        chunkModules: true
       })
     ]
   }
@@ -55,13 +60,6 @@ module.exports = ({ cwd, env, babelrc }) => {
       'core-js/modules/es6.symbol', // added this polyfill here
       config.entry.bundle
     ]
-    // config.plugins already defined so lets push any extras
-    config.plugins.push(
-      // output chunk stats (path is relative to output path)
-      new StatsPlugin('../.tapestry/stats.json', {
-        chunkModules: true
-      })
-    )
   }
 
   // production specific config
