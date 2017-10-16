@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import { match } from 'react-router'
 import HTTPStatus from 'http-status'
-import isFunction from 'lodash/isFunction'
+import isFunction from 'lodash.isfunction'
 
 import RouteWrapper from '../shared/route-wrapper'
 import { log } from '../utilities/logger'
