@@ -7,7 +7,7 @@ module.exports = (babelrc) => ({
       options: babelrc || {
         cacheDirectory: true,
         presets: [
-          'es2015',
+          'env',
           'react'
         ],
         plugins: [

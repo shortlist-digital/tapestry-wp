@@ -13,6 +13,7 @@ process.noDeprecation = true
 module.exports = ({ cwd, env, babelrc }) => {
   // expose environment to user
   const __DEV__ = env === 'development'
+  const __SERVER__ = true
   // return webpack config
   let serverConfig = {
     // target node as runtime
@@ -49,7 +50,7 @@ module.exports = ({ cwd, env, babelrc }) => {
     ],
     plugins: [
       // expose environment to user
-      new webpack.DefinePlugin({ __DEV__ }),
+      new webpack.DefinePlugin({ __DEV__, __SERVER__ }),
       new webpack.BannerPlugin({
         banner: 'require("source-map-support").install();',
         raw: true,
