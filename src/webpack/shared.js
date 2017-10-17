@@ -17,5 +17,8 @@ module.exports = (babelrc) => ({
         ]
       }
     }]
+  }, {
+    test: /\.(jpe?g|png|gif|svg|woff|woff2)$/,
+    use: [{ loader: 'file-loader' }]
   }]
 })

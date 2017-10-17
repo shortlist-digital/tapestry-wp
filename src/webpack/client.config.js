@@ -1,8 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
 const CleanPlugin = require('clean-webpack-plugin')
-const AssetsPlugin = require('assets-webpack-plugin')
 const StatsPlugin = require('stats-webpack-plugin')
+const AssetsManifest = require('webpack-assets-manifest')
 const sharedModules = require('./shared')
 
 // exporting function to allow process.cwd() and environment to get passed through
@@ -37,10 +37,9 @@ module.exports = ({ cwd, env, babelrc }) => {
       // expose environment to user
       new webpack.DefinePlugin({ __DEV__, __SERVER__ }),
       // output public path data for each bundle
-      new AssetsPlugin({
-        filename: 'assets.json',
-        path: path.resolve(cwd, '.tapestry'),
-        prettyPrint: true
+      new AssetsManifest({
+        output: '../.tapestry/manifest.json',
+        fileExtRegex: /\.(jpe?g|png|gif|svg|woff|woff2)$/
       }),
       // remove output directory before saving new bundle
       new CleanPlugin(['_scripts'], {
