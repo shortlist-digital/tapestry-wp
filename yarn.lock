@@ -3840,9 +3840,17 @@ joi@10.x.x:
     items "2.x.x"
     topo "2.x.x"
 
-joi@^11.1.0, joi@^11.3.4:
+joi@^11.1.0:
   version "11.3.4"
   resolved "https://registry.yarnpkg.com/joi/-/joi-11.3.4.tgz#c25fc2598c3847865f92c51b5249b519af3e51cb"
+  dependencies:
+    hoek "4.x.x"
+    isemail "3.x.x"
+    topo "2.x.x"
+
+joi@^12.0.0:
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-12.0.0.tgz#46f55e68f4d9628f01bbb695902c8b307ad8d33a"
   dependencies:
     hoek "4.x.x"
     isemail "3.x.x"
