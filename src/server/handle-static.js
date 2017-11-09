@@ -20,14 +20,14 @@ export default ({ server }) => {
   })
 
   // Static folders
-  const staticPaths = ['_scripts', 'public']
+  const staticPaths = ['_assets', 'public']
 
   staticPaths.map(path => {
     server.route({
       method: 'GET',
       path: `/${path}/{param*}`,
       config: {
-        cache: path === '_scripts' && cacheConfig
+        cache: path === '_assets' && cacheConfig
       },
       handler: {
         directory: {

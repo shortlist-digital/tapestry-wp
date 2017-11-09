@@ -18,12 +18,12 @@ module.exports = ({ cwd, env, babelrc }) => {
     entry: {
       bundle: 'tapestry-wp/src/client/index.js'
     },
-    // output bundle to _scripts, no caching required in dev mode so bundle.js is sufficient
+    // output bundle to _assets, no caching required in dev mode so bundle.js is sufficient
     output: {
-      path: path.resolve(cwd, '_scripts'),
+      path: path.resolve(cwd, '_assets'),
       sourceMapFilename: '[name].map',
       filename: '[name].js',
-      publicPath: '/_scripts/'
+      publicPath: '/_assets/'
     },
     // when tapestry config is called from webpack.entry.js, resolve from the root of cwd
     resolve: {
@@ -43,7 +43,7 @@ module.exports = ({ cwd, env, babelrc }) => {
         prettyPrint: true
       }),
       // remove output directory before saving new bundle
-      new CleanPlugin(['_scripts'], {
+      new CleanPlugin(['_assets'], {
         root: cwd,
         verbose: false
       }),

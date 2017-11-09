@@ -17,5 +17,13 @@ module.exports = (babelrc) => ({
         ]
       }
     }]
+  }, {
+    test: /\.(css|jpe?g|png|svg|ico|woff(2)?)$/,
+    use: [{
+      loader: 'file-loader',
+      options: {
+        publicPath: '/_assets/'
+      }
+    }]
   }]
 })

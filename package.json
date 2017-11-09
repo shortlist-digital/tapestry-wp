@@ -61,6 +61,7 @@
     "core-js": "^2.5.0",
     "create-react-class": "^15.6.0",
     "es6-promise": "^4.1.0",
+    "file-loader": "^1.1.5",
     "fs-extra": "^4.0",
     "glamor": "2.20.25",
     "glob-fs": "^0.1.6",
