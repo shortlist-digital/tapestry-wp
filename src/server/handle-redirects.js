@@ -4,14 +4,9 @@ import fetcher from '../shared/fetcher'
 import { log } from '../utilities/logger'
 
 const setRedirects = (server, redirects) => {
-  server.ext('onPostHandler', (request, reply) => {
-    const status = reply.request.response.statusCode
-    if (
-      (status === 404)
-      && redirects
-      // Tapestry only handles lowercase URLs
-      && (typeof redirects[request.url.pathname.toLowerCase()] !== "undefined")
-    ) {
+  server.ext('onPreHandler', (request, reply) => {
+    if (typeof redirects[request.url.pathname.toLowerCase()] !== "undefined")
+    {
       return reply
         .redirect(`${redirects[request.url.pathname]}${request.url.search}`)
         .permanent()
