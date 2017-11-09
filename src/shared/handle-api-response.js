@@ -1,6 +1,12 @@
 import idx from 'idx'
 import HTTPStatus from 'http-status'
-import isEmpty from 'lodash.isempty'
+
+const isEmpty = value => (
+  value === undefined ||
+  value === null ||
+  (typeof value === 'object' && Object.keys(value).length === 0) ||
+  (typeof value === 'string' && value.trim().length === 0)
+)
 
 export default (response, route) => {
   // WP returns single objects or arrays

@@ -1,9 +1,12 @@
 import React from 'react'
 import { hydrate } from 'react-dom'
 import { match, browserHistory } from 'react-router'
+import 'core-js/es6/map'
+import 'core-js/es6/set'
 import mitt from 'mitt'
 import 'location-origin'
-import 'es6-promise/auto'
+// import 'es6-promise/auto'
+import 'promis'
 
 import AsyncProps from '../shared/third-party/async-props'
 import RouteWrapper from '../shared/route-wrapper'
