@@ -1,3 +1,4 @@
+import chalk from 'chalk'
 import fs from 'fs'
 import path from 'path'
 import fetcher from '../shared/fetcher'
@@ -7,6 +8,9 @@ const setRedirects = (server, redirects) => {
   server.ext('onPreHandler', (request, reply) => {
     if (typeof redirects[request.url.pathname.toLowerCase()] !== "undefined")
     {
+      log.debug(
+        `Redirect handled for ${chalk.green(request.url.pathname)} to ${chalk.green(redirects[request.url.pathname])}`
+      )
       return reply
         .redirect(`${redirects[request.url.pathname]}${request.url.search}`)
         .permanent()
