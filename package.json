@@ -108,7 +108,7 @@
     "mocha": "^4.0.1",
     "nock": "^9.0.11",
     "pre-commit": "^1.2.2",
-    "react": "~16.0.0",
+    "react": "~16.1.0",
     "react-dom": "~16.0.0",
     "react-addons-test-utils": "^15.4.2",
     "request": "^2.81.0",
