@@ -57,7 +57,9 @@ module.exports = ({ cwd, env, babelrc }) => {
   // development specific config
   if (env === 'development') {
     config.entry.bundle = [
-      'core-js/modules/es6.symbol', // added this polyfill here
+      'core-js/es6/symbol',
+      'core-js/es6/map',
+      'core-js/es6/set',
       config.entry.bundle
     ]
   }
@@ -71,7 +73,9 @@ module.exports = ({ cwd, env, babelrc }) => {
     // non-changing vendor packages to combine in a vendor bundle
     // react-helmet/glamor aren't required by Tapestry on the client, but they're very likely be put to use by the user so including it in the vendor file
     config.entry.vendor = [
-      'core-js/modules/es6.symbol',
+      'core-js/es6/symbol',
+      'core-js/es6/map',
+      'core-js/es6/set',
       'glamor',
       'react-dom',
       'react-helmet',
