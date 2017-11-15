@@ -31,6 +31,8 @@ export default ({ server, config }) => {
   if (fs.existsSync(redirectsFile)) {
     const redirectsFromFile = JSON.parse(fs.readFileSync(redirectsFile, 'utf8'))
     setRedirects(server, Object.assign({}, redirects, redirectsFromFile))
+  } else {
+    setRedirects(server, redirects)
   }
 
   if (config.redirectsEndpoint) {
