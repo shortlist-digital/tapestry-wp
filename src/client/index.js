@@ -12,6 +12,8 @@ import config from 'tapestry.config.js'
 import { AppContainer } from 'react-hot-loader'
 import Root from './root'
 
+import normaliseUrlPath from '../utilities/normalise-url-path'
+
 if (window !== 'undefined') {
   window.tapestryEmitter = mitt()
 }
@@ -29,7 +31,9 @@ const renderApp = config => {
 
 
   // run a router match (not sure why this is necessary)
-  match({ routes, history }, (error, redirectLocation, renderProps) =>
+  match({
+    routes, history, location: normaliseUrlPath(window.location.pathname)
+  }, (error, redirectLocation, renderProps) =>
     render(
       <AppContainer key={Math.random()}>
         <Root
