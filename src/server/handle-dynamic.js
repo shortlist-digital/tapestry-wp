@@ -113,7 +113,6 @@ export default ({ server, config, assets }) => {
             if (!isPreview) {
               log.debug(`Cache set ${chalk.green(cacheKey)} in html`)
               cache.set(cacheKey, html)
-              log.silly(cache.keys())
             }
           }
         })
