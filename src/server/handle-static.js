@@ -7,18 +7,6 @@ export default ({ server }) => {
     expiresIn: parseInt(process.env.STATIC_CACHE_CONTROL_MAX_AGE, 10) || 0
   }
 
-  // Default favicon redirect
-  server.route({
-    method: 'GET',
-    path: '/favicon.ico',
-    handler: (request, reply) => {
-      reply
-        .redirect('/public/favicon.ico')
-        .permanent()
-        .rewritable(false)
-    }
-  })
-
   // Static folders
   const staticPaths = ['_assets', 'public']
 

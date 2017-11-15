@@ -38,7 +38,6 @@ const AFAR = (url, serverReplyObject, cacheKey = false) => {
         log.debug(`Cache set ${chalk.green(cacheKey)} in api`)
         log.silly(`Cache set for ${cacheKey}`)
         cache.set(cacheKey, { response: resp })
-        log.silly(cache.keys())
       }
     })
     .catch(error => {
