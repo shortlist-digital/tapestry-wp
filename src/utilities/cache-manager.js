@@ -7,15 +7,7 @@ let internalCaches = []
 let instance = null
 let cacheConfig
 
-export const stripLeadingTrailingSlashes = path => {
-  if (path !== '/') {
-    return path.replace(/^\/+|\/+$/g, '')
-  }
-  return path
-}
-
 export default class CacheManager {
-
 
   constructor() {
     if (instance) {

@@ -8,7 +8,9 @@ import RouteWrapper from '../shared/route-wrapper'
 import handleApiResponse from '../shared/handle-api-response'
 import renderHtml from './render'
 import { log } from '../utilities/logger'
-import CacheManager, { stripLeadingTrailingSlashes } from '../utilities/cache-manager'
+import CacheManager from '../utilities/cache-manager'
+import normaliseUrlPath from '../utilities/normalise-url-path'
+
 let cacheManager = new CacheManager()
 
 export default ({ server, config, assets }) => {
@@ -30,7 +32,7 @@ export default ({ server, config, assets }) => {
       const isPreview = idx(request, _ => _.query.tapestry_hash)
       match({
         routes: RouteWrapper(config),
-        location: request.url.path
+        location: normaliseUrlPath(request.url.path)
       }, (err, redirectLocation, renderProps) => {
 
         // 500 if error from Router
@@ -75,7 +77,7 @@ export default ({ server, config, assets }) => {
             response.code :
             HTTPStatus.OK
 
-          const cacheKey = stripLeadingTrailingSlashes(request.url.pathname)
+          const cacheKey = normaliseUrlPath(request.url.pathname)
 
           // Find HTML based on path - might be undefined
           const cachedHTML = await cache.get(cacheKey)
