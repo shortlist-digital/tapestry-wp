@@ -1,7 +1,7 @@
 import idx from 'idx'
 import mitt from 'mitt'
 import isPlainObject from 'lodash.isplainobject'
-import isFunction from 'lodash.isfunction'
+import resolvePaths from '../utilities/resolve-paths'
 import fetcher from './fetcher'
 
 mitt()
@@ -71,44 +71,37 @@ export default ({
   } else {
     emitEvent('dataStart')
   }
-  // resolve function if required
-  if (isFunction(loadFrom)) {
-    loadFrom = loadFrom(params)
-  }
+  // fetch each endpoint
+  const endpoint = resolvePaths({
+    paths: loadFrom,
+    params,
+    cb: fetchJSON
+  })
   // handle endpoint configurations
   // can be one of Array, Object, String
-  if (Array.isArray(loadFrom)) {
-    // map out all endpoints in array, fetch each endpoint
+  if (Array.isArray(endpoint.paths)) {
+    // save reference of API request
+    fetchRequests.push(endpoint.result)
     // wait for all to resolve then handle response
-    const endpoints = loadFrom.map(
-      endpoint => fetchJSON(endpoint)
-    )
-    // save reference of API request
-    fetchRequests.push(endpoints)
     return Promise
-      .all(endpoints)
-      .then(resp => handleResolve(endpoints, resp, cb))
+      .all(endpoint.result)
+      .then(resp => handleResolve(endpoint.result, resp, cb))
       .catch(err => handleReject(err, cb))
-  } else if (isPlainObject(loadFrom)) {
-    // map out endpoints by object keys, fetch each endpoint
-    // wait for all to resolve then update response to original object schema (Promise.all() will return an ordered array so we can map back onto the object correctly)
-    const endpoints = Object.keys(loadFrom).map(
-      i => fetchJSON(loadFrom[i])
-    )
+  } else if (isPlainObject(endpoint.paths)) {
     // save reference of API request
-    fetchRequests.push(endpoints)
+    fetchRequests.push(endpoint.result)
+    // wait for all to resolve then update response to original object schema (Promise.all() will return an ordered array so we can map back onto the object correctly)
     return Promise
-      .all(endpoints)
-      .then(resp => mapArrayToObject(resp, loadFrom))
-      .then(resp => handleResolve(endpoints, resp, cb))
+      .all(endpoint.result)
+      .then(resp => mapArrayToObject(resp, endpoint.paths))
+      .then(resp => handleResolve(endpoint.result, resp, cb))
       .catch(err => handleReject(err, cb))
   } else {
     // save reference of API request
-    fetchRequests.push(loadFrom)
-    // handle endpoint as a function
-    // then fetch single endpoint and handle response
-    return fetchJSON(loadFrom)
-      .then(resp => handleResolve(loadFrom, resp, cb))
+    fetchRequests.push(endpoint.paths)
+    // handle response
+    return endpoint.result
+      .then(resp => handleResolve(endpoint.paths, resp, cb))
       .catch(err => handleReject(err, cb))
   }
 }
