@@ -29,7 +29,7 @@ describe('Handling cache purges', () => {
       component: () => <p>Custom endpoint</p>
     }, {
       path: 'multiple-endpoint',
-      endpoint: 'pages',
+      endpoint: ['pages', 'pages?slug=test'],
       component: () => <p>Multi endpoint</p>
     }],
     siteUrl: 'http://dummy.api'

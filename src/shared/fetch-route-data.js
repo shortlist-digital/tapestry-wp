@@ -77,31 +77,25 @@ export default ({
     params,
     cb: fetchJSON
   })
+
+  // save reference of API request
+  fetchRequests.push(endpoint.paths)
+
+  const isArray = Array.isArray(endpoint.paths)
+  const isObject = isPlainObject(endpoint.paths)
+
   // handle endpoint configurations
   // can be one of Array, Object, String
-  if (Array.isArray(endpoint.paths)) {
-    // save reference of API request
-    fetchRequests.push(endpoint.result)
-    // wait for all to resolve then handle response
-    return Promise
-      .all(endpoint.result)
-      .then(resp => handleResolve(endpoint.result, resp, cb))
-      .catch(err => handleReject(err, cb))
-  } else if (isPlainObject(endpoint.paths)) {
-    // save reference of API request
-    fetchRequests.push(endpoint.result)
-    // wait for all to resolve then update response to original object schema (Promise.all() will return an ordered array so we can map back onto the object correctly)
-    return Promise
-      .all(endpoint.result)
-      .then(resp => mapArrayToObject(resp, endpoint.paths))
-      .then(resp => handleResolve(endpoint.result, resp, cb))
-      .catch(err => handleReject(err, cb))
-  } else {
-    // save reference of API request
-    fetchRequests.push(endpoint.paths)
-    // handle response
-    return endpoint.result
-      .then(resp => handleResolve(endpoint.paths, resp, cb))
-      .catch(err => handleReject(err, cb))
-  }
+  const result = (isArray || isObject)
+    ? Promise.all(endpoint.result)
+    : endpoint.result
+  // wait for all to resolve
+  return result
+    .then(resp => {
+      // update response to original object schema (Promise.all() will return an ordered array so we can map back onto the object correctly)
+      if (isObject) return mapArrayToObject(resp, endpoint.paths)
+      else return resp
+    })
+    .then(resp => handleResolve(endpoint.paths, resp, cb))
+    .catch(err => handleReject(err, cb))
 }
