@@ -11,10 +11,9 @@ import resolvePaths from '../utilities/resolve-paths'
 const cacheManager = new CacheManager()
 const purgePath = process.env.SECRET_PURGE_PATH || 'purge'
 
-const clearCacheItem = ({ path, endpoint }) => {
-  log.debug(`Purge path ${chalk.green(path)} mapped to ${chalk.green(endpoint)}`)
-  cacheManager.clearCache('api', endpoint)
-  cacheManager.clearCache('html', path)
+const clearCacheItem = ({ path, cache }) => {
+  log.debug(`Purged path ${chalk.green(path)} from ${chalk.green(cache.toUpperCase())}`)
+  cacheManager.clearCache(cache, path)
 }
 
 export default ({ server, config }) => {
@@ -39,8 +38,10 @@ export default ({ server, config }) => {
         resolvePaths({
           paths: renderProps.components[1].endpoint,
           params: renderProps.params,
-          cb: endpoint => clearCacheItem({ endpoint, path })
+          cb: endpoint => clearCacheItem({ path: endpoint, cache: 'api' })
         })
+
+        clearCacheItem({ path, cache: 'html'})
 
         reply({ status: `Purged ${path}` }, HTTPStatus.OK)
       })
