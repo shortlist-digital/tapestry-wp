@@ -1,4 +1,5 @@
 import React from 'react'
+import Helmet from 'react-helmet'
 import { expect } from 'chai'
 import request from 'request'
 import nock from 'nock'
@@ -21,7 +22,32 @@ describe('Document contents', () => {
       path: 'custom-document',
       component: () => <p>Custom HTML</p>,
       options: {
-        document: () => `testing-document`
+        document: () => 'testing-document'
+      }
+    }, {
+      path: 'custom-document/with-data',
+      endpoint: 'posts',
+      component: () => (
+        <div>
+          <Helmet>
+            <title>Custom Title</title>
+          </Helmet>
+          <p className={css({ fontSize: '13px' })}>Custom HTML</p>
+        </div>
+      ),
+      options: {
+        document: ({ html, css, head, props }) => (
+          <html>
+            <head>
+              { head.title.toComponent() }
+              <style dangerouslySetInnerHTML={{ __html: css }} />
+            </head>
+            <body>
+              <div dangerouslySetInnerHTML={{ __html: html }} />
+              <script dangerouslySetInnerHTML={{ __html: `const test = ${JSON.stringify(props)}` }} />
+            </body>
+          </html>
+        )
       }
     }],
     siteUrl: 'http://dummy.api'
@@ -65,6 +91,16 @@ describe('Document contents', () => {
   it('Uses custom document if available', (done) => {
     request.get(`${uri}/custom-document`, (err, res, body) => {
       expect(body).to.contain('testing-document')
+      done()
+    })
+  })
+
+  it('Passes correct data to custom document', (done) => {
+    request.get(`${uri}/custom-document/with-data`, (err, res, body) => {
+      expect(body).to.contain('Custom Title')
+      expect(body).to.contain('Custom HTML')
+      expect(body).to.contain(`const test = [{"data":${JSON.stringify(dataPosts.data)}}]`)
+      expect(body).to.contain('{font-size:13px;}')
       done()
     })
   })

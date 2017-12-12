@@ -11,34 +11,36 @@ export default ({
   response,
   renderProps = false,
   loadContext,
-  asyncProps,
-  assets
+  asyncProps = {},
+  assets = {}
 }) => {
 
   let Document = (
     idx(renderProps, _ => _.components[1].options.document) ||
-    require('./default-html').default
+    require('./default-document').default
+  )
+  const body = renderProps ? (
+    <AsyncProps
+      {...renderProps}
+      {...asyncProps}
+      loadContext={loadContext}
+    />
+  ) : (
+    <RenderError
+      response={response}
+      config={loadContext}
+    />
   )
 
-  // get html from props
+  const { html, css, ids } = renderStaticOptimized(() => renderToString(body))
+
   const data = {
-    markup: renderStaticOptimized(() =>
-      renderToString(
-        renderProps ?
-          <AsyncProps
-            {...renderProps}
-            {...asyncProps}
-            loadContext={loadContext}
-          /> :
-          <RenderError
-            response={response}
-            config={loadContext}
-          />
-      )
-    ),
+    html,
+    css,
+    ids,
     head: Helmet.rewind(),
     assets,
-    asyncProps
+    props: asyncProps.propsArray
   }
 
   // render html with data
