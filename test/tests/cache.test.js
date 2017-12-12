@@ -27,18 +27,23 @@ describe('Handling cache purges', () => {
       path: 'dynamic-string-endpoint/:custom',
       endpoint: (params) => `pages?slug=${params.custom}`,
       component: () => <p>Custom endpoint</p>
+    }, {
+      path: 'multiple-endpoint',
+      endpoint: ['pages', 'pages?slug=test'],
+      component: () => <p>Multi endpoint</p>
     }],
     siteUrl: 'http://dummy.api'
   }
   const cacheManager = new CacheManager()
 
-  before(done => {
+  beforeEach(done => {
     // mock api response
     nock('http://dummy.api')
       .get('/wp-json/wp/v2/pages')
-      .times(2)
+      .times(4)
       .reply(200, dataPages.data)
       .get('/wp-json/wp/v2/pages?slug=test')
+      .times(4)
       .reply(200, dataPage)
     // boot tapestry server
     tapestry = bootServer(config)
@@ -48,7 +53,7 @@ describe('Handling cache purges', () => {
     })
   })
 
-  after(() => tapestry.server.stop())
+  afterEach(() => tapestry.server.stop())
 
   it('String endpoint is purgeable', (done) => {
     const route = 'string-endpoint'
@@ -82,6 +87,27 @@ describe('Handling cache purges', () => {
         expect(body).to.contain(JSON.stringify(purgeResp))
         expect(res.statusCode).to.equal(200)
         const result = await cacheApi.get('pages?slug=test')
+        expect(result).to.not.exist
+        done()
+      })
+    })
+  })
+
+  it('Multi array endpoint is purgeable', (done) => {
+    const route = `multiple-endpoint`
+    const purgeResp = { status: `Purged ${route}` }
+
+    request.get(`${uri}/${route}`, (err, res, body) => {
+      expect(body).to.contain('Multi endpoint')
+      expect(res.statusCode).to.equal(200)
+
+      request.get(`${uri}/purge/${route}`, async (err, res, body) => {
+        const cacheApi = cacheManager.getCache('api')
+        expect(body).to.contain(JSON.stringify(purgeResp))
+        expect(res.statusCode).to.equal(200)
+        let result = await cacheApi.get('testing')
+        expect(result).to.not.exist
+        result = await cacheApi.get('pages')
         expect(result).to.not.exist
         done()
       })

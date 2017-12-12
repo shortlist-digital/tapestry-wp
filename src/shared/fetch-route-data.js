@@ -1,7 +1,7 @@
 import idx from 'idx'
 import mitt from 'mitt'
 import isPlainObject from 'lodash.isplainobject'
-import isFunction from 'lodash.isfunction'
+import resolvePaths from '../utilities/resolve-paths'
 import fetcher from './fetcher'
 
 mitt()
@@ -71,44 +71,31 @@ export default ({
   } else {
     emitEvent('dataStart')
   }
-  // resolve function if required
-  if (isFunction(loadFrom)) {
-    loadFrom = loadFrom(params)
-  }
+  // fetch each endpoint
+  const endpoint = resolvePaths({
+    paths: loadFrom,
+    params,
+    cb: fetchJSON
+  })
+
+  // save reference of API request
+  fetchRequests.push(endpoint.paths)
+
+  const isArray = Array.isArray(endpoint.paths)
+  const isObject = isPlainObject(endpoint.paths)
+
   // handle endpoint configurations
   // can be one of Array, Object, String
-  if (Array.isArray(loadFrom)) {
-    // map out all endpoints in array, fetch each endpoint
-    // wait for all to resolve then handle response
-    const endpoints = loadFrom.map(
-      endpoint => fetchJSON(endpoint)
-    )
-    // save reference of API request
-    fetchRequests.push(endpoints)
-    return Promise
-      .all(endpoints)
-      .then(resp => handleResolve(endpoints, resp, cb))
-      .catch(err => handleReject(err, cb))
-  } else if (isPlainObject(loadFrom)) {
-    // map out endpoints by object keys, fetch each endpoint
-    // wait for all to resolve then update response to original object schema (Promise.all() will return an ordered array so we can map back onto the object correctly)
-    const endpoints = Object.keys(loadFrom).map(
-      i => fetchJSON(loadFrom[i])
-    )
-    // save reference of API request
-    fetchRequests.push(endpoints)
-    return Promise
-      .all(endpoints)
-      .then(resp => mapArrayToObject(resp, loadFrom))
-      .then(resp => handleResolve(endpoints, resp, cb))
-      .catch(err => handleReject(err, cb))
-  } else {
-    // save reference of API request
-    fetchRequests.push(loadFrom)
-    // handle endpoint as a function
-    // then fetch single endpoint and handle response
-    return fetchJSON(loadFrom)
-      .then(resp => handleResolve(loadFrom, resp, cb))
-      .catch(err => handleReject(err, cb))
-  }
+  const result = (isArray || isObject)
+    ? Promise.all(endpoint.result)
+    : endpoint.result
+  // wait for all to resolve
+  return result
+    .then(resp => {
+      // update response to original object schema (Promise.all() will return an ordered array so we can map back onto the object correctly)
+      if (isObject) return mapArrayToObject(resp, endpoint.paths)
+      else return resp
+    })
+    .then(resp => handleResolve(endpoint.paths, resp, cb))
+    .catch(err => handleReject(err, cb))
 }
