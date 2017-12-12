@@ -16,7 +16,7 @@ export default ({
 }) => {
 
   let Document = (
-    idx(renderProps, _ => _.components[1].options.document) ||
+    idx(renderProps, _ => _.components[1].options.customDocument) ||
     require('./default-document').default
   )
   const body = renderProps ? (
@@ -40,7 +40,7 @@ export default ({
     ids,
     head: Helmet.rewind(),
     assets,
-    props: asyncProps.propsArray
+    asyncProps: asyncProps.propsArray
   }
 
   // render html with data

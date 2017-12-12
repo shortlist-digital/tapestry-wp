@@ -15,7 +15,7 @@ const escapeScriptTags = (data) => {
     .replace(/\u2029/g, "\\u2029")
 }
 
-const DefaultDocument = ({ html, css, head, props, assets }) => {
+const DefaultDocument = ({ html, css, head, asyncProps, assets }) => {
   const attr = head.htmlAttributes.toComponent()
   return (
     <html lang="en" {...attr}>
@@ -33,13 +33,14 @@ const DefaultDocument = ({ html, css, head, props, assets }) => {
       <body>
         <div id="root" dangerouslySetInnerHTML={{ __html: html }} />
         {
-          props &&
-          <script
-            type="text/javascript"
-            dangerouslySetInnerHTML={{
-              __html: `window.__ASYNC_PROPS__ = ${escapeScriptTags(props)}`
-            }}
-          />
+          asyncProps && (
+            <script
+              type="text/javascript"
+              dangerouslySetInnerHTML={{
+                __html: `window.__ASYNC_PROPS__ = ${escapeScriptTags(asyncProps)}`
+              }}
+            />
+          )
         }
       </body>
     </html>

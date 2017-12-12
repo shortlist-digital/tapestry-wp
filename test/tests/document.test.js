@@ -22,7 +22,7 @@ describe('Document contents', () => {
       path: 'custom-document',
       component: () => <p>Custom HTML</p>,
       options: {
-        document: () => 'testing-document'
+        customDocument: () => 'testing-document'
       }
     }, {
       path: 'custom-document/with-data',
@@ -36,7 +36,7 @@ describe('Document contents', () => {
         </div>
       ),
       options: {
-        document: ({ html, css, head, props }) => (
+        customDocument: ({ html, css, head, asyncProps }) => (
           <html>
             <head>
               { head.title.toComponent() }
@@ -44,7 +44,7 @@ describe('Document contents', () => {
             </head>
             <body>
               <div dangerouslySetInnerHTML={{ __html: html }} />
-              <script dangerouslySetInnerHTML={{ __html: `const test = ${JSON.stringify(props)}` }} />
+              <script dangerouslySetInnerHTML={{ __html: `const test = ${JSON.stringify(asyncProps)}` }} />
             </body>
           </html>
         )

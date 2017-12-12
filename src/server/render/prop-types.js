@@ -5,6 +5,6 @@ export default {
   ids: PropTypes.array.isRequired,
   css: PropTypes.string.isRequired,
   head: PropTypes.object.isRequired,
-  props: PropTypes.array,
+  asyncProps: PropTypes.array,
   assets: PropTypes.object
 }
