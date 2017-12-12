@@ -8,22 +8,29 @@ import { bootServer } from '../utils'
 import dataPosts from '../mocks/posts.json'
 
 
-describe('Not sure what these tests should be defined as', () => {
+describe('Document contents', () => {
 
   let tapestry = null
   let uri = null
   let config = {
-    components: {
-      FrontPage: () =>
-        <p className={css({ color: '#639' })}>Hello</p>
-    },
+    routes: [{
+      path: '/',
+      endpoint: 'posts',
+      component: () => <p className={css({ color: '#639' })}>Hello</p>
+    }, {
+      path: 'custom-document',
+      component: () => <p>Custom HTML</p>,
+      options: {
+        document: () => `testing-document`
+      }
+    }],
     siteUrl: 'http://dummy.api'
   }
 
-  before(done => {
+  beforeEach(done => {
     // mock api response
     nock('http://dummy.api')
-      .get('/wp-json/wp/v2/posts?_embed')
+      .get('/wp-json/wp/v2/posts')
       .times(5)
       .reply(200, dataPosts.data)
     // boot tapestry server
@@ -34,9 +41,9 @@ describe('Not sure what these tests should be defined as', () => {
     })
   })
 
-  after(() => tapestry.server.stop())
+  afterEach(() => tapestry.server.stop())
 
-  it('AsyncProps defined correctly', (done) => {
+  it('Contains correct AsyncProps data', (done) => {
     request.get(uri, (err, res, body) => {
       expect(body).to.contain(`window.__ASYNC_PROPS__ = [{"data":${
         JSON.stringify(dataPosts.data)
@@ -48,9 +55,16 @@ describe('Not sure what these tests should be defined as', () => {
     })
   })
 
-  it('Glamor CSS works', (done) => {
+  it('Contains Glamor styles', (done) => {
     request.get(uri, (err, res, body) => {
-      expect(body).to.contain('#639')
+      expect(body).to.contain('{color:#639;}')
+      done()
+    })
+  })
+
+  it('Uses custom document if available', (done) => {
+    request.get(`${uri}/custom-document`, (err, res, body) => {
+      expect(body).to.contain('testing-document')
       done()
     })
   })
