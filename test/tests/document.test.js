@@ -88,6 +88,13 @@ describe('Document contents', () => {
     })
   })
 
+  it('Uses default document if no custom document used', (done) => {
+    request.get(uri, (err, res, body) => {
+      expect(body).to.contain('<link rel="shortcut icon" href="/public/favicon.ico"/>')
+      done()
+    })
+  })
+
   it('Uses custom document if available', (done) => {
     request.get(`${uri}/custom-document`, (err, res, body) => {
       expect(body).to.contain('testing-document')
