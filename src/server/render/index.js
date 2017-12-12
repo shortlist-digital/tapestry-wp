@@ -1,10 +1,10 @@
 import React from 'react'
+import idx from 'idx'
 import { renderToStaticMarkup, renderToString } from 'react-dom/server'
 import Helmet from 'react-helmet'
 import { renderStaticOptimized } from 'glamor/server'
 
 import AsyncProps from '../../shared/third-party/async-props'
-import DefaultHTML from './default-html'
 import RenderError from '../../shared/render-error'
 
 export default ({
@@ -14,6 +14,11 @@ export default ({
   asyncProps,
   assets
 }) => {
+
+  let Document = (
+    idx(renderProps, _ => _.components[1].options.document) ||
+    require('./default-html').default
+  )
 
   // get html from props
   const data = {
@@ -37,5 +42,5 @@ export default ({
   }
 
   // render html with data
-  return `<!doctype html>${renderToStaticMarkup(<DefaultHTML {...data} />)}`
+  return `<!doctype html>${renderToStaticMarkup(<Document {...data} />)}`
 }

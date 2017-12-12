@@ -19,6 +19,7 @@ describe('Document contents', () => {
       component: () => <p className={css({ color: '#639' })}>Hello</p>
     }, {
       path: 'custom-document',
+      endpoint: 'posts',
       component: () => <p>Custom HTML</p>,
       options: {
         document: () => `testing-document`
