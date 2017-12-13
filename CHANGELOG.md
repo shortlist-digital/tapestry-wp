@@ -1,3 +1,12 @@
+#### 4.0.0
+
+* Custom Document Support
+* Multiple endpoint purging
+* Polyfills for React 16
+* Redirects handler runs at the beginning of a request
+* File loader in webpack for hashing off static assets
+* Housekeeping of files
+
 #### 3.0.0
 
 * Release 🎉
