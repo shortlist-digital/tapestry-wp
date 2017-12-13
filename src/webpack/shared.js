@@ -7,7 +7,7 @@ module.exports = (babelrc) => ({
       options: babelrc || {
         cacheDirectory: true,
         presets: [
-          'es2015',
+          'env',
           'react'
         ],
         plugins: [
@@ -15,6 +15,14 @@ module.exports = (babelrc) => ({
           'syntax-dynamic-import',
           'idx'
         ]
+      }
+    }]
+  }, {
+    test: /\.(css|jpe?g|png|svg|ico|woff(2)?)$/,
+    use: [{
+      loader: 'file-loader',
+      options: {
+        publicPath: '/_assets/'
       }
     }]
   }]

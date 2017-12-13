@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from 'react-dom'
+import { hydrate } from 'react-dom'
 import { match, browserHistory } from 'react-router'
 import mitt from 'mitt'
 import 'location-origin'
@@ -34,7 +34,7 @@ const renderApp = config => {
   match({
     routes, history, location: normaliseUrlPath(window.location.pathname)
   }, (error, redirectLocation, renderProps) =>
-    render(
+    hydrate(
       <AppContainer key={Math.random()}>
         <Root
           renderAsyncProps={renderAsyncProps}

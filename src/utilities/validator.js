@@ -40,7 +40,8 @@ const schema = joi.object({
       ],
       getComponent: joi.func(),
       options: joi.object().keys({
-        allowEmptyResponse: joi.boolean()
+        allowEmptyResponse: joi.boolean(),
+        customDocument: joi.func()
       }),
       path: joi.string().required()
     })

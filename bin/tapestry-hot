@@ -59,7 +59,7 @@ const server = new WebpackDevServer(devCompiler, {
 		colors: true
   },
   hot: true,
-  publicPath: '/_scripts/',
+  publicPath: '/_assets/',
   proxy: {
     '/api/v1/**': {
       target: cmsTarget,
@@ -78,7 +78,7 @@ const server = new WebpackDevServer(devCompiler, {
         res.redirect('/public/favicon.ico')
       }
     })
-    app.get(/^(?!\/api\/|\/public\/|\/_scripts\/).+/, (req, res) => {
+    app.get(/^(?!\/api\/|\/public\/|\/_assets\/).+/, (req, res) => {
       res.sendFile(indexFilePath)
     })
   }

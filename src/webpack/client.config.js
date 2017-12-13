@@ -9,6 +9,7 @@ const sharedModules = require('./shared')
 module.exports = ({ cwd, env, babelrc }) => {
   // expose environment to user
   const __DEV__ = env === 'development'
+  const __SERVER__ = false
   const config = {
     // target the browser as runtime
     target: 'web',
@@ -17,12 +18,12 @@ module.exports = ({ cwd, env, babelrc }) => {
     entry: {
       bundle: 'tapestry-wp/src/client/index.js'
     },
-    // output bundle to _scripts, no caching required in dev mode so bundle.js is sufficient
+    // output bundle to _assets, no caching required in dev mode so bundle.js is sufficient
     output: {
-      path: path.resolve(cwd, '_scripts'),
+      path: path.resolve(cwd, '_assets'),
       sourceMapFilename: '[name].map',
       filename: '[name].js',
-      publicPath: '/_scripts/'
+      publicPath: '/_assets/'
     },
     // when tapestry config is called from webpack.entry.js, resolve from the root of cwd
     resolve: {
@@ -34,7 +35,7 @@ module.exports = ({ cwd, env, babelrc }) => {
     module: sharedModules(babelrc),
     plugins: [
       // expose environment to user
-      new webpack.DefinePlugin({ __DEV__ }),
+      new webpack.DefinePlugin({ __DEV__, __SERVER__ }),
       // output public path data for each bundle
       new AssetsPlugin({
         filename: 'assets.json',
@@ -42,9 +43,13 @@ module.exports = ({ cwd, env, babelrc }) => {
         prettyPrint: true
       }),
       // remove output directory before saving new bundle
-      new CleanPlugin(['_scripts'], {
+      new CleanPlugin(['_assets'], {
         root: cwd,
         verbose: false
+      }),
+      // output chunk stats (path is relative to output path)
+      new StatsPlugin('../.tapestry/stats.json', {
+        chunkModules: true
       })
     ]
   }
@@ -52,16 +57,11 @@ module.exports = ({ cwd, env, babelrc }) => {
   // development specific config
   if (env === 'development') {
     config.entry.bundle = [
-      'core-js/modules/es6.symbol', // added this polyfill here
+      'core-js/es6/map',
+      'core-js/es6/set',
+      'core-js/es6/symbol',
       config.entry.bundle
     ]
-    // config.plugins already defined so lets push any extras
-    config.plugins.push(
-      // output chunk stats (path is relative to output path)
-      new StatsPlugin('../.tapestry/stats.json', {
-        chunkModules: true
-      })
-    )
   }
 
   // production specific config
@@ -73,7 +73,9 @@ module.exports = ({ cwd, env, babelrc }) => {
     // non-changing vendor packages to combine in a vendor bundle
     // react-helmet/glamor aren't required by Tapestry on the client, but they're very likely be put to use by the user so including it in the vendor file
     config.entry.vendor = [
-      'core-js/modules/es6.symbol',
+      'core-js/es6/map',
+      'core-js/es6/set',
+      'core-js/es6/symbol',
       'glamor',
       'react-dom',
       'react-helmet',
