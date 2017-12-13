@@ -1,5 +1,4 @@
 import React from 'react'
-import idx from 'idx'
 import propTypes from './prop-types'
 
 // Add a stringify template helper for outputting JSON with forward
@@ -16,7 +15,7 @@ const escapeScriptTags = (data) => {
     .replace(/\u2029/g, "\\u2029")
 }
 
-const defaultHtml = ({ markup, head, asyncProps, assets = {} }) => {
+const DefaultDocument = ({ html, css, head, asyncProps, assets }) => {
   const attr = head.htmlAttributes.toComponent()
   return (
     <html lang="en" {...attr}>
@@ -28,27 +27,26 @@ const defaultHtml = ({ markup, head, asyncProps, assets = {} }) => {
         { assets.vendor && <script defer src={assets.vendor.js} /> }
         { assets.bundle && <script defer src={assets.bundle.js} /> }
         { head.script.toComponent() }
-        <style dangerouslySetInnerHTML={{ __html: markup.css }} />
+        <style dangerouslySetInnerHTML={{ __html: css }} />
         <link rel="shortcut icon" href="/public/favicon.ico" />
       </head>
       <body>
-        <div id="root" dangerouslySetInnerHTML={{ __html: markup.html }} />
+        <div id="root" dangerouslySetInnerHTML={{ __html: html }} />
         {
-          idx(asyncProps, _ => _.propsArray) &&
-          <script
-            type="text/javascript"
-            dangerouslySetInnerHTML={{
-              __html: `window.__ASYNC_PROPS__ = ${
-                escapeScriptTags(asyncProps.propsArray)
-              }`
-            }}
-          />
+          asyncProps && (
+            <script
+              type="text/javascript"
+              dangerouslySetInnerHTML={{
+                __html: `window.__ASYNC_PROPS__ = ${escapeScriptTags(asyncProps)}`
+              }}
+            />
+          )
         }
       </body>
     </html>
   )
 }
 
-defaultHtml.propTypes = propTypes
+DefaultDocument.propTypes = propTypes
 
-export default defaultHtml
+export default DefaultDocument

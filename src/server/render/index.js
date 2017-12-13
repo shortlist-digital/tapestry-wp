@@ -1,41 +1,48 @@
 import React from 'react'
+import idx from 'idx'
 import { renderToStaticMarkup, renderToString } from 'react-dom/server'
 import Helmet from 'react-helmet'
 import { renderStaticOptimized } from 'glamor/server'
 
 import AsyncProps from '../../shared/third-party/async-props'
-import DefaultHTML from './default-html'
 import RenderError from '../../shared/render-error'
 
 export default ({
   response,
   renderProps = false,
   loadContext,
-  asyncProps,
-  assets
+  asyncProps = {},
+  assets = {}
 }) => {
 
-  // get html from props
+  let Document = (
+    idx(renderProps, _ => _.components[1].options.customDocument) ||
+    require('./default-document').default
+  )
+  const body = renderProps ? (
+    <AsyncProps
+      {...renderProps}
+      {...asyncProps}
+      loadContext={loadContext}
+    />
+  ) : (
+    <RenderError
+      response={response}
+      config={loadContext}
+    />
+  )
+
+  const { html, css, ids } = renderStaticOptimized(() => renderToString(body))
+
   const data = {
-    markup: renderStaticOptimized(() =>
-      renderToString(
-        renderProps ?
-          <AsyncProps
-            {...renderProps}
-            {...asyncProps}
-            loadContext={loadContext}
-          /> :
-          <RenderError
-            response={response}
-            config={loadContext}
-          />
-      )
-    ),
+    html,
+    css,
+    ids,
     head: Helmet.rewind(),
     assets,
-    asyncProps
+    asyncProps: asyncProps.propsArray
   }
 
   // render html with data
-  return `<!doctype html>${renderToStaticMarkup(<DefaultHTML {...data} />)}`
+  return `<!doctype html>${renderToStaticMarkup(<Document {...data} />)}`
 }
