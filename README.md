@@ -1,66 +1,145 @@
-<a href="https://shortlist-digital.github.io/tapestry-wp"><img src="http://i.imgur.com/HtzivRT.png" height="120" /></a>
----
+<p align="center">
+  <img src="https://cdn.rawgit.com/shortlist-digital/tapestry-wp/master/logo/tapestry-logo-glyph.svg">
+  <br>
+  <a href="https://www.npmjs.org/package/tapestry-wp"><img src="https://img.shields.io/npm/v/tapestry-wp.svg?style=flat" alt="npm"></a> <a href="https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/master"><img src="https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/master.svg?style=shield" alt="circleci"></a> <a href="https://snyk.io/test/github/shortlist-digital/tapestry-wp"><img src="https://snyk.io/test/github/shortlist-digital/tapestry-wp/badge.svg" alt="snyk"></a>
+</p>
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/shortlist-digital/tapestry-wp.svg)](https://greenkeeper.io/)
-[![npm](https://img.shields.io/npm/v/tapestry-wp.svg)]()
-[![CircleCI](https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop.svg?style=shield)](https://circleci.com/gh/shortlist-digital/tapestry-wp/tree/develop)
-[![Known Vulnerabilities](https://snyk.io/test/github/shortlist-digital/tapestry-wp/badge.svg)](https://snyk.io/test/github/shortlist-digital/tapestry-wp)
+# Tapestry
 
-Tapestry is a Universal JavaScript Application for rendering React front-ends via the Wordpress API.
+An opinionated React SPA service for the WordPress Rest API. Create React components and let Tapestry handle the data loading, server rendering, JavaScript bundling and more.
 
-_**Note:** This is currently a work in progress and will likely undergo major public/private API changes and feature updates._
+## Features
 
-## Using Tapestry
-Install  `tapestry-wp` through `npm` or `yarn`
-```text
-npm install tapestry-wp --save
-```
-Map the Tapestry commands to `npm` scripts in your `package.json`
-```js
-"scripts": {
-  "start": "tapestry",
-  "start:prod": "tapestry start",
-  "bootstrap": "tapestry init"
+- Data handling
+- Server rendered React
+- Small, secure Node server through Hapi
+- CSS-in-JS out of the box
+- Hot reloading
+- Production ready
+
+## Installation
+
+`yarn add tapestry-wp react react-dom`
+
+## Usage
+
+Tapestry has a couple of commands to handle building and running the project, you can pop these into your NPM scripts.
+
+`tapestry` will create the client/server bundles and run the server in development mode, `tapestry build` will create the client and server bundles in production mode and `tapestry start` will run the server in production mode.
+
+```json
+{
+  "scripts": {
+    "start": "tapestry",
+    "build": "tapestry build",
+    "start:prod": "tapestry start"
+  }
 }
 ```
-You can now either run `npm run bootstrap` to create a simple Tapestry project or manually add a `tapestry.config.js` to your project root.
+
+Create a `tapestry.config.js` in the root of your project and export an object with your WordPress site URL and routes or components to render.
+
 ```js
 import Post from './components/post'
 import Page from './components/page'
 
 export default {
-  components: {
-    Post, Page
-  },
-  siteUrl: 'http://your-wordpress.url'
+  siteUrl: 'http://your-wordpress.url',
+  components: { Post, Page }
 }
 ```
 
-### API
-* `siteUrl`: The Wordpress instance to access the WP-API. e.g. `http://thesun.co.uk`
-* `components`: An object with React components mapped to Wordpress endpoints. e.g. `Post`, `Page`, `Term`, `Category`
-* `loaders`: An optional object with data loading functions matching components.
-* `proxyPaths`: An array of paths to allow proxy access e.g. `['robots.txt', 'favicon.ico']`
-* `host`: The host Tapestry is assigned to. e.g. `localhost`
-* `port`: The port Tapestry is assigned to. e.g. `3030`
-* `onPageUpdate`: A function called on React-router `route` event
+These components will match the default WordPress permalink routes for each page type. e.g. `/2017/12/08/a-post-slug`. You can override these default routes by adding a `routes` array to our config.
 
-### Plugins
-If running WordPress 4.7 or later, the [Rest Filter WordPress plugin](https://github.com/WP-API/rest-filter) will need to be installed to run `tapestry-wp`.
+Each route requires a `path` and a `component`, to access data from WordPress pass in an `endpoint`
 
-## Roadmap
-Tapestry has a long list of features that we are looking to implement, including confirmed and super speculative features.
-- [x] Server render React component tree
-- [x] Bundle the app for the client
-- [x] Provide production option for client bundle
-- [x] Supply CLI to run the server
-- [x] Hook up WP-API to match routes
-- [x] Render `<head>` tags with `react-helmet`
-- [x] Supply default routes
-- [x] Integrate Glamor CSS-in-JS framework, rendering server-side, hydrating on the client
-- [x] Ability to override data loaders
-- [ ] Ability to override routing
-- [ ] WordPress plugin to enable previewing, 'View Post' functionality and permalinks
-- [ ] Create a global Redux store of page, post and archive data
-- [ ] Handle Redirects
-- [ ] Access options, menus through WP-API
+```js
+import Post from './components/post'
+import Page from './components/page'
+
+export default {
+  siteUrl: 'http://your-wordpress.url',
+  routes: [{
+    path: '/:slug/:id',
+    endpoint: id => `posts/${id}`,
+    component: Post
+  }, {
+    path: '/about/:slug',
+    endpoint: slug => `pages?filter=${slug}`,
+    component: Page
+  }]
+}
+```
+
+Once these are set up, you're free to start building your site and writing React components.
+
+## Options
+
+`tapestry.config.js` has a number of configurable options to modify the Tapestry bundling and server.
+
+```js
+{
+  // [string] URL for your WordPress instance
+  siteUrl: '',
+  // [object] Container for React components
+  components: {
+    // [function] React components for rendering a post, page, category
+    Category,
+    CustomError,
+    FrontPage,
+    Page,
+    Post
+  },
+  // [array] Container for route objects
+  routes: [
+    {
+      // [string] Path to match component
+      path: '',
+      // path: '/path/:dynamic-path(/:optional-path)'
+      
+      // [function] React component to render
+      component: () => {},
+      // [function] import React component to render, this will code-split all JS from this route
+      getComponent: () => import(),
+      // [any] Source for WordPress API data, can be one of array, object or string, can also be a function that returns any of those data-types
+      endpoint: 'posts',
+      // endpoint: ['posts', 'pages'],
+      // endpoint: { posts: 'posts', pages: 'pages' },
+      
+      // When used as a function it has access to params from the path
+      // endpoint: (id) => `posts/${id}`,
+      // endpoint: (id) => [`posts/${id}`, `pages/${id}`],
+      // endpoint: (id) => { posts: `posts/${id}`, pages: `pages/${id}` }
+      
+      // [object] Container for route specific options
+      options: {
+        // [boolean] If WordPress API returns an array, allow the array response to be empty
+        allowEmptyResponse: false,
+        // [function] A React component to handle the surrounding document
+        customDocument: ({ html, css, ids, asyncProps, assets }) => {}
+      }
+    }
+  ],
+  // [array] Paths to proxy through to the WordPress URL
+  proxyPaths: [],
+  // [object] Redirects from key to value e.g. { 'from': 'to' }
+  redirectPaths: {},
+  // [string] [uri] URL for JSON redirects file, will get picked up on server boot
+  redirectsEndpoint: '',
+  // [function] Runs when a route has updated and passes the API response
+  onPageUpdate: (response) => {},
+  // [object] Container for site options
+  options: {
+    // [string] 'localhost', '0.0.0.0'
+    host: '',
+    // [number] 3030
+    port: 3030,
+    // [string] Theme colour for progress bar
+    progressBarColor: '',
+    // [boolean] Registers https Hapi plugin
+    forceHttps: false,
+    // [boolean] Wordpress.com hosting configuration
+    wordpressDotComHosting: false
+  }
+}
+```
