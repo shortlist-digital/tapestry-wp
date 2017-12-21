@@ -53,7 +53,7 @@ class ProgressIndicator extends Component {
       handler: this.reset
     }]
 
-    this.customProgressIndicator = idx(props, _ => _.route.config.components.CustomProgressIndicator)
+    this.ProgressIndicator = idx(props, _ => _.route.config.components.ProgressIndicator)
     // set color if declared
     // if (idx(props, _ => _.route.config.options.progressBarColor)) {
     //   this.progressBarColor = props.route.config.options.progressBarColor
@@ -124,11 +124,11 @@ class ProgressIndicator extends Component {
   }
 
   render() {
-    const CustomProgressIndicator = this.customProgressIndicator
+    const ProgressIndicator = this.ProgressIndicator
     const { percent, visible } = this.state
-    return this.customProgressIndicator ? (
+    return ProgressIndicator ? (
       <Fragment>
-        <CustomProgressIndicator
+        <ProgressIndicator
           percent={percent}
           visible={visible}
         />
