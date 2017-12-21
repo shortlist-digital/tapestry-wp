@@ -33,7 +33,6 @@ class ProgressIndicator extends Component {
       visible: false
     }
     // configurable options
-    // this.progressBarColor = '#00ffcb'
     this.resetDelay = 800
     this.increaseInterval = 400
     // bindin this yo
@@ -54,10 +53,6 @@ class ProgressIndicator extends Component {
     }]
 
     this.ProgressIndicator = idx(props, _ => _.route.config.components.ProgressIndicator)
-    // set color if declared
-    // if (idx(props, _ => _.route.config.options.progressBarColor)) {
-    //   this.progressBarColor = props.route.config.options.progressBarColor
-    // }
   }
 
   componentDidMount() {

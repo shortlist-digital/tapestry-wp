@@ -5,7 +5,7 @@ import HTTPStatus from 'http-status'
 
 import defaultRoutes from './default-routes'
 import fetchData from './fetch-data'
-import ProgressOfficer from './components/progress-officer'
+import ProgressIndicator from './components/progress-indicator'
 import RenderError from './render-error'
 
 const ComponentWrapper = (component, route) => {
@@ -31,7 +31,7 @@ const RouteWrapper = (config) => {
   // loops over routes and return react-router <Route /> components
   return (
     <Route
-      component={ProgressOfficer}
+      component={ProgressIndicator}
       config={config}
     >
       {
