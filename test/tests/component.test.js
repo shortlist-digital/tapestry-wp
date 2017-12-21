@@ -16,16 +16,14 @@ describe('Custom components rendering', () => {
   let tapestry = null
   let uri = null
   let config = {
-    options: {
-      progressBarColor: '#c0ffee'
-    },
     components: {
       Post: () => (
         <Helmet>
           <title>Custom title</title>
         </Helmet>
       ),
-      FrontPage: () => <p>Hello</p>
+      FrontPage: () => <p>Hello</p>,
+      ProgressIndicator: () => <p>Progress bar</p>
     },
     siteUrl: 'http://dummy.api'
   }
@@ -62,9 +60,9 @@ describe('Custom components rendering', () => {
     })
   })
 
-  it('Custom progressBarColor is used', (done) => {
+  it('CustomProgressIndicator is used', (done) => {
     request.get(uri, (err, res, body) => {
-      expect(body).to.contain('background-color:#c0ffee;')
+      expect(body).to.contain('Progress bar')
       done()
     })
   })

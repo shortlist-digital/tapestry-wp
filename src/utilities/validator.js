@@ -23,6 +23,7 @@ const schema = joi.object({
     Error: joi.any().forbidden(), // DEPRECATED
     Category: joi.func(),
     CustomError: joi.func(),
+    ProgressIndicator: joi.func(),
     FrontPage: joi.func(),
     Page: joi.func(),
     Post: joi.func()
@@ -60,8 +61,6 @@ const schema = joi.object({
     host: joi.string(),
     // number e.g. 3030
     port: joi.number(),
-    // theme color for progress bar
-    progressBarColor: joi.string(),
     // registers https Hapi plugin
     forceHttps: joi.boolean(),
     // Wordpress.com hosting configuration

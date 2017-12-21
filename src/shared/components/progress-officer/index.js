@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import idx from 'idx'
 import propTypes from './prop-types'
 
@@ -33,7 +33,7 @@ class ProgressIndicator extends Component {
       visible: false
     }
     // configurable options
-    this.progressBarColor = '#00ffcb'
+    // this.progressBarColor = '#00ffcb'
     this.resetDelay = 800
     this.increaseInterval = 400
     // bindin this yo
@@ -52,10 +52,12 @@ class ProgressIndicator extends Component {
       type: 'dataReset',
       handler: this.reset
     }]
+
+    this.customProgressIndicator = idx(props, _ => _.route.config.components.CustomProgressIndicator)
     // set color if declared
-    if (idx(props, _ => _.route.config.options.progressBarColor)) {
-      this.progressBarColor = props.route.config.options.progressBarColor
-    }
+    // if (idx(props, _ => _.route.config.options.progressBarColor)) {
+    //   this.progressBarColor = props.route.config.options.progressBarColor
+    // }
   }
 
   componentDidMount() {
@@ -122,26 +124,17 @@ class ProgressIndicator extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <div
-          style={{
-            backgroundColor: this.progressBarColor,
-            height: '3px',
-            left: 0,
-            opacity: this.state.visible ? 1 : 0,
-            position: 'fixed',
-            top: 0,
-            transition: this.state.visible ?
-              `opacity 0ms linear 0ms, width 400ms ease` :
-              `opacity 300ms ease 300ms, width 300ms ease`,
-            width: `${this.state.percent}%`,
-            zIndex: 10000
-          }}
+    const CustomProgressIndicator = this.customProgressIndicator
+    const { percent, visible } = this.state
+    return this.customProgressIndicator ? (
+      <Fragment>
+        <CustomProgressIndicator
+          percent={percent}
+          visible={visible}
         />
         {this.props.children}
-      </div>
-    )
+      </Fragment>
+    ) : this.props.children
   }
 }
 
