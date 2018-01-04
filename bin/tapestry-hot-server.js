@@ -2,11 +2,11 @@
 const path = require('path')
 const nodemon = require('nodemon')
 const log = require('../src/utilities/logger')
+const createCompilers = require('../src/utilities/create-compilers')
 const notify = log.notify
 const cwd = process.cwd()
-const createCompilers = require('../src/utilities/create-compilers')
 const env = 'development'
-const winston = log.log
+const winston = log.default
 
 let serverBooted = false
 

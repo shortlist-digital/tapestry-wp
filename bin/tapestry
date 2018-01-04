@@ -1,16 +1,47 @@
 #!/usr/bin/env node
 const sade = require('sade')
 const pkg = require('../package.json')
+
+const build = require('./tapestry-build')
+const development = require('./tapestry-development')
+const hotClient = require('./tapestry-hot')
 const hotServer = require('./tapestry-hot-server')
+const init = require('./tapestry-init')
+const start = require('./tapestry-start')
 
-const prog = sade('tapestry')
+const program = sade('tapestry')
 
-prog
+program
   .version(pkg.version)
 
-prog
+program
+  .command('development', '', { default:true })
+  .describe('Run a Tapestry website in development mode')
+  .action(development)
+
+program
+  .command('init')
+  .describe('Add some useful defaults to your Tapestry website')
+  .action(init)
+
+program
+  .command('build')
+  .describe('Build server and client scripts in production mode')
+  .action(build)
+
+program
+  .command('start')
+  .describe('Run a Tapestry website in production mode')
+  .action(start)
+
+program
+  .command('hot')
+  .describe('Run a Tapestry website in hot module replacement mode (Experimental)')
+  .action(hotClient)
+
+program
   .command('hot-server')
-  .describe('Run a Tapestry website in server hot reload mode')
+  .describe('Run a Tapestry website in Nodemon server reload mode (Experimental)')
   .action(hotServer)
 
-prog.parse(process.argv)
+program.parse(process.argv)
