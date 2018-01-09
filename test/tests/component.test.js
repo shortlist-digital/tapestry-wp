@@ -16,7 +16,9 @@ describe('Default components rendering', () => {
   let tapestry = null
   let uri = null
   let config = {
-    components: {},
+    components: {
+      FrontPage: () => <p>Hello</p>
+    },
     siteUrl: 'http://dummy.api'
   }
 
@@ -24,10 +26,7 @@ describe('Default components rendering', () => {
     // mock api response
     nock('http://dummy.api')
       .get('/wp-json/wp/v2/posts?_embed')
-      .times(2)
       .reply(200, dataPosts.data)
-      .get('/wp-json/wp/v2/posts?slug=slug&_embed')
-      .reply(200, dataPage)
     // boot tapestry server
     tapestry = bootServer(config)
     tapestry.server.on('start', () => {
@@ -40,7 +39,7 @@ describe('Default components rendering', () => {
 
   it('DefaultProgressIndicator is used', (done) => {
     request.get(uri, (err, res, body) => {
-      expect(body).to.contain('#00ffcb')
+      expect(body).to.contain('background-color:#00ffcb;')
       done()
     })
   })
