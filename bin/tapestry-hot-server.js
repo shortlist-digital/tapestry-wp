@@ -25,7 +25,7 @@ module.exports = () => {
     }
     if (!serverBooted) {
       nodemon({
-        script: './node_modules/tapestry-wp/bin/hot-server.js',
+        script: './node_modules/tapestry-wp/bin/_nodemon-hot-server.js',
         watch: path.resolve(cwd, '.tapestry')
       }).on('quit', process.exit)
     }
