@@ -11,6 +11,42 @@ import dataPosts from '../mocks/posts.json'
 import dataPage from '../mocks/page.json'
 
 
+describe('Default components rendering', () => {
+
+  let tapestry = null
+  let uri = null
+  let config = {
+    components: {},
+    siteUrl: 'http://dummy.api'
+  }
+
+  before(done => {
+    // mock api response
+    nock('http://dummy.api')
+      .get('/wp-json/wp/v2/posts?_embed')
+      .times(2)
+      .reply(200, dataPosts.data)
+      .get('/wp-json/wp/v2/posts?slug=slug&_embed')
+      .reply(200, dataPage)
+    // boot tapestry server
+    tapestry = bootServer(config)
+    tapestry.server.on('start', () => {
+      uri = tapestry.server.info.uri
+      done()
+    })
+  })
+
+  after(() => tapestry.server.stop())
+
+  it('DefaultProgressIndicator is used', (done) => {
+    request.get(uri, (err, res, body) => {
+      expect(body).to.contain('#00ffcb')
+      done()
+    })
+  })
+})
+
+
 describe('Custom components rendering', () => {
 
   let tapestry = null
