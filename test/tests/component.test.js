@@ -11,21 +11,54 @@ import dataPosts from '../mocks/posts.json'
 import dataPage from '../mocks/page.json'
 
 
+describe('Default components rendering', () => {
+
+  let tapestry = null
+  let uri = null
+  let config = {
+    components: {
+      FrontPage: () => <p>Hello</p>
+    },
+    siteUrl: 'http://dummy.api'
+  }
+
+  before(done => {
+    // mock api response
+    nock('http://dummy.api')
+      .get('/wp-json/wp/v2/posts?_embed')
+      .reply(200, dataPosts.data)
+    // boot tapestry server
+    tapestry = bootServer(config)
+    tapestry.server.on('start', () => {
+      uri = tapestry.server.info.uri
+      done()
+    })
+  })
+
+  after(() => tapestry.server.stop())
+
+  it('DefaultProgressIndicator is used', (done) => {
+    request.get(uri, (err, res, body) => {
+      expect(body).to.contain('background-color:#00ffcb;')
+      done()
+    })
+  })
+})
+
+
 describe('Custom components rendering', () => {
 
   let tapestry = null
   let uri = null
   let config = {
-    options: {
-      progressBarColor: '#c0ffee'
-    },
     components: {
       Post: () => (
         <Helmet>
           <title>Custom title</title>
         </Helmet>
       ),
-      FrontPage: () => <p>Hello</p>
+      FrontPage: () => <p>Hello</p>,
+      ProgressIndicator: () => <p>Progress bar</p>
     },
     siteUrl: 'http://dummy.api'
   }
@@ -62,9 +95,9 @@ describe('Custom components rendering', () => {
     })
   })
 
-  it('Custom progressBarColor is used', (done) => {
+  it('CustomProgressIndicator is used', (done) => {
     request.get(uri, (err, res, body) => {
-      expect(body).to.contain('background-color:#c0ffee;')
+      expect(body).to.contain('Progress bar')
       done()
     })
   })
