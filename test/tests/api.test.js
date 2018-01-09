@@ -24,7 +24,7 @@ describe('Handling API responses', () => {
       .get('/wp-json/wp/v2/posts/archive-image.jpg')
       .reply(404)
 
-    process.env.CACHE_CONTROL_MAX_AGE=60
+    process.env.CACHE_CONTROL_MAX_AGE = 60
     tapestry = bootServer(config)
     tapestry.server.on('start', () => {
       uri = tapestry.server.info.uri
@@ -37,20 +37,22 @@ describe('Handling API responses', () => {
     delete process.env.CACHE_CONTROL_MAX_AGE
   })
 
-  it('API proxies 404\'s from origin', (done) => {
+  it("API proxies 404's from origin", done => {
     request.get(`${uri}/api/v1/posts/archive-image.jpg`, (err, res) => {
       expect(res.statusCode).to.equal(404)
       done()
     })
   })
 
-  it('Route matched, has correct headers', (done) => {
+  it('Route matched, has correct headers', done => {
     request.get(`${uri}/api/v1/posts?slug=test&_embed`, (err, res) => {
-      expect(res.headers['content-type']).to.equal('application/json; charset=utf-8')
-      expect(res.headers['cache-control']).to.equal('max-age=60, must-revalidate, public')
+      expect(res.headers['content-type']).to.equal(
+        'application/json; charset=utf-8'
+      )
+      expect(res.headers['cache-control']).to.equal(
+        'max-age=60, must-revalidate, public'
+      )
       done()
     })
   })
-
 })
-

@@ -62,14 +62,14 @@ module.exports = ({ cwd, env, babelrc }) => {
   // Always ignore server files using async await
 
   const ignoreAwaitFiles = [
-    "node_modules/tapestry-wp/src/utilities/cache-manager.js",
-    "node_modules/tapestry-wp/src/server/handle-api.js",
-    "node_modules/tapestry-wp/src/server/handle-daynamic"
+    'node_modules/tapestry-wp/src/utilities/cache-manager.js',
+    'node_modules/tapestry-wp/src/server/handle-api.js',
+    'node_modules/tapestry-wp/src/server/handle-daynamic'
   ]
 
   let babelConfig = serverConfig.module
 
-  const isIgnoreSet = idx(babelConfig, _ =>  _.rules[0].use[0].options.ignore)
+  const isIgnoreSet = idx(babelConfig, _ => _.rules[0].use[0].options.ignore)
 
   if (isIgnoreSet) {
     babelConfig.rules[0].use[0].options.ignore.push(ignoreAwaitFiles)

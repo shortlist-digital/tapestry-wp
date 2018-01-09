@@ -15,12 +15,10 @@ import handleRedirects from './handle-redirects'
 import handleStatic from './handle-static'
 import CacheManager from '../utilities/cache-manager'
 
-const cacheManager = new CacheManager
+const cacheManager = new CacheManager()
 
 export default class Tapestry {
-
-  constructor ({ config, assets = {}, env }) {
-
+  constructor({ config, assets = {}, env }) {
     // provide more info about Promise rejection
     process.on('unhandledRejection', err => log.error(err))
 
@@ -61,8 +59,7 @@ export default class Tapestry {
     this.startServer()
   }
 
-  bootServer () {
-
+  bootServer() {
     const host = idx(this.config, _ => _.options.host)
     const port = idx(this.config, _ => _.options.port)
     const forceHttps = idx(this.config, _ => _.options.forceHttps)
@@ -109,7 +106,7 @@ export default class Tapestry {
 
     return server
   }
-  startServer () {
+  startServer() {
     this.server.start(err => {
       if (err) {
         log.error(err)

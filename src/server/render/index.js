@@ -14,22 +14,13 @@ export default ({
   asyncProps = {},
   assets = {}
 }) => {
-
-  let Document = (
+  let Document =
     idx(renderProps, _ => _.components[1].options.customDocument) ||
     require('./default-document').default
-  )
   const body = renderProps ? (
-    <AsyncProps
-      {...renderProps}
-      {...asyncProps}
-      loadContext={loadContext}
-    />
+    <AsyncProps {...renderProps} {...asyncProps} loadContext={loadContext} />
   ) : (
-    <RenderError
-      response={response}
-      config={loadContext}
-    />
+    <RenderError response={response} config={loadContext} />
   )
 
   const { html, css, ids } = renderStaticOptimized(() => renderToString(body))

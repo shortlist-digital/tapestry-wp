@@ -4,26 +4,20 @@ import { Link } from 'react-router'
 import styles from '../styles'
 
 // remove protocol and host from URL string
-const getRelativeUrl = url =>
-  url.replace(/^(?:\/\/|[^/]+)*\//, '/')
+const getRelativeUrl = url => url.replace(/^(?:\/\/|[^/]+)*\//, '/')
 
-const FrontPage = ({ posts }) =>
+const FrontPage = ({ posts }) => (
   <main className={styles.wrapper}>
-    <h1 className={styles.heading}>
-      Wordpress News
-    </h1>
+    <h1 className={styles.heading}>Wordpress News</h1>
     <ul>
-      {
-        posts.map(post => (
-          <li key={post.id}>
-            <Link to={getRelativeUrl(post.link)}>
-              {post.title.rendered}
-            </Link>
-          </li>
-        ))
-      }
+      {posts.map(post => (
+        <li key={post.id}>
+          <Link to={getRelativeUrl(post.link)}>{post.title.rendered}</Link>
+        </li>
+      ))}
     </ul>
   </main>
+)
 
 FrontPage.propTypes = {
   posts: PropTypes.arrayOf(

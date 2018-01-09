@@ -2,7 +2,6 @@ import { expect } from 'chai'
 import resolvePaths from './index'
 
 describe('Resolve paths', () => {
-
   it('should return original paths', () => {
     const { paths } = resolvePaths({ paths: 'hello' })
     const expected = 'hello'
@@ -11,7 +10,7 @@ describe('Resolve paths', () => {
 
   it('should return modified paths if function', () => {
     const { paths } = resolvePaths({
-      paths: (params) => `hello ${params}`,
+      paths: params => `hello ${params}`,
       params: 'world'
     })
     const expected = 'hello world'

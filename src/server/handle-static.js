@@ -1,6 +1,4 @@
-
 export default ({ server }) => {
-
   const cacheConfig = {
     // cache static assets for 1 year
     privacy: 'public',
@@ -24,5 +22,4 @@ export default ({ server }) => {
       }
     })
   })
-
 }

@@ -27,7 +27,6 @@ const AFAR = (url, serverReplyObject, cacheKey = false) => {
     })
     .then(resp => resp.json())
     .then(resp => {
-
       log.debug(`API response via HTTP for ${chalk.green(url)}`)
       reply(resp)
 
@@ -41,7 +40,11 @@ const AFAR = (url, serverReplyObject, cacheKey = false) => {
       }
     })
     .catch(error => {
-      log.debug(`AFAR is replying with HTTP error:\n`, error, `\nError was just handled for ${url}`)
+      log.debug(
+        `AFAR is replying with HTTP error:\n`,
+        error,
+        `\nError was just handled for ${url}`
+      )
       reply(error).code(error.status)
     })
 }

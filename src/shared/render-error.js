@@ -5,9 +5,9 @@ import DefaultError from './components/default-error'
 
 const RenderError = ({ config, response, missing }) => {
   // render custom error or default if custom error not declared
-  let ErrorView = idx(config, _ => _.components.CustomError) ?
-    config.components.CustomError :
-    DefaultError
+  let ErrorView = idx(config, _ => _.components.CustomError)
+    ? config.components.CustomError
+    : DefaultError
   // render missing component only in DEV
   if (__DEV__ && missing) {
     ErrorView = require('./components/missing-view').default

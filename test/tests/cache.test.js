@@ -11,27 +11,31 @@ import dataPage from '../mocks/page.json'
 import dataPages from '../mocks/pages.json'
 
 describe('Handling cache purges', () => {
-
   let tapestry = null
   let uri = null
   let config = {
-    routes: [{
-      path: '/',
-      endpoint: 'pages',
-      component: () => <p>Basic endpoint</p>
-    }, {
-      path: 'string-endpoint',
-      endpoint: 'pages',
-      component: () => <p>Basic endpoint</p>
-    }, {
-      path: 'dynamic-string-endpoint/:custom',
-      endpoint: (params) => `pages?slug=${params.custom}`,
-      component: () => <p>Custom endpoint</p>
-    }, {
-      path: 'multiple-endpoint',
-      endpoint: ['pages', 'pages?slug=test'],
-      component: () => <p>Multi endpoint</p>
-    }],
+    routes: [
+      {
+        path: '/',
+        endpoint: 'pages',
+        component: () => <p>Basic endpoint</p>
+      },
+      {
+        path: 'string-endpoint',
+        endpoint: 'pages',
+        component: () => <p>Basic endpoint</p>
+      },
+      {
+        path: 'dynamic-string-endpoint/:custom',
+        endpoint: params => `pages?slug=${params.custom}`,
+        component: () => <p>Custom endpoint</p>
+      },
+      {
+        path: 'multiple-endpoint',
+        endpoint: ['pages', 'pages?slug=test'],
+        component: () => <p>Multi endpoint</p>
+      }
+    ],
     siteUrl: 'http://dummy.api'
   }
   const cacheManager = new CacheManager()
@@ -55,7 +59,7 @@ describe('Handling cache purges', () => {
 
   afterEach(() => tapestry.server.stop())
 
-  it('String endpoint is purgeable', (done) => {
+  it('String endpoint is purgeable', done => {
     const route = 'string-endpoint'
     const purgeResp = { status: `Purged ${route}` }
 
@@ -74,7 +78,7 @@ describe('Handling cache purges', () => {
     })
   })
 
-  it('Dynamic string endpoint is purgeable', (done) => {
+  it('Dynamic string endpoint is purgeable', done => {
     const route = `dynamic-string-endpoint/test`
     const purgeResp = { status: `Purged ${route}` }
 
@@ -93,7 +97,7 @@ describe('Handling cache purges', () => {
     })
   })
 
-  it('Multi array endpoint is purgeable', (done) => {
+  it('Multi array endpoint is purgeable', done => {
     const route = `multiple-endpoint`
     const purgeResp = { status: `Purged ${route}` }
 
@@ -114,7 +118,7 @@ describe('Handling cache purges', () => {
     })
   })
 
-  it('Home route is purgeable', (done) => {
+  it('Home route is purgeable', done => {
     const route = '/'
     const purgeResp = { status: `Purged ${route}` }
 
@@ -136,7 +140,6 @@ describe('Handling cache purges', () => {
 })
 
 describe('Handling cache set/get', () => {
-
   let tapestry = null
   let uri = null
   let config = {
@@ -149,7 +152,7 @@ describe('Handling cache set/get', () => {
   const cacheManager = new CacheManager()
 
   before(done => {
-    process.env.CACHE_MAX_AGE = 60*1000
+    process.env.CACHE_MAX_AGE = 60 * 1000
     process.env.CACHE_MAX_ITEM_COUNT = 2
     // mock api response
     nock('http://dummy.api')
@@ -186,21 +189,32 @@ describe('Handling cache set/get', () => {
       const cacheHtml = cacheManager.getCache('html')
       const apiResult = await cacheApi.get('posts?_embed')
       const htmlResult = await cacheHtml.get('/')
-      expect(apiResult).to.be.an('object').to.have.ownProperty('response')
-      expect(htmlResult).to.be.a('string').that.includes('doctype')
+      expect(apiResult)
+        .to.be.an('object')
+        .to.have.ownProperty('response')
+      expect(htmlResult)
+        .to.be.a('string')
+        .that.includes('doctype')
       done()
     })
   })
 
   it('Sets API/HTML cache items without query string', done => {
-    request.get(`${uri}/2017/12/01/query-test?utm_source=stop-it`, async (err, res, body) => {
-      const cacheHtml = cacheManager.getCache('html')
-      const shouldCache = await cacheHtml.get('2017/12/01/query-test')
-      const shouldNotCache = await cacheHtml.get('2017/12/01/query-test?utm_source=stop-it')
-      expect(shouldCache).to.be.a('string').that.includes('doctype')
-      expect(shouldNotCache).to.not.exist
-      done()
-    })
+    request.get(
+      `${uri}/2017/12/01/query-test?utm_source=stop-it`,
+      async (err, res, body) => {
+        const cacheHtml = cacheManager.getCache('html')
+        const shouldCache = await cacheHtml.get('2017/12/01/query-test')
+        const shouldNotCache = await cacheHtml.get(
+          '2017/12/01/query-test?utm_source=stop-it'
+        )
+        expect(shouldCache)
+          .to.be.a('string')
+          .that.includes('doctype')
+        expect(shouldNotCache).to.not.exist
+        done()
+      }
+    )
   })
 
   it('Retrieves API cache items correctly', done => {
@@ -227,7 +241,6 @@ describe('Handling cache set/get', () => {
   // Redis doens't have a max items limit
   if (!process.env.REDIS_URL) {
     it('Sets max cache items correctly', done => {
-
       const cacheHtml = cacheManager.getCache('html')
       cacheHtml.reset()
 

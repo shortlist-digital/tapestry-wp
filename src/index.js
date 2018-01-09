@@ -8,8 +8,8 @@ import validator from './utilities/validator'
 import config from 'tapestry.config.js'
 
 // create client bundle and boot server on callback, avoids the server booting without the client ready.
-export default (options) =>
-  validator(config, (sanitizedConfig) => {
+export default options =>
+  validator(config, sanitizedConfig => {
     // collect bundle asset info and boot server
     const assetsPath = path.resolve(options.cwd, '.tapestry', 'assets.json')
     const assets = fs.readJsonSync(assetsPath)

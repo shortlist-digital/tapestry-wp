@@ -8,7 +8,6 @@ let instance = null
 let cacheConfig
 
 export default class CacheManager {
-
   constructor() {
     if (instance) {
       return instance
@@ -19,7 +18,6 @@ export default class CacheManager {
   }
 
   createCache(name) {
-
     cacheConfig = {
       store: 'memory',
       max: parseInt(process.env.CACHE_MAX_ITEM_COUNT, 10) || 100,
@@ -39,9 +37,7 @@ export default class CacheManager {
 
   clearAll() {
     if (internalCaches) {
-      internalCaches.forEach(async (cache) =>
-        await cache.reset()
-      )
+      internalCaches.forEach(async cache => await cache.reset())
     }
   }
 
@@ -50,8 +46,9 @@ export default class CacheManager {
   }
 
   async clearCache(cacheName, keyName) {
-
-    log.debug(`Cache cleared ${chalk.green(keyName)} in ${chalk.green(cacheName)}`)
+    log.debug(
+      `Cache cleared ${chalk.green(keyName)} in ${chalk.green(cacheName)}`
+    )
     log.silly(JSON.stringify(internalCaches, null, 2))
 
     await internalCaches[cacheName].del(keyName)
