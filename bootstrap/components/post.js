@@ -7,7 +7,7 @@ const Post = props => {
   const data = props.posts[0]
   return (
     <main className={styles.wrapper}>
-      <Link to='/'>
+      <Link to="/">
         <h1 className={styles.heading}>Home</h1>
       </Link>
       <h1 className={styles.heading}>

@@ -22,9 +22,7 @@ export default ({ paths, params, cb }) => {
   if (isPlainObject(paths)) {
     return {
       paths,
-      result: Object
-        .keys(paths)
-        .map(i => cb(paths[i]))
+      result: Object.keys(paths).map(i => cb(paths[i]))
     }
   }
 
