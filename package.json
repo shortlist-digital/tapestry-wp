@@ -79,7 +79,7 @@
     "lodash.isplainobject": "^4.0.6",
     "lodash.startswith": "^4.2.1",
     "mitt": "^1.1.0",
-    "nodemon": "^1.14.7",
+    "nodemon": "^1.14.10",
     "pretty-bytes": "^4.0.2",
     "prop-types": "^15.5.7",
     "react-helmet": "^5.2.0",
@@ -111,8 +111,8 @@
     "nock": "^9.0.11",
     "pre-commit": "^1.2.2",
     "react": "~16.2.0",
-    "react-dom": "~16.2.0",
     "react-addons-test-utils": "^15.4.2",
+    "react-dom": "~16.2.0",
     "request": "^2.81.0",
     "rimraf": "^2.6.1"
   },
