@@ -57,7 +57,6 @@
     "cache-manager-redis-store": "^1.2.0",
     "chalk": "^2.1.0",
     "clean-webpack-plugin": "^0.1.16",
-    "commander": "^2.9.0",
     "core-js": "^2.5.0",
     "create-react-class": "^15.6.0",
     "es6-promise": "^4.1.0",
