@@ -9,9 +9,7 @@ import RenderError from './render-error'
 import handleApiResponse from './handle-api-response'
 
 const fetchData = (TopLevelComponent, route) => {
-
   class AsyncPropsWrapper extends Component {
-
     static loadProps({ params, loadContext }, cb) {
       let loadFrom = this.endpoint
       // go get all that data
@@ -55,16 +53,13 @@ const fetchData = (TopLevelComponent, route) => {
         )
       }
       // otherwise return the actual component
-      return (
-        <TopLevelComponent
-          key={uid()}
-          {...response}
-        />
-      )
+      return <TopLevelComponent key={uid()} {...response} />
     }
   }
 
-  AsyncPropsWrapper.displayName = `wrappedForDataFetching(${TopLevelComponent ? TopLevelComponent.name : 'Error'})`
+  AsyncPropsWrapper.displayName = `wrappedForDataFetching(${
+    TopLevelComponent ? TopLevelComponent.name : 'Error'
+  })`
   AsyncPropsWrapper.endpoint = route.endpoint
   AsyncPropsWrapper.options = route.options
 

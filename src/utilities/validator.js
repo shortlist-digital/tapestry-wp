@@ -5,11 +5,11 @@ const options = {
   abortEarly: false, // we want all the errors, not just the first
   language: {
     any: {
-      unknown: 'has been deprecated, refer to tapestry-wp.js.org for config options'
+      unknown:
+        'has been deprecated, refer to tapestry-wp.js.org for config options'
     }
   }
 }
-
 
 // define valid config schema
 const schema = joi.object({
@@ -17,7 +17,10 @@ const schema = joi.object({
   frontPage: joi.any().forbidden(),
   loaders: joi.any().forbidden(),
   // required url
-  siteUrl: joi.string().uri().required(),
+  siteUrl: joi
+    .string()
+    .uri()
+    .required(),
   // optional object containing React components
   components: joi.object().keys({
     Error: joi.any().forbidden(), // DEPRECATED
@@ -33,12 +36,7 @@ const schema = joi.object({
     // object containing a string path and React component
     joi.object({
       component: joi.func(),
-      endpoint: [
-        joi.string(),
-        joi.func(),
-        joi.object(),
-        joi.array()
-      ],
+      endpoint: [joi.string(), joi.func(), joi.object(), joi.array()],
       getComponent: joi.func(),
       options: joi.object().keys({
         allowEmptyResponse: joi.boolean(),
@@ -68,10 +66,14 @@ const schema = joi.object({
   })
 })
 
-
-const logErrors = (err) => {
+const logErrors = err => {
   // for each error message, output to console
-  log.error(`There are some issues with your tapestry.config.js\n ${err.details.reduce((prev, item) => `${prev}\n  ${item.message}`, '')}`)
+  log.error(
+    `There are some issues with your tapestry.config.js\n ${err.details.reduce(
+      (prev, item) => `${prev}\n  ${item.message}`,
+      ''
+    )}`
+  )
   log.debug('tapestry.config.js error', err.details)
 }
 
@@ -80,12 +82,10 @@ const validator = (config, cb) => {
   // joi will parse the config and match the defined schema
   joi.validate(config, schema, options, (err, value) => {
     // handle validation errors
-    if (err)
-      return logErrors(err)
+    if (err) return logErrors(err)
     // run tapestry server
     cb(value)
   })
 }
-
 
 export default validator

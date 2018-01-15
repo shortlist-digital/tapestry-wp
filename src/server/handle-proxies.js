@@ -1,6 +1,4 @@
-
 export default ({ server, config }) => {
-
   if (!config.proxyPaths) return
 
   config.proxyPaths.map(path => {

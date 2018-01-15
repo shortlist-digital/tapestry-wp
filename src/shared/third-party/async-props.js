@@ -19,9 +19,8 @@ function eachComponents(components, iterator) {
 
 function filterAndFlattenComponents(components) {
   var flattened = []
-  eachComponents(components, (Component) => {
-    if (Component && Component.loadProps)
-      flattened.push(Component)
+  eachComponents(components, Component => {
+    if (Component && Component.loadProps) flattened.push(Component)
   })
   return flattened
 }
@@ -32,11 +31,9 @@ function loadAsyncProps({ components, params, loadContext }, cb) {
   let needToLoadCounter = components.length
   let hasCalledBack = []
 
-  const maybeFinish = (err) => {
-    if (err)
-      cb(err)
-    else if (needToLoadCounter === 0)
-      cb(null, { propsArray, componentsArray })
+  const maybeFinish = err => {
+    if (err) cb(err)
+    else if (needToLoadCounter === 0) cb(null, { propsArray, componentsArray })
   }
 
   // If there are no components we should resolve directly
@@ -48,12 +45,11 @@ function loadAsyncProps({ components, params, loadContext }, cb) {
         const isDeferredCallback = hasCalledBack[index]
         if (isDeferredCallback && needToLoadCounter === 0) {
           cb(error, {
-            propsArray: [ props ],
-            componentsArray: [ Component ]
+            propsArray: [props],
+            componentsArray: [Component]
           })
         } else {
-          if (!hasCalledBack[index])
-            needToLoadCounter--
+          if (!hasCalledBack[index]) needToLoadCounter--
           propsArray[index] = props
           componentsArray[index] = Component
           hasCalledBack[index] = true
@@ -88,26 +84,27 @@ function mergePropsAndComponents(current, changes) {
 
 function createElement(Component, props) {
   if (Component.loadProps)
-    return <AsyncPropsContainer Component={Component} routerProps={props}/>
-  else
-    return <Component {...props}/>
+    return <AsyncPropsContainer Component={Component} routerProps={props} />
+  else return <Component {...props} />
 }
 
 export function loadPropsOnServer({ components, params }, loadContext, cb) {
-  loadAsyncProps({
-    components: filterAndFlattenComponents(components),
-    params,
-    loadContext
-  }, (err, propsAndComponents) => {
-    if (err) {
-      cb(err)
+  loadAsyncProps(
+    {
+      components: filterAndFlattenComponents(components),
+      params,
+      loadContext
+    },
+    (err, propsAndComponents) => {
+      if (err) {
+        cb(err)
+      } else {
+        const json = JSON.stringify(propsAndComponents.propsArray, null, 2)
+        const scriptString = `<script>__ASYNC_PROPS__ = ${json}</script>`
+        cb(null, propsAndComponents, scriptString)
+      }
     }
-    else {
-      const json = JSON.stringify(propsAndComponents.propsArray, null, 2)
-      const scriptString = `<script>__ASYNC_PROPS__ = ${json}</script>`
-      cb(null, propsAndComponents, scriptString)
-    }
-  })
+  )
 }
 
 function hydrate(props) {
@@ -116,13 +113,10 @@ function hydrate(props) {
       propsArray: __ASYNC_PROPS__,
       componentsArray: filterAndFlattenComponents(props.components)
     }
-  else
-    return null
+  else return null
 }
 
-
 const AsyncPropsContainer = CreateClass({
-
   propTypes: {
     Component: PropTypes.func.isRequired,
     routerProps: PropTypes.object.isRequired
@@ -134,7 +128,11 @@ const AsyncPropsContainer = CreateClass({
 
   render() {
     const { Component, routerProps, ...props } = this.props
-    const { propsAndComponents, loading, reloadComponent } = this.context.asyncProps
+    const {
+      propsAndComponents,
+      loading,
+      reloadComponent
+    } = this.context.asyncProps
     const asyncProps = lookupPropsForComponent(Component, propsAndComponents)
     const reload = () => reloadComponent(Component)
     return (
@@ -147,11 +145,9 @@ const AsyncPropsContainer = CreateClass({
       />
     )
   }
-
 })
 
 const AsyncProps = CreateClass({
-
   childContextTypes: {
     asyncProps: PropTypes.object
   },
@@ -180,7 +176,7 @@ const AsyncProps = CreateClass({
       },
 
       render(props) {
-        return <RouterContext {...props} createElement={createElement}/>
+        return <RouterContext {...props} createElement={createElement} />
       }
     }
   },
@@ -191,9 +187,9 @@ const AsyncProps = CreateClass({
     return {
       loading: false,
       prevProps: null,
-      propsAndComponents: isServerRender ?
-        { propsArray, componentsArray } :
-        hydrate(this.props)
+      propsAndComponents: isServerRender
+        ? { propsArray, componentsArray }
+        : hydrate(this.props)
     }
   },
 
@@ -203,7 +199,7 @@ const AsyncProps = CreateClass({
       asyncProps: {
         loading,
         propsAndComponents,
-        reloadComponent: (Component) => {
+        reloadComponent: Component => {
           this.reloadComponent(Component)
         }
       }
@@ -219,8 +215,7 @@ const AsyncProps = CreateClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.location === this.props.location)
-      return
+    if (nextProps.location === this.props.location) return
 
     const { enterRoutes } = computeChangedRoutes(
       { routes: this.props.routes, params: this.props.params },
@@ -241,10 +236,8 @@ const AsyncProps = CreateClass({
 
   handleError(cb) {
     return (err, ...args) => {
-      if (err && this.props.onError)
-        this.props.onError(err)
-      else
-        cb(null, ...args)
+      if (err && this.props.onError) this.props.onError(err)
+      else cb(null, ...args)
     }
   },
 
@@ -280,54 +273,58 @@ const AsyncProps = CreateClass({
     }
     // END SL FIX
 
-    this.setState({
-      loading: true,
-      prevProps: props
-    }, () => {
-      loadAsyncProps({
-        components: filterAndFlattenComponents(components),
-        params,
-        loadContext
-      }, this.handleError((err, propsAndComponents) => {
-        const reloading = options && options.reload
-        const didNotChangeRoutes = this.props.location === location
-        // FIXME: next line has potential (rare) race conditions I think. If
-        // somebody calls reloadAsyncProps, changes location, then changes
-        // location again before its done and state gets out of whack (Rx folks
-        // are like "LOL FLAT MAP LATEST NEWB"). Will revisit later.
-        if ((reloading || didNotChangeRoutes) && !this._unmounted) {
-          if (this.state.propsAndComponents) {
-            propsAndComponents = mergePropsAndComponents(
-              this.state.propsAndComponents,
-              propsAndComponents
-            )
-          }
-          this.setState({
-            loading: false,
-            propsAndComponents,
-            prevProps: null
+    this.setState(
+      {
+        loading: true,
+        prevProps: props
+      },
+      () => {
+        loadAsyncProps(
+          {
+            components: filterAndFlattenComponents(components),
+            params,
+            loadContext
+          },
+          this.handleError((err, propsAndComponents) => {
+            const reloading = options && options.reload
+            const didNotChangeRoutes = this.props.location === location
+            // FIXME: next line has potential (rare) race conditions I think. If
+            // somebody calls reloadAsyncProps, changes location, then changes
+            // location again before its done and state gets out of whack (Rx folks
+            // are like "LOL FLAT MAP LATEST NEWB"). Will revisit later.
+            if ((reloading || didNotChangeRoutes) && !this._unmounted) {
+              if (this.state.propsAndComponents) {
+                propsAndComponents = mergePropsAndComponents(
+                  this.state.propsAndComponents,
+                  propsAndComponents
+                )
+              }
+              this.setState({
+                loading: false,
+                propsAndComponents,
+                prevProps: null
+              })
+            }
           })
-        }
-      }))
-    })
+        )
+      }
+    )
   },
 
   reloadComponent(Component) {
     const { params } = this.props
-    this.loadAsyncProps([ Component ], params, null, { reload: true })
+    this.loadAsyncProps([Component], params, null, { reload: true })
   },
 
   render() {
     const { propsAndComponents } = this.state
     if (!propsAndComponents) {
       return this.props.renderLoading()
-    }
-    else {
+    } else {
       const props = this.state.loading ? this.state.prevProps : this.props
       return this.props.render(props)
     }
   }
-
 })
 
 export default AsyncProps

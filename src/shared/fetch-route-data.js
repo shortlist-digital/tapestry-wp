@@ -11,7 +11,7 @@ let origin = null
 let preview = false
 let fetchRequests = []
 
-const fetchJSON = (endpoint) => {
+const fetchJSON = endpoint => {
   // set default JSON source
   let url = `${origin}/api/v1/${endpoint}`
   // detect if preview source required
@@ -21,8 +21,7 @@ const fetchJSON = (endpoint) => {
     url = `${origin}/api/preview/v1/${endpoint}${queryPrefix}${queryParams}`
   }
   // return fetch as promise
-  return fetcher(url)
-    .then(resp => resp.json())
+  return fetcher(url).then(resp => resp.json())
 }
 const emitEvent = (event, data) => {
   if (typeof window !== 'undefined') {
@@ -54,12 +53,7 @@ const handleReject = (err, cb) => {
   cb(err)
 }
 
-export default ({
-  loadFrom,
-  loadContext,
-  params,
-  cb
-}) => {
+export default ({ loadFrom, loadContext, params, cb }) => {
   // save data for use in util functions
   query = idx(loadContext, _ => _.location.query)
   origin = loadContext.serverUri || window.location.origin
@@ -86,9 +80,8 @@ export default ({
 
   // handle endpoint configurations
   // can be one of Array, Object, String
-  const result = (isArray || isObject)
-    ? Promise.all(endpoint.result)
-    : endpoint.result
+  const result =
+    isArray || isObject ? Promise.all(endpoint.result) : endpoint.result
   // wait for all to resolve
   return result
     .then(resp => {

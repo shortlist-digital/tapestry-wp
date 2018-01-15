@@ -10,7 +10,6 @@ const configServerDefault = require('../webpack/server.config')
 const configDevDefault = require('../webpack/dev.config')
 
 module.exports = ({ cwd, env }) => {
-
   const configCustomPath = path.resolve(cwd, 'webpack.config.js')
   const babelCustomPath = path.resolve(cwd, '.babelrc')
 
@@ -30,7 +29,7 @@ module.exports = ({ cwd, env }) => {
     log.debug(`Using custom .babelrc from ${chalk.green(babelCustomPath)}`)
   }
 
-  const createCompiler = (configDefault) => {
+  const createCompiler = configDefault => {
     // combine default/user webpack config
     const webpackConfig = mergeConfigs({
       configCustom,
