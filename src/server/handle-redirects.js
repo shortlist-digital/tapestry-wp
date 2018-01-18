@@ -6,10 +6,11 @@ import { log } from '../utilities/logger'
 
 const setRedirects = (server, redirects) => {
   server.ext('onPreHandler', (request, reply) => {
-    if (typeof redirects[request.url.pathname.toLowerCase()] !== "undefined")
-    {
+    if (typeof redirects[request.url.pathname.toLowerCase()] !== 'undefined') {
       log.debug(
-        `Redirect handled for ${chalk.green(request.url.pathname)} to ${chalk.green(redirects[request.url.pathname])}`
+        `Redirect handled for ${chalk.green(
+          request.url.pathname
+        )} to ${chalk.green(redirects[request.url.pathname])}`
       )
       return reply
         .redirect(`${redirects[request.url.pathname]}${request.url.search}`)
@@ -22,9 +23,8 @@ const setRedirects = (server, redirects) => {
 }
 
 export default ({ server, config }) => {
-
   // Handle legacy redirects
-  let redirects  = config.redirectPaths || {}
+  let redirects = config.redirectPaths || {}
 
   const redirectsFile = path.resolve(process.cwd(), 'redirects.json')
 

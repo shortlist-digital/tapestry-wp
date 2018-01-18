@@ -2,7 +2,6 @@ import normaliseUrlPath from '../utilities/normalise-url-path'
 import AFAR from './api-fetch-and-respond'
 
 export default ({ server, config }) => {
-
   server.route({
     method: 'GET',
     path: '/api/preview/v1/{query*}',

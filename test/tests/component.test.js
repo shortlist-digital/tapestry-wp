@@ -10,22 +10,51 @@ import dataPost from '../mocks/post.json'
 import dataPosts from '../mocks/posts.json'
 import dataPage from '../mocks/page.json'
 
-
-describe('Custom components rendering', () => {
-
+describe('Default components rendering', () => {
   let tapestry = null
   let uri = null
   let config = {
-    options: {
-      progressBarColor: '#c0ffee'
+    components: {
+      FrontPage: () => <p>Hello</p>
     },
+    siteUrl: 'http://dummy.api'
+  }
+
+  before(done => {
+    // mock api response
+    nock('http://dummy.api')
+      .get('/wp-json/wp/v2/posts?_embed')
+      .reply(200, dataPosts.data)
+    // boot tapestry server
+    tapestry = bootServer(config)
+    tapestry.server.on('start', () => {
+      uri = tapestry.server.info.uri
+      done()
+    })
+  })
+
+  after(() => tapestry.server.stop())
+
+  it('DefaultProgressIndicator is used', done => {
+    request.get(uri, (err, res, body) => {
+      expect(body).to.contain('background-color:#00ffcb;')
+      done()
+    })
+  })
+})
+
+describe('Custom components rendering', () => {
+  let tapestry = null
+  let uri = null
+  let config = {
     components: {
       Post: () => (
         <Helmet>
           <title>Custom title</title>
         </Helmet>
       ),
-      FrontPage: () => <p>Hello</p>
+      FrontPage: () => <p>Hello</p>,
+      ProgressIndicator: () => <p>Progress bar</p>
     },
     siteUrl: 'http://dummy.api'
   }
@@ -48,31 +77,29 @@ describe('Custom components rendering', () => {
 
   after(() => tapestry.server.stop())
 
-  it('Custom components are rendered', (done) => {
+  it('Custom components are rendered', done => {
     request.get(uri, (err, res, body) => {
       expect(body).to.contain('Hello')
       done()
     })
   })
 
-  it('Custom head tags are rendered', (done) => {
+  it('Custom head tags are rendered', done => {
     request.get(`${uri}/year/month/day/slug`, (err, res, body) => {
       expect(body).to.contain('Custom title')
       done()
     })
   })
 
-  it('Custom progressBarColor is used', (done) => {
+  it('CustomProgressIndicator is used', done => {
     request.get(uri, (err, res, body) => {
-      expect(body).to.contain('background-color:#c0ffee;')
+      expect(body).to.contain('Progress bar')
       done()
     })
   })
 })
 
-
 describe('Default view rendering', () => {
-
   let tapestry = null
   let uri = null
   let config = {
@@ -106,28 +133,28 @@ describe('Default view rendering', () => {
 
   after(() => tapestry.server.stop())
 
-  it('Default FrontPage is rendered', (done) => {
+  it('Default FrontPage is rendered', done => {
     request(uri, (err, res, body) => {
       expect(body).to.contain('FrontPage component')
       done()
     })
   })
 
-  it('Default Category is rendered', (done) => {
+  it('Default Category is rendered', done => {
     request(`${uri}/category/test`, (err, res, body) => {
       expect(body).to.contain('Category component')
       done()
     })
   })
 
-  it('Default Page is rendered', (done) => {
+  it('Default Page is rendered', done => {
     request(`${uri}/slug`, (err, res, body) => {
       expect(body).to.contain('Page component')
       done()
     })
   })
 
-  it('Default Post is rendered', (done) => {
+  it('Default Post is rendered', done => {
     request(`${uri}/year/month/day/slug`, (err, res, body) => {
       expect(body).to.contain('Post component')
       done()
@@ -135,9 +162,7 @@ describe('Default view rendering', () => {
   })
 })
 
-
 describe('Error view rendering', () => {
-
   let tapestry = null
   let config = {
     components: {},
@@ -160,59 +185,58 @@ describe('Error view rendering', () => {
 
   afterEach(() => tapestry.server.stop())
 
-  it('Show MissingView in DEV if component missing', (done) => {
+  it('Show MissingView in DEV if component missing', done => {
     tapestry = bootServer(config)
     tapestry.server.on('start', () => {
-      request
-        .get(tapestry.server.info.uri, (err, res, body) => {
-          expect(body).to.contain('Missing component')
-          done()
-        })
+      request.get(tapestry.server.info.uri, (err, res, body) => {
+        expect(body).to.contain('Missing component')
+        done()
+      })
     })
   })
 
-  it('Show DefaultError in PROD if component missing', (done) => {
+  it('Show DefaultError in PROD if component missing', done => {
     tapestry = bootServer(config, { __DEV__: false })
     tapestry.server.on('start', () => {
-      request
-        .get(tapestry.server.info.uri, (err, res, body) => {
-          expect(body).to.contain('Application Error')
-          done()
-        })
+      request.get(tapestry.server.info.uri, (err, res, body) => {
+        expect(body).to.contain('Application Error')
+        done()
+      })
     })
   })
 
-  it('Show DefaultError if API 404', (done) => {
+  it('Show DefaultError if API 404', done => {
     tapestry = bootServer({
       ...config,
       components: { Page: () => <p>Hello</p> }
     })
     tapestry.server.on('start', () => {
-      request
-        .get(`${tapestry.server.info.uri}/404-route`, (err, res, body) => {
-          expect(body).to.contain(404)
-          expect(body).to.contain(HTTPStatus[404])
-          done()
-        })
+      request.get(`${tapestry.server.info.uri}/404-route`, (err, res, body) => {
+        expect(body).to.contain(404)
+        expect(body).to.contain(HTTPStatus[404])
+        done()
+      })
     })
   })
 
-  it('Show DefaultError if route 404', (done) => {
+  it('Show DefaultError if route 404', done => {
     tapestry = bootServer({
       ...config,
       components: { Page: () => <p>Hello</p> }
     })
     tapestry.server.on('start', () => {
-      request
-        .get(`${tapestry.server.info.uri}/route/not/matched/in/any/way`, (err, res, body) => {
+      request.get(
+        `${tapestry.server.info.uri}/route/not/matched/in/any/way`,
+        (err, res, body) => {
           expect(body).to.contain(404)
           expect(body).to.contain(HTTPStatus[404])
           done()
-        })
+        }
+      )
     })
   })
 
-  it('Show CustomError if defined', (done) => {
+  it('Show CustomError if defined', done => {
     tapestry = bootServer({
       ...config,
       components: {
@@ -221,30 +245,32 @@ describe('Error view rendering', () => {
       }
     })
     tapestry.server.on('start', () => {
-      request
-        .get(`${tapestry.server.info.uri}/404-route`, (err, res, body) => {
-          expect(body).to.contain('Custom Error')
-          done()
-        })
+      request.get(`${tapestry.server.info.uri}/404-route`, (err, res, body) => {
+        expect(body).to.contain('Custom Error')
+        done()
+      })
     })
   })
 
-  it('Status code and message are available to CustomError', (done) => {
+  it('Status code and message are available to CustomError', done => {
     tapestry = bootServer({
       ...config,
       components: {
-        CustomError: ({ code, message }) => <p>Custom Error {code} {message}</p>,
+        CustomError: ({ code, message }) => (
+          <p>
+            Custom Error {code} {message}
+          </p>
+        ),
         Page: () => <p>Hello</p>
       }
     })
     tapestry.server.on('start', () => {
-      request
-        .get(`${tapestry.server.info.uri}/404-route`, (err, res, body) => {
-          expect(body).to.contain('Custom Error')
-          expect(body).to.contain('404')
-          expect(body).to.contain('Not Found')
-          done()
-        })
+      request.get(`${tapestry.server.info.uri}/404-route`, (err, res, body) => {
+        expect(body).to.contain('Custom Error')
+        expect(body).to.contain('404')
+        expect(body).to.contain('Not Found')
+        done()
+      })
     })
   })
 })

@@ -19,31 +19,32 @@ if (window !== 'undefined') {
 }
 
 // methods in use on the <Router />
-const renderAsyncProps = props =>
-  <AsyncProps loadContext={config} {...props} />
+const renderAsyncProps = props => <AsyncProps loadContext={config} {...props} />
 
 const renderApp = config => {
-
   // define routes/history for react-router
   const routes = RouteWrapper(config)
   const history = browserHistory
   const targetNode = document.getElementById('root')
 
-
   // run a router match (not sure why this is necessary)
-  match({
-    routes, history, location: normaliseUrlPath(window.location.pathname)
-  }, (error, redirectLocation, renderProps) =>
-    hydrate(
-      <AppContainer key={Math.random()}>
-        <Root
-          renderAsyncProps={renderAsyncProps}
-          routes={routes}
-          renderProps={renderProps}
-        />
-      </AppContainer>,
-      targetNode
-    )
+  match(
+    {
+      routes,
+      history,
+      location: normaliseUrlPath(window.location.pathname)
+    },
+    (error, redirectLocation, renderProps) =>
+      hydrate(
+        <AppContainer key={Math.random()}>
+          <Root
+            renderAsyncProps={renderAsyncProps}
+            routes={routes}
+            renderProps={renderProps}
+          />
+        </AppContainer>,
+        targetNode
+      )
   )
 }
 

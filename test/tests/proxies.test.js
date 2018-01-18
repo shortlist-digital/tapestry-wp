@@ -4,9 +4,7 @@ import nock from 'nock'
 
 import { bootServer } from '../utils'
 
-
 describe('Handling static proxies', () => {
-
   let tapestry = null
   let uri = null
   let proxyPath = '/robots.txt'
@@ -34,25 +32,22 @@ describe('Handling static proxies', () => {
 
   after(() => tapestry.server.stop())
 
-  it('Proxy should return correct content', (done) => {
-    request
-      .get(uri + proxyPath, (err, res, body) => {
-        expect(body).to.contain(proxyContents)
-        done()
-      })
+  it('Proxy should return correct content', done => {
+    request.get(uri + proxyPath, (err, res, body) => {
+      expect(body).to.contain(proxyContents)
+      done()
+    })
   })
 
-  it('Undeclared proxy should return 404', (done) => {
-    request
-      .get(`${uri}/test.txt`, (err, res) => {
-        expect(res.statusCode).to.equal(404)
-        done()
-      })
+  it('Undeclared proxy should return 404', done => {
+    request.get(`${uri}/test.txt`, (err, res) => {
+      expect(res.statusCode).to.equal(404)
+      done()
+    })
   })
 })
 
 describe('Handling wildcard proxies', () => {
-
   let tapestry = null
   let uri = null
   let proxyPath = '/sitemap/{sitemapId}'
@@ -80,20 +75,17 @@ describe('Handling wildcard proxies', () => {
 
   after(() => tapestry.server.stop())
 
-  it('Proxy should return correct content from test a', (done) => {
-    request
-      .get(uri + '/sitemap/test.xml', (err, res, body) => {
-        expect(body).to.contain(proxyContents)
-        done()
-      })
+  it('Proxy should return correct content from test a', done => {
+    request.get(uri + '/sitemap/test.xml', (err, res, body) => {
+      expect(body).to.contain(proxyContents)
+      done()
+    })
   })
 
-  it('Proxy should return correct content from test b', (done) => {
-    request
-      .get(uri + '/sitemap/different-id.xml', (err, res, body) => {
-        expect(body).to.contain(proxyContents)
-        done()
-      })
+  it('Proxy should return correct content from test b', done => {
+    request.get(uri + '/sitemap/different-id.xml', (err, res, body) => {
+      expect(body).to.contain(proxyContents)
+      done()
+    })
   })
-
 })

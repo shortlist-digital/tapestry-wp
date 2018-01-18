@@ -11,15 +11,16 @@ import dataPage from '../mocks/page.json'
 import dataRedirects from '../mocks/redirects.json'
 
 describe('Handling redirects', () => {
-
   let redirectsFilePath = path.resolve(process.cwd(), 'redirects.json')
   let tapestry = null
   let uri = null
   let config = {
-    routes: [{
-      path: '/page',
-      component: () => <p>Redirected component</p>
-    }],
+    routes: [
+      {
+        path: '/page',
+        component: () => <p>Redirected component</p>
+      }
+    ],
     redirectPaths: {
       '/redirect/from/this-path': '/page',
       '/redirect/with/query': '/page',
@@ -41,7 +42,7 @@ describe('Handling redirects', () => {
       .get('/web/app/uploads/redirects.json')
       .query(true)
       .times(1)
-      .reply(200, {'/redirect/from/endpoint': '/page'})
+      .reply(200, { '/redirect/from/endpoint': '/page' })
 
     // boot tapestry server
     tapestry = bootServer(config)
@@ -56,28 +57,28 @@ describe('Handling redirects', () => {
     tapestry.server.stop()
   })
 
-  it('Redirect returns 301 status', (done) => {
-    tapestry.server.inject(`${uri}/redirect/from/this-path`, (res) => {
+  it('Redirect returns 301 status', done => {
+    tapestry.server.inject(`${uri}/redirect/from/this-path`, res => {
       expect(res.statusCode).to.equal(301)
       done()
     })
   })
 
-  it('Redirect returns 301 with strange characters', (done) => {
-    tapestry.server.inject(`${uri}/test()what£]cool`, (res) => {
+  it('Redirect returns 301 with strange characters', done => {
+    tapestry.server.inject(`${uri}/test()what£]cool`, res => {
       expect(res.statusCode).to.equal(301)
       done()
     })
   })
 
-  it('Redirect returns 301 status insensitive to case', (done) => {
-    tapestry.server.inject(`${uri}/reDirect/From/tHis-path`, (res) => {
+  it('Redirect returns 301 status insensitive to case', done => {
+    tapestry.server.inject(`${uri}/reDirect/From/tHis-path`, res => {
       expect(res.statusCode).to.equal(301)
       done()
     })
   })
 
- it('Redirect path contains querystring', (done) => {
+  it('Redirect path contains querystring', done => {
     const query = '?querystring=something'
     request.get(`${uri}/redirect/with/query${query}`, (err, res, body) => {
       expect(res.req.path).to.contain(`/page${query}`)
@@ -85,7 +86,7 @@ describe('Handling redirects', () => {
     })
   })
 
-  it('Redirect path redirects correctly', (done) => {
+  it('Redirect path redirects correctly', done => {
     request.get(`${uri}/redirect/from/this-path`, (err, res, body) => {
       expect(body).to.contain('Redirected component')
       expect(res.statusCode).to.equal(200)
@@ -93,24 +94,25 @@ describe('Handling redirects', () => {
     })
   })
 
-  it('Redirect path loaded from `redirects.json` file', (done) => {
+  it('Redirect path loaded from `redirects.json` file', done => {
     request.get(`${uri}/redirect/from/this`, (err, res, body) => {
       expect(body).to.contain('Redirected component')
       expect(res.statusCode).to.equal(200)
       done()
     })
   })
-
 })
 
 describe('Handling endpoint redirects', () => {
   let tapestry = null
   let uri = null
   let config = {
-    routes: [{
-      path: 'page',
-      component: () => <p>Redirected component</p>
-    }],
+    routes: [
+      {
+        path: 'page',
+        component: () => <p>Redirected component</p>
+      }
+    ],
     redirectsEndpoint: 'http://dummy.api/web/app/uploads/redirects.json',
     siteUrl: 'http://dummy.api'
   }
@@ -119,8 +121,7 @@ describe('Handling endpoint redirects', () => {
     tapestry.server.stop()
   })
 
-  it('Redirect path loaded from redirects endpoint', (done) => {
-
+  it('Redirect path loaded from redirects endpoint', done => {
     nock('http://dummy.api')
       .get('/web/app/uploads/redirects.json')
       .query(true)
@@ -140,8 +141,7 @@ describe('Handling endpoint redirects', () => {
     })
   })
 
-  it('Server handles 404 gracefully', (done) => {
-
+  it('Server handles 404 gracefully', done => {
     nock('http://dummy.api')
       .get('/web/app/uploads/redirects.json')
       .query(true)
@@ -160,8 +160,7 @@ describe('Handling endpoint redirects', () => {
     })
   })
 
-   it('Server handles invalid data gracefully', (done) => {
-
+  it('Server handles invalid data gracefully', done => {
     nock('http://dummy.api')
       .get('/web/app/uploads/redirects.json')
       .query(true)
@@ -179,5 +178,4 @@ describe('Handling endpoint redirects', () => {
       })
     })
   })
-
 })

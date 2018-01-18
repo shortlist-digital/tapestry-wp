@@ -24,7 +24,8 @@
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:react/recommended",
-    "plugin:jsx-a11y/recommended"
+    "plugin:jsx-a11y/recommended",
+    "prettier"
   ],
   "plugins": [
     "react",

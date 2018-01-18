@@ -5,6 +5,7 @@
   ],
   "*.js": [
     "eslint --fix",
+    "node_modules/.bin/prettier --config .prettierrc --write",
     "git add",
     "npm test"
   ]
