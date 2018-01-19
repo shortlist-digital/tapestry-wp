@@ -26,7 +26,7 @@ const schema = joi.object({
     Error: joi.any().forbidden(), // DEPRECATED
     Category: joi.func(),
     CustomError: joi.func(),
-    ProgressIndicator: joi.func(),
+    ProgressIndicator: joi.func().allow(null),
     FrontPage: joi.func(),
     Page: joi.func(),
     Post: joi.func()
