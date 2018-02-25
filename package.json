@@ -92,7 +92,7 @@
     "throng": "^4.0.0",
     "validator.js": "^2.0.3",
     "webpack": "^3.0.0",
-    "webpack-dev-server": "^2.5.1",
+    "webpack-dev-server": "^3.0.0",
     "webpack-node-externals": "^1.5.4",
     "winston": "^2.3.1"
   },
