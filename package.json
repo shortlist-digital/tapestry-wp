@@ -64,7 +64,7 @@
     "fs-extra": "^4.0",
     "glamor": "2.20.25",
     "glob-fs": "^0.1.6",
-    "h2o2": "^6.0.1",
+    "h2o2": "^8.0.1",
     "hapi": "~16.6.2",
     "hapi-require-https": "^2.1.0",
     "http-status": "^1.0.1",
